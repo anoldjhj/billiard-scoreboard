@@ -1470,8 +1470,8 @@ h2 {
     position: fixed;
     left: 50%;
     top: 50%;
-    width: calc(var(--viewport-height, 100dvh) - 24px);
-    height: calc(var(--viewport-width, 100dvw) - 24px);
+    width: calc(var(--viewport-height, 100dvh) - 56px);
+    height: calc(var(--viewport-width, 100dvw) - 8px);
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
