@@ -1017,6 +1017,7 @@ function renderRecords() {
 
 function showRecords() {
   setPreferredOrientation("portrait");
+  document.body.classList.remove("score-mode");
   renderRecords();
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
@@ -1025,6 +1026,7 @@ function showRecords() {
 
 function showSetup() {
   setPreferredOrientation("portrait");
+  document.body.classList.remove("score-mode");
   els.recordsScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
@@ -1062,6 +1064,7 @@ function openBoard() {
   state.inning = 1;
   state.active = 0;
   state.history = [];
+  document.body.classList.add("score-mode");
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.remove("is-hidden");
   renderScoreboard();
@@ -1109,6 +1112,7 @@ function goHome() {
   setPreferredOrientation("portrait");
   stopTimer();
   stopMatchTimer();
+  document.body.classList.remove("score-mode");
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
   els.recordsScreen.classList.add("is-hidden");
