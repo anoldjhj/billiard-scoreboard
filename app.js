@@ -133,12 +133,23 @@ function selectionText(slot) {
   return member ? `${member.name} ${member.target}` : "선택 없음";
 }
 
+function appendNameTarget(parent, member) {
+  const name = document.createElement("span");
+  const target = document.createElement("span");
+  name.className = "member-label-name";
+  target.className = "member-label-target";
+  name.textContent = member.name;
+  target.textContent = member.target;
+  parent.replaceChildren(name, target);
+}
+
 function renderSelections() {
   els.selectionStrip.replaceChildren(
     ...Array.from({ length: state.playerCount }, (_, slot) => {
       const item = document.createElement("button");
       const label = document.createElement("span");
       const value = document.createElement("strong");
+      const member = state.members[state.selected[slot]];
 
       item.type = "button";
       item.className = "selection-card";
@@ -146,7 +157,8 @@ function renderSelections() {
       item.dataset.selectionSlot = String(slot);
       item.setAttribute("aria-label", `선수${slot + 1} 박스 선택`);
       label.textContent = `선수${slot + 1}`;
-      value.textContent = selectionText(slot);
+      if (member) appendNameTarget(value, member);
+      else value.textContent = selectionText(slot);
       item.append(label, value);
       return item;
     }),
@@ -173,7 +185,7 @@ function renderMembers() {
       pick.type = "button";
       pick.className = "edit-info";
       pick.dataset.pickIndex = String(index);
-      pick.textContent = `${member.name} ${member.target}`;
+      appendNameTarget(pick, member);
       pick.setAttribute("aria-label", `${member.name} 선택`);
 
       badge.className = "selection-badge";
@@ -460,7 +472,7 @@ function speakText(text, lang = "ko-KR") {
   if (!("speechSynthesis" in window)) return;
   if (localStorage.getItem(VOICE_KEY) === "off") return;
   window.speechSynthesis.cancel();
-  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.bright;
+  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.calm;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
   utterance.voice = preferredVoice || findPreferredVoice();
@@ -1004,7 +1016,7 @@ function renderRecords() {
 
       result.players.forEach((player) => {
         const item = document.createElement("span");
-        const targetText = player.target ? `(${player.target})` : "";
+        const targetText = player.target ? ` (${player.target})` : "";
         item.textContent = `${player.name}${targetText} High ${player.highRun} Aver ${player.average}`;
         players.append(item);
       });
@@ -1018,6 +1030,7 @@ function renderRecords() {
 function showRecords() {
   setPreferredOrientation("portrait");
   document.body.classList.remove("score-mode");
+  syncVisualViewport();
   renderRecords();
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
@@ -1027,6 +1040,7 @@ function showRecords() {
 function showSetup() {
   setPreferredOrientation("portrait");
   document.body.classList.remove("score-mode");
+  syncVisualViewport();
   els.recordsScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
@@ -1065,9 +1079,11 @@ function openBoard() {
   state.active = 0;
   state.history = [];
   document.body.classList.add("score-mode");
+  syncVisualViewport();
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.remove("is-hidden");
   renderScoreboard();
+  requestAnimationFrame(syncVisualViewport);
 }
 
 function startMatch() {
@@ -1113,6 +1129,7 @@ function goHome() {
   stopTimer();
   stopMatchTimer();
   document.body.classList.remove("score-mode");
+  syncVisualViewport();
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
   els.recordsScreen.classList.add("is-hidden");
@@ -1127,6 +1144,14 @@ function setPreferredOrientation(orientation) {
   if (!screenOrientation?.lock) return;
   const lockTarget = orientation === "landscape" ? "landscape" : "portrait";
   screenOrientation.lock(lockTarget).catch(() => {});
+}
+
+function syncVisualViewport() {
+  const viewport = window.visualViewport;
+  const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
+  const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  document.documentElement.style.setProperty("--viewport-width", `${width}px`);
+  document.documentElement.style.setProperty("--viewport-height", `${height}px`);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);
@@ -1171,7 +1196,7 @@ els.voiceSelect.addEventListener("change", () => {
   findPreferredVoice();
   speakScore(1);
 });
-els.voiceStyle.value = localStorage.getItem(VOICE_STYLE_KEY) || "bright";
+els.voiceStyle.value = localStorage.getItem(VOICE_STYLE_KEY) || "calm";
 els.voiceStyle.addEventListener("change", () => {
   localStorage.setItem(VOICE_STYLE_KEY, els.voiceStyle.value);
   speakScore(1);
@@ -1208,6 +1233,9 @@ els.scoreBoard.addEventListener("click", (event) => {
   const turnButton = event.target.closest("[data-turn-index]");
   if (turnButton) reduceTurn(Number(turnButton.dataset.turnIndex));
 });
+window.addEventListener("resize", syncVisualViewport);
+window.visualViewport?.addEventListener("resize", syncVisualViewport);
+window.visualViewport?.addEventListener("scroll", syncVisualViewport);
 
 if ("speechSynthesis" in window) {
   renderVoiceOptions();
@@ -1220,6 +1248,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+syncVisualViewport();
 loadMembers();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
 applyDefaultFinishSettings();
