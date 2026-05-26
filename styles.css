@@ -1467,17 +1467,16 @@ h2 {
 
   .score-screen:not(.is-hidden) {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    width: 852px;
-    height: 393px;
+    inset: 0 auto auto 0;
+    width: var(--viewport-height, 100dvh);
+    height: var(--viewport-width, 100dvw);
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 6px;
     padding: 6px 8px;
-    transform: translate(-50%, -50%) rotate(90deg) scale(var(--score-scale, 1));
-    transform-origin: center;
+    transform: rotate(90deg) translateY(calc(-1 * var(--viewport-width, 100dvw)));
+    transform-origin: top left;
   }
 
   .score-screen:not(.is-hidden) .score-header {
@@ -1502,6 +1501,128 @@ h2 {
 
   .score-screen:not(.is-hidden) .score-box {
     min-height: 108px;
+  }
+
+  .score-screen:not(.is-hidden) .timer {
+    min-height: 48px;
+    gap: 4px;
+  }
+
+  .score-screen:not(.is-hidden) .timer strong,
+  .score-screen:not(.is-hidden) .inning-main strong {
+    font-size: 34px;
+  }
+
+  .score-screen:not(.is-hidden) .timer span {
+    font-size: 13px;
+  }
+
+  .score-screen:not(.is-hidden) .match-time,
+  .score-screen:not(.is-hidden) .inning-title {
+    min-height: 48px;
+  }
+
+  .score-screen:not(.is-hidden) .match-time strong {
+    font-size: 29px;
+  }
+
+  .score-screen:not(.is-hidden) .inning-main span {
+    font-size: 11px;
+  }
+
+  .score-screen:not(.is-hidden) .inning-adjust {
+    gap: 2px;
+  }
+
+  .score-screen:not(.is-hidden) .inning-adjust button {
+    width: 30px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .score-screen:not(.is-hidden) .header-actions {
+    gap: 3px;
+  }
+
+  .score-screen:not(.is-hidden) .start-button,
+  .score-screen:not(.is-hidden) .turn-change-button {
+    min-height: 36px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+
+  .score-screen:not(.is-hidden) .turn-change-button {
+    padding: 0 6px;
+  }
+
+  .score-screen:not(.is-hidden) .settings-button {
+    min-width: 42px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .score-screen:not(.is-hidden) .icon-button {
+    width: 34px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .score-screen:not(.is-hidden) .player-topline {
+    min-height: 34px;
+  }
+
+  .score-screen:not(.is-hidden) .target {
+    min-width: 42px;
+    font-size: 28px;
+  }
+
+  .score-screen:not(.is-hidden) .name-button {
+    font-size: 20px;
+  }
+
+  .score-screen:not(.is-hidden) .score-box span {
+    font-size: clamp(68px, calc(var(--viewport-height, 100dvh) * 0.14), 128px);
+  }
+
+  .score-screen:not(.is-hidden) .score-box span.result-text {
+    font-size: clamp(42px, calc(var(--viewport-height, 100dvh) * 0.08), 86px);
+  }
+
+  .score-screen:not(.is-hidden) .score-box span.status-bank {
+    font-size: clamp(32px, calc(var(--viewport-height, 100dvh) * 0.06), 58px);
+  }
+
+  .score-screen:not(.is-hidden) .finish-count {
+    min-width: 56px;
+    min-height: 30px;
+    font-size: 22px;
+  }
+
+  .score-screen:not(.is-hidden) .center-controls {
+    font-size: 12px;
+  }
+
+  .score-screen:not(.is-hidden) .turn-mark {
+    width: 40px;
+    height: 36px;
+    font-size: 27px;
+  }
+
+  .score-screen:not(.is-hidden) .stat-row {
+    gap: 6px;
+  }
+
+  .score-screen:not(.is-hidden) .stat {
+    gap: 2px;
+  }
+
+  .score-screen:not(.is-hidden) .stat span {
+    font-size: 13px;
+  }
+
+  .score-screen:not(.is-hidden) .stat strong {
+    min-height: 36px;
+    font-size: 24px;
   }
 
   .score-screen:not(.is-hidden) .score-header,
