@@ -35,6 +35,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  touch-action: manipulation;
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1467,16 +1468,20 @@ h2 {
 
   .score-screen:not(.is-hidden) {
     position: fixed;
-    inset: 0 auto auto 0;
-    width: var(--viewport-height, 100dvh);
-    height: var(--viewport-width, 100dvw);
+    left: 50%;
+    top: 50%;
+    width: calc(var(--viewport-height, 100dvh) - 24px);
+    height: calc(var(--viewport-width, 100dvw) - 24px);
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 6px;
     padding: 6px 8px;
-    transform: rotate(90deg) translateY(calc(-1 * var(--viewport-width, 100dvw)));
-    transform-origin: top left;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
   }
 
   .score-screen:not(.is-hidden) .score-header {
