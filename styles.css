@@ -529,6 +529,15 @@ h2 {
   flex: 0 0 auto;
   color: #475569;
   font-weight: 900;
+  font-size: 0.72em;
+}
+
+.selection-strip .member-label-target {
+  transform: translateY(-1px);
+}
+
+.edit-info .member-label-target {
+  font-size: 0.82em;
 }
 
 .setup-switch {
@@ -1458,17 +1467,41 @@ h2 {
 
   .score-screen:not(.is-hidden) {
     position: fixed;
-    inset: 0 auto auto 0;
-    width: var(--viewport-height, 100dvh);
-    height: var(--viewport-width, 100dvw);
+    left: 50%;
+    top: 50%;
+    width: 852px;
+    height: 393px;
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 6px;
-    padding: max(6px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-top))
-      max(6px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom));
-    transform: rotate(90deg) translateY(calc(-1 * var(--viewport-width, 100dvw)));
-    transform-origin: top left;
+    padding: 6px 8px;
+    transform: translate(-50%, -50%) rotate(90deg) scale(var(--score-scale, 1));
+    transform-origin: center;
+  }
+
+  .score-screen:not(.is-hidden) .score-header {
+    min-height: 64px;
+    grid-template-columns: 102px 126px 128px minmax(0, 1fr);
+    gap: 20px;
+    padding: 6px 10px;
+  }
+
+  .score-screen:not(.is-hidden) .board {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .score-screen:not(.is-hidden) .player-card {
+    grid-template-rows: 34px minmax(108px, 1fr) 54px;
+    gap: 6px;
+    padding: 8px;
+    outline-width: 3px;
+    outline-offset: 4px;
+  }
+
+  .score-screen:not(.is-hidden) .score-box {
+    min-height: 108px;
   }
 
   .score-screen:not(.is-hidden) .score-header,
@@ -1958,4 +1991,20 @@ h2 {
     min-height: 32px;
     font-size: 20px;
   }
+}
+
+.selection-strip strong .member-label-name {
+  font-size: 1em;
+}
+
+.selection-strip strong .member-label-target {
+  font-size: 0.72em;
+}
+
+.edit-info .member-label-name {
+  font-size: 1em;
+}
+
+.edit-info .member-label-target {
+  font-size: 0.82em;
 }

@@ -1150,8 +1150,12 @@ function syncVisualViewport() {
   const viewport = window.visualViewport;
   const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
   const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  const scoreWidth = 852;
+  const scoreHeight = 393;
+  const scoreScale = Math.min(width / scoreHeight, height / scoreWidth, 1) * 0.96;
   document.documentElement.style.setProperty("--viewport-width", `${width}px`);
   document.documentElement.style.setProperty("--viewport-height", `${height}px`);
+  document.documentElement.style.setProperty("--score-scale", `${scoreScale}`);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);
