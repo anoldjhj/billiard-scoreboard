@@ -438,7 +438,7 @@ function speakScore(score) {
 
 function speakPenaltyScore(score, wasPositiveRun) {
   if (wasPositiveRun) {
-    speakText(`마이너스 일 ${score}점`, "ko-KR");
+    speakText(`마이너스 일, ${score}점`, "ko-KR");
     return;
   }
 
@@ -653,9 +653,9 @@ function createPlayerCard(player, index) {
   top.append(target, name);
 
   scoreBox.type = "button";
-  scoreBox.className = isYellowBall(index) ? "score-box yellow" : "score-box";
+  scoreBox.className = isYellowBall(player, index) ? "score-box yellow" : "score-box";
   scoreBox.dataset.scoreIndex = String(index);
-  scoreBox.disabled = state.gameEnded;
+  scoreBox.disabled = state.gameEnded || player.status === "win";
   scoreBox.setAttribute("aria-label", `${player.name} 점수`);
   scoreContent.className = "score-content";
   score.textContent = scoreText(player);
@@ -701,7 +701,7 @@ function createTurnButton(player, index) {
   button.type = "button";
   button.className = "stat inning-score";
   button.dataset.turnIndex = String(index);
-  button.disabled = state.gameEnded;
+  button.disabled = state.gameEnded || player.status === "win";
   button.setAttribute("aria-label", `${player.name} 이닝스코어 1점 빼기`);
   value.textContent = player.turn;
   const hint = document.createElement("small");
@@ -713,10 +713,16 @@ function createTurnButton(player, index) {
 }
 
 function scoreText(player) {
-  if (player.status === "win") return "Win";
+  if (player.status === "win") return rankText(player.rank);
   if (player.status === "threeC") return "3C";
   if (player.status === "bank") return "Bank";
   return player.score;
+}
+
+function rankText(rank) {
+  if (rank === 2) return "2nd";
+  if (rank === 3) return "3rd";
+  return "Win";
 }
 
 function finishRemaining(player) {
@@ -772,9 +778,46 @@ function announceScoreState(player, before) {
   speakScore(player.turn);
 }
 
-function isYellowBall(index) {
-  if (state.players.length !== 3) return index % 2 === 1;
+function isYellowBall(player, index) {
+  if (player.status === "win") return false;
+  const activePlayers = state.players.filter((candidate) => candidate.status !== "win");
+  const latestWinnerIndex = latestWinnerPlayerIndex();
+
+  if (latestWinnerIndex === -1) return yellowByOriginalRule(index, state.players.length);
+
+  const playOrder = orderedActivePlayersAfter(latestWinnerIndex);
+  const orderIndex = playOrder.indexOf(player);
+  if (orderIndex === -1) return yellowByOriginalRule(index, activePlayers.length || state.players.length);
+
+  const firstPlayerIndex = state.players.indexOf(playOrder[0]);
+  const firstPlayerWasYellow = yellowByOriginalRule(firstPlayerIndex, activePlayers.length + 1);
+  return orderIndex % 2 === 0 ? firstPlayerWasYellow : !firstPlayerWasYellow;
+}
+
+function yellowByOriginalRule(index, playerCount) {
+  if (playerCount !== 3) return index % 2 === 1;
   return (index + state.inning - 1) % 2 === 1;
+}
+
+function latestWinnerPlayerIndex() {
+  let latestRank = 0;
+  let latestIndex = -1;
+  state.players.forEach((player, index) => {
+    if (player.rank && player.rank > latestRank) {
+      latestRank = player.rank;
+      latestIndex = index;
+    }
+  });
+  return latestIndex;
+}
+
+function orderedActivePlayersAfter(index) {
+  const ordered = [];
+  for (let step = 1; step <= state.players.length; step += 1) {
+    const player = state.players[(index + step) % state.players.length];
+    if (player?.status !== "win") ordered.push(player);
+  }
+  return ordered;
 }
 
 function averageFor(player) {
@@ -794,6 +837,7 @@ function createPlayer(member) {
     turn: 0,
     runs: [],
     status: "playing",
+    rank: null,
     finish: { threeC: state.finish.threeC, bank: state.finish.bank },
     finishGoal: { threeC: state.finish.threeC, bank: state.finish.bank },
   };
@@ -843,16 +887,23 @@ function updatePlayerStatus(player) {
 
 function beginTurn(playerIndex) {
   const current = state.players[state.active];
-  current.runs.push(current.turn);
-  current.turn = 0;
-  recalcHigh(current);
+  if (current && current.status !== "win") {
+    current.runs.push(current.turn);
+    current.turn = 0;
+    recalcHigh(current);
+  }
   if (playerIndex <= state.active) state.inning += 1;
   state.active = playerIndex;
   resetTimer(true);
 }
 
-function nextPlayerIndex() {
-  return (state.active + 1) % state.players.length;
+function nextPlayerIndex(fromIndex = state.active) {
+  for (let step = 1; step <= state.players.length; step += 1) {
+    const nextIndex = (fromIndex + step) % state.players.length;
+    if (state.players[nextIndex]?.status !== "win") return nextIndex;
+  }
+
+  return fromIndex;
 }
 
 function handleScoreTouch(playerIndex) {
@@ -869,7 +920,7 @@ function handleScoreTouch(playerIndex) {
     if (!state.gameEnded) resetTimer(true);
   }
   renderScoreboard();
-  checkWinner(state.players[playerIndex]);
+  checkWinnerForRankedPlay(state.players[playerIndex]);
 }
 
 function switchTurn() {
@@ -907,6 +958,8 @@ function adjustInning(delta) {
 }
 
 function checkWinner(player) {
+  checkWinnerForRankedPlay(player);
+  return;
   if (player.status !== "win") return;
   state.gameEnded = true;
   state.gameStarted = false;
@@ -923,6 +976,36 @@ function checkWinner(player) {
   els.winnerTitle.textContent = `${player.name} 승리`;
   els.winnerText.textContent = "";
   els.winnerDialog.showModal();
+}
+
+function checkWinnerForRankedPlay(player) {
+  if (player.status !== "win") return;
+  assignRank(player);
+
+  const remainingPlayers = state.players.filter((candidate) => candidate.status !== "win").length;
+  const shouldEnd = state.players.length <= 2 || remainingPlayers <= 1;
+  if (shouldEnd) {
+    state.gameEnded = true;
+    state.gameStarted = false;
+    stopTimer();
+    stopMatchTimer();
+    if (!state.resultSaved) {
+      saveMatchResult(player);
+      state.resultSaved = true;
+    }
+  } else if (state.players[state.active] === player) {
+    beginTurn(nextPlayerIndex(state.active));
+  }
+
+  renderScoreboard();
+  playVictorySound();
+  speakText(`${player.name} 승리`);
+}
+
+function assignRank(player) {
+  if (player.rank) return;
+  const ranks = state.players.map((candidate) => candidate.rank).filter(Boolean);
+  player.rank = ranks.length + 1;
 }
 
 function saveMatchResult(winner) {
