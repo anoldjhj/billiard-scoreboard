@@ -436,6 +436,15 @@ function speakScore(score) {
   speakText(`${score}점`, "ko-KR");
 }
 
+function speakPenaltyScore(score, wasPositiveRun) {
+  if (wasPositiveRun) {
+    speakText(`마이너스 일 ${score}점`, "ko-KR");
+    return;
+  }
+
+  speakScore(score);
+}
+
 function koreanCount(value) {
   const number = Math.max(0, Number(value) || 0);
   const native = [
@@ -795,8 +804,8 @@ function addScore(playerIndex, delta) {
   if (!player || player.status === "win") return;
   if (delta > 0 && advanceFinish(player)) return;
 
-  player.score = Math.max(0, player.score + delta);
-  player.turn = Math.max(0, player.turn + delta);
+  player.score += delta;
+  player.turn += delta;
   recalcHigh(player);
   updatePlayerStatus(player);
 }
@@ -880,12 +889,12 @@ function reduceTurn(playerIndex) {
   if (!state.gameStarted || state.gameEnded || playerIndex !== state.active) return;
   const player = state.players[playerIndex];
   if (player.status !== "playing") return;
-  if (player.turn <= 0 && player.score <= 0) return;
+  const wasPositiveRun = player.turn > 0;
   snapshot();
   addScore(playerIndex, -1);
   renderScoreboard();
   playSubtractSound();
-  window.setTimeout(() => speakScore(player.turn), 520);
+  window.setTimeout(() => speakPenaltyScore(player.turn, wasPositiveRun), 520);
 }
 
 function adjustInning(delta) {
