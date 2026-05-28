@@ -1,5 +1,6 @@
 const MEMBER_KEY = "billiards-members-v1";
 const RESULT_KEY = "billiards-results-v1";
+const SETTINGS_KEY = "billiards-settings-v1";
 const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
@@ -128,6 +129,50 @@ function saveMembers() {
   localStorage.setItem(MEMBER_KEY, JSON.stringify(state.members));
 }
 
+function loadSettings() {
+  let settings = {};
+  try {
+    settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") || {};
+  } catch {
+    settings = {};
+  }
+
+  const playerCount = [2, 3, 4].includes(Number(settings.playerCount)) ? Number(settings.playerCount) : state.playerCount;
+  const gameType = ["four-ball", "three-cushion"].includes(settings.gameType) ? settings.gameType : state.gameType;
+  state.gameType = gameType;
+  state.playerCount = playerCount;
+  if (Array.isArray(settings.selected)) state.selected = settings.selected.map((index) => (Number.isInteger(index) ? index : null));
+  state.nextPick = Number.isInteger(settings.nextPick) ? settings.nextPick : state.nextPick;
+
+  els.gameType.value = gameType;
+  els.playerCount.value = String(playerCount);
+  els.shotLimit.value = settings.shotLimit || "none";
+  els.finishThreeC.value = settings.finish?.threeC ?? (gameType === "four-ball" ? "1" : "0");
+  els.finishBank.value = settings.finish?.bank ?? "0";
+
+  renderFinishOptions();
+  normalizeSelected();
+  readFinishSettings();
+  saveSettings();
+}
+
+function saveSettings() {
+  localStorage.setItem(
+    SETTINGS_KEY,
+    JSON.stringify({
+      gameType: els.gameType.value,
+      playerCount: Number(els.playerCount.value),
+      finish: {
+        threeC: Math.max(0, Number(els.finishThreeC.value) || 0),
+        bank: Math.max(0, Number(els.finishBank.value) || 0),
+      },
+      shotLimit: els.shotLimit.value,
+      selected: state.selected.slice(0, Math.max(state.playerCount, state.selected.length)),
+      nextPick: state.nextPick,
+    }),
+  );
+}
+
 function selectionText(slot) {
   const member = state.members[state.selected[slot]];
   return member ? `${member.name} ${member.target}` : "선택 없음";
@@ -215,11 +260,13 @@ function pickMember(index) {
 
   state.selected[state.nextPick] = index;
   state.nextPick = (state.nextPick + 1) % state.playerCount;
+  saveSettings();
   renderMembers();
 }
 
 function selectPlayerSlot(slot) {
   state.nextPick = Math.min(Math.max(0, slot), state.playerCount - 1);
+  saveSettings();
   renderMembers();
 }
 
@@ -268,6 +315,7 @@ function deleteMember(index) {
   });
   normalizeSelected();
   saveMembers();
+  saveSettings();
   renderMembers();
 }
 
@@ -780,18 +828,8 @@ function announceScoreState(player, before) {
 
 function isYellowBall(player, index) {
   if (player.status === "win") return false;
-  const activePlayers = state.players.filter((candidate) => candidate.status !== "win");
-  const latestWinnerIndex = latestWinnerPlayerIndex();
-
-  if (latestWinnerIndex === -1) return yellowByOriginalRule(index, state.players.length);
-
-  const playOrder = orderedActivePlayersAfter(latestWinnerIndex);
-  const orderIndex = playOrder.indexOf(player);
-  if (orderIndex === -1) return yellowByOriginalRule(index, activePlayers.length || state.players.length);
-
-  const firstPlayerIndex = state.players.indexOf(playOrder[0]);
-  const firstPlayerWasYellow = yellowByOriginalRule(firstPlayerIndex, activePlayers.length + 1);
-  return orderIndex % 2 === 0 ? firstPlayerWasYellow : !firstPlayerWasYellow;
+  if (typeof player.ballYellow === "boolean") return player.ballYellow;
+  return yellowByOriginalRule(index, state.players.length);
 }
 
 function yellowByOriginalRule(index, playerCount) {
@@ -838,6 +876,7 @@ function createPlayer(member) {
     runs: [],
     status: "playing",
     rank: null,
+    ballYellow: null,
     finish: { threeC: state.finish.threeC, bank: state.finish.bank },
     finishGoal: { threeC: state.finish.threeC, bank: state.finish.bank },
   };
@@ -885,16 +924,67 @@ function updatePlayerStatus(player) {
   player.status = "win";
 }
 
-function beginTurn(playerIndex) {
-  const current = state.players[state.active];
+function beginTurn(playerIndex, { adjustBallColor = true } = {}) {
+  const currentIndex = state.active;
+  const current = state.players[currentIndex];
+  const next = state.players[playerIndex];
+  const previousColor = current && current.status !== "win" ? isYellowBall(current, currentIndex) : null;
+  const preservedNextColor =
+    !adjustBallColor && next && next.status !== "win" ? isYellowBall(next, playerIndex) : null;
   if (current && current.status !== "win") {
+    if (typeof current.ballYellow !== "boolean") current.ballYellow = previousColor;
     current.runs.push(current.turn);
     current.turn = 0;
     recalcHigh(current);
   }
-  if (playerIndex <= state.active) state.inning += 1;
+  const inningChanged = playerIndex <= currentIndex;
+  if (inningChanged) state.inning += 1;
   state.active = playerIndex;
+  adjustTurnBallColor(next, playerIndex, previousColor, preservedNextColor, adjustBallColor && inningChanged);
   resetTimer(true);
+}
+
+function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust) {
+  if (!player || player.status === "win" || !hasRankedWinner()) return;
+  if (typeof preservedColor === "boolean") {
+    player.ballYellow = preservedColor;
+    return;
+  }
+
+  if (shouldAdjust) {
+    normalizeRemainingBallColors(index, previousColor);
+    return;
+  }
+
+  const nextColor = isYellowBall(player, index);
+  if (typeof player.ballYellow !== "boolean") player.ballYellow = nextColor;
+}
+
+function hasRankedWinner() {
+  return state.players.some((player) => player.rank);
+}
+
+function normalizeRemainingBallColors(startIndex, previousColor) {
+  const activeOrder = orderedActivePlayersFrom(startIndex);
+  if (!activeOrder.length) return;
+
+  const first = activeOrder[0];
+  const firstIndex = state.players.indexOf(first);
+  let nextColor = isYellowBall(first, firstIndex);
+  if (typeof previousColor === "boolean" && nextColor === previousColor) nextColor = !previousColor;
+
+  activeOrder.forEach((player, orderIndex) => {
+    player.ballYellow = orderIndex % 2 === 0 ? nextColor : !nextColor;
+  });
+}
+
+function orderedActivePlayersFrom(index) {
+  const ordered = [];
+  for (let step = 0; step < state.players.length; step += 1) {
+    const player = state.players[(index + step) % state.players.length];
+    if (player?.status !== "win") ordered.push(player);
+  }
+  return ordered;
 }
 
 function nextPlayerIndex(fromIndex = state.active) {
@@ -994,7 +1084,7 @@ function checkWinnerForRankedPlay(player) {
       state.resultSaved = true;
     }
   } else if (state.players[state.active] === player) {
-    beginTurn(nextPlayerIndex(state.active));
+    beginTurn(nextPlayerIndex(state.active), { adjustBallColor: false });
   }
 
   renderScoreboard();
@@ -1009,18 +1099,20 @@ function assignRank(player) {
 }
 
 function saveMatchResult(winner) {
-  if (state.playerCount !== 2) return;
+  const rankedWinner = state.players.find((player) => player.rank === 1) || winner;
   const result = {
+    id: `match-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     savedAt: new Date().toISOString(),
     gameType: state.gameType,
     playerCount: state.playerCount,
     finish: { ...state.finish },
-    winner: winner.name,
+    winner: rankedWinner.name,
     inning: state.inning,
     duration: state.matchElapsed,
     players: state.players.map((player) => ({
       name: player.name,
       target: player.target,
+      rank: player.rank || null,
       highRun: player.high,
       average: averageFor(player),
       score: player.score,
@@ -1047,13 +1139,26 @@ function loadResults() {
   }
 }
 
-function twoPlayerResultsFor(gameType = els.recordGameType.value) {
+function resultsForGameType(gameType = els.recordGameType.value) {
   return loadResults()
-    .filter((result) => result.playerCount === 2 && result.gameType === gameType)
+    .filter((result) => result.gameType === gameType)
     .slice(0, 30);
 }
 
-function renderRecordPlayers(results = twoPlayerResultsFor()) {
+function resultKey(result, index) {
+  return result.id || result.savedAt || `record-${index}`;
+}
+
+function deleteResultByKey(key) {
+  const results = loadResults();
+  localStorage.setItem(
+    RESULT_KEY,
+    JSON.stringify(results.filter((result, index) => resultKey(result, index) !== key)),
+  );
+  renderRecords();
+}
+
+function renderRecordPlayers(results = resultsForGameType()) {
   const names = [...new Set(results.flatMap((result) => result.players.map((player) => player.name)))];
   const current = els.recordPlayerSelect.value;
   els.recordPlayerSelect.replaceChildren(
@@ -1069,7 +1174,7 @@ function renderRecordPlayers(results = twoPlayerResultsFor()) {
 }
 
 function renderRecords() {
-  const results = twoPlayerResultsFor();
+  const results = resultsForGameType();
   renderRecordPlayers(results);
   const playerName = els.recordPlayerSelect.value;
   const playerRows = results
@@ -1119,6 +1224,115 @@ function renderRecords() {
   );
 }
 
+function renderRecords() {
+  const results = resultsForGameType();
+  renderRecordPlayers(results);
+  const playerName = els.recordPlayerSelect.value;
+  const playerRows = results
+    .map((result) => result.players.find((player) => player.name === playerName))
+    .filter(Boolean);
+  const average =
+    playerRows.length === 0
+      ? "0.0"
+      : (playerRows.reduce((sum, player) => sum + Number(player.average || 0), 0) / playerRows.length).toFixed(1);
+
+  els.recordAverage.textContent = average;
+  if (results.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "record-empty";
+    empty.textContent = "저장된 경기 기록이 없습니다.";
+    els.recordList.replaceChildren(empty);
+    return;
+  }
+
+  els.recordList.replaceChildren(...results.map(createRecordRow));
+}
+
+function createRecordRow(result, index) {
+  const row = document.createElement("article");
+  const title = document.createElement("div");
+  const meta = document.createElement("div");
+  const winner = document.createElement("strong");
+  const players = document.createElement("div");
+  const deleteButton = document.createElement("button");
+  const date = new Date(result.savedAt);
+  const key = resultKey(result, index);
+
+  row.className = "record-row";
+  row.dataset.resultKey = key;
+  title.className = "record-row-title";
+  meta.className = "record-meta";
+  players.className = "record-players";
+  deleteButton.className = "record-delete";
+  deleteButton.type = "button";
+  deleteButton.dataset.deleteResult = key;
+  deleteButton.textContent = "삭제";
+  deleteButton.setAttribute("aria-label", `${result.winner} 기록 삭제`);
+  winner.textContent = `${result.winner} 승리`;
+  meta.textContent = `${date.toLocaleDateString("ko-KR")} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}인`;
+  title.append(winner, meta);
+
+  result.players.forEach((player) => {
+    const item = document.createElement("span");
+    const targetText = player.target ? ` (${player.target})` : "";
+    const rankText = player.rank ? ` ${rankTextForRecord(player.rank)}` : "";
+    item.textContent = `${player.name}${rankText}${targetText} High ${player.highRun} Aver ${player.average}`;
+    players.append(item);
+  });
+
+  row.append(title, players, deleteButton);
+  return row;
+}
+
+function rankTextForRecord(rank) {
+  if (rank === 1) return "Win";
+  if (rank === 2) return "2nd";
+  if (rank === 3) return "3rd";
+  return `${rank}th`;
+}
+
+function createRecordRow(result, index) {
+  const row = document.createElement("article");
+  const title = document.createElement("div");
+  const standings = document.createElement("strong");
+  const meta = document.createElement("div");
+  const players = document.createElement("div");
+  const deleteButton = document.createElement("button");
+  const date = new Date(result.savedAt);
+  const key = resultKey(result, index);
+
+  row.className = "record-row";
+  row.dataset.resultKey = key;
+  title.className = "record-row-title";
+  standings.className = "record-standings";
+  meta.className = "record-meta";
+  players.className = "record-players";
+  deleteButton.className = "record-delete";
+  deleteButton.type = "button";
+  deleteButton.dataset.deleteResult = key;
+  deleteButton.textContent = "삭제";
+  deleteButton.setAttribute("aria-label", `${result.winner} 기록 삭제`);
+
+  standings.textContent = recordStandingsText(result);
+  meta.textContent = `${date.toLocaleDateString("ko-KR")} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}인`;
+  title.append(standings, meta);
+
+  result.players.forEach((player) => {
+    const item = document.createElement("span");
+    item.textContent = `${player.name} High ${player.highRun} Aver ${player.average}`;
+    players.append(item);
+  });
+
+  row.append(title, players, deleteButton);
+  return row;
+}
+
+function recordStandingsText(result) {
+  const rankedPlayers = result.players.filter((player) => player.rank).sort((a, b) => a.rank - b.rank);
+  if (!rankedPlayers.length) return `${result.winner} Win`;
+  return rankedPlayers.map((player) => `${player.name}${rankTextForRecord(player.rank)}`).join(", ");
+}
+
 function showRecords() {
   setPreferredOrientation("portrait");
   document.body.classList.remove("score-mode");
@@ -1159,6 +1373,7 @@ function openBoard() {
   state.playerCount = Number(els.playerCount.value);
   readFinishSettings();
   if (!readSelectedPlayers()) return;
+  saveSettings();
   stopTimer();
   stopMatchTimer();
   state.timeLimit = els.shotLimit.value === "none" ? null : Number(els.shotLimit.value);
@@ -1278,10 +1493,19 @@ els.openRecordsButton.addEventListener("click", showRecords);
 els.backToSetupButton.addEventListener("click", showSetup);
 els.recordGameType.addEventListener("change", renderRecords);
 els.recordPlayerSelect.addEventListener("change", renderRecords);
+els.recordList.addEventListener("click", (event) => {
+  const deleteButton = event.target.closest("[data-delete-result]");
+  if (deleteButton) deleteResultByKey(deleteButton.dataset.deleteResult);
+});
 els.startButton.addEventListener("click", startMatch);
 els.turnSwitchButton.addEventListener("click", switchTurn);
 els.homeButton.addEventListener("click", goHome);
-els.gameType.addEventListener("change", applyDefaultFinishSettings);
+els.gameType.addEventListener("change", () => {
+  applyDefaultFinishSettings();
+  state.gameType = els.gameType.value;
+  readFinishSettings();
+  saveSettings();
+});
 els.voiceSelect.addEventListener("change", () => {
   localStorage.setItem(VOICE_KEY, els.voiceSelect.value);
   preferredVoice = null;
@@ -1296,13 +1520,25 @@ els.voiceStyle.addEventListener("change", () => {
 els.warningSound.value = localStorage.getItem(WARNING_SOUND_KEY) || "on";
 els.warningSound.addEventListener("change", () => {
   localStorage.setItem(WARNING_SOUND_KEY, els.warningSound.value);
+  saveSettings();
   if (els.warningSound.value !== "off") playWarningSound(false);
 });
 els.playerCount.addEventListener("change", () => {
   state.playerCount = Number(els.playerCount.value);
   normalizeSelected();
   applyDefaultFinishSettings();
+  readFinishSettings();
+  saveSettings();
   renderMembers();
+});
+els.shotLimit.addEventListener("change", saveSettings);
+els.finishThreeC.addEventListener("change", () => {
+  readFinishSettings();
+  saveSettings();
+});
+els.finishBank.addEventListener("change", () => {
+  readFinishSettings();
+  saveSettings();
 });
 els.timerButton.addEventListener("click", () => {
   if (!state.gameStarted || state.gameEnded) return;
@@ -1342,7 +1578,7 @@ if ("serviceWorker" in navigator) {
 
 syncVisualViewport();
 loadMembers();
+loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
-applyDefaultFinishSettings();
 renderMembers();
 renderScoreboard();

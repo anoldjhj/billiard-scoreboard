@@ -160,7 +160,7 @@ button:disabled {
 .app-logo small {
   align-self: start;
   color: #facc15;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -327,10 +327,11 @@ h2 {
   min-height: 34px;
   min-width: 82px;
   padding: 0 10px;
-  border-color: #cbd5e1;
-  background: #f8fafc;
-  color: var(--primary);
+  border-color: rgba(14, 165, 233, 0.5);
+  background: #e0f2fe;
+  color: #075985;
   font-size: 13px;
+  box-shadow: inset 0 -2px 0 rgba(14, 165, 233, 0.16);
 }
 
 .setup-start-action {
@@ -340,7 +341,7 @@ h2 {
   min-height: 110px;
   min-width: 260px;
   padding: 0 22px;
-  font-size: 31px;
+  font-size: 36px;
   line-height: 1;
   white-space: nowrap;
 }
@@ -356,6 +357,13 @@ h2 {
   font-size: 31px;
   line-height: 1;
   letter-spacing: 0.02em;
+}
+
+.records-header .secondary-action {
+  border-color: rgba(14, 165, 233, 0.44);
+  background: #e0f2fe;
+  color: #075985;
+  box-shadow: inset 0 -2px 0 rgba(14, 165, 233, 0.16);
 }
 
 .record-average {
@@ -408,9 +416,9 @@ h2 {
 }
 
 .record-list {
-  max-height: min(58svh, 520px);
+  max-height: none;
   display: grid;
-  gap: 6px;
+  gap: 8px;
   overflow: auto;
   padding-right: 2px;
 }
@@ -426,22 +434,26 @@ h2 {
 
 .record-row {
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 44px;
+  grid-template-columns: minmax(0, 1fr) 54px;
+  gap: 6px 10px;
   align-items: center;
 }
 
 .record-row-title {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 
-.record-row-title strong {
+.record-row-title strong,
+.record-standings {
+  min-width: 0;
   font-size: 16px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .record-meta {
@@ -454,59 +466,73 @@ h2 {
 
 .record-players {
   position: relative;
+  grid-column: 1;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
   margin-top: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .record-players::before {
-  content: "";
-  position: absolute;
-  left: -22px;
-  top: 4px;
-  bottom: 4px;
-  width: 1px;
-  background: var(--line);
+  display: none;
 }
 
 .record-players span {
   min-width: 0;
-  flex: 1 1 0;
-  padding: 7px 8px;
+  flex: 0 0 auto;
+  max-width: 170px;
+  padding: 5px 7px;
   border-radius: 6px;
   background: var(--surface-soft);
   color: #334155;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.record-delete {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: end;
+  align-self: center;
+  min-width: 54px;
+  width: auto;
+  min-height: 34px;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  background: #fff1f2;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 900;
+}
+
 .selection-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
   align-items: center;
 }
 
 .selection-strip .selection-card {
   min-width: 0;
   display: grid;
-  gap: 5px;
-  border: 1px solid var(--line);
+  gap: 8px;
+  border: 2px solid rgba(14, 165, 233, 0.55);
   border-radius: var(--radius);
-  padding: 13px 14px;
+  padding: 17px 16px;
   background: var(--surface);
   color: var(--ink);
   text-align: left;
-  box-shadow: none;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.12);
 }
 
 .selection-strip .selection-card.is-picking {
-  border-color: var(--primary);
-  box-shadow: inset 0 0 0 2px rgba(47, 95, 143, 0.18);
+  border-color: #0284c7;
+  box-shadow: inset 0 0 0 2px rgba(14, 165, 233, 0.28), 0 0 0 3px rgba(14, 165, 233, 0.12);
 }
 
 .selection-strip strong {
@@ -517,7 +543,7 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .member-label-name {
@@ -530,7 +556,7 @@ h2 {
   flex: 0 0 auto;
   color: #475569;
   font-weight: 900;
-  font-size: 0.72em;
+  font-size: 0.78em;
 }
 
 .selection-strip .member-label-target {
@@ -570,7 +596,35 @@ h2 {
   cursor: pointer;
   min-height: 34px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.manager-panel summary::after {
+  content: "▲";
+  width: 30px;
+  min-height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.46);
+  border-radius: 50%;
+  padding: 0;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.manager-panel:not([open]) summary::after {
+  content: "▼";
+  border-color: rgba(14, 165, 233, 0.42);
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .member-form {
@@ -578,6 +632,26 @@ h2 {
   grid-template-columns: minmax(0, 1fr) 80px 72px;
   gap: 8px;
   margin-bottom: 10px;
+}
+
+.manager-panel summary::after {
+  content: "";
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(50% - 4px) 50%, calc(50% + 4px) 50%;
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+}
+
+.manager-panel:not([open]) summary::after {
+  content: "";
+  background-image:
+    linear-gradient(135deg, transparent 50%, currentColor 50%),
+    linear-gradient(45deg, currentColor 50%, transparent 50%);
+  background-position: calc(50% - 4px) 50%, calc(50% + 4px) 50%;
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
 }
 
 .member-form button {
@@ -1294,7 +1368,7 @@ h2 {
   }
 
   .app-logo small {
-    font-size: 9px;
+    font-size: 10px;
     letter-spacing: 0.04em;
     transform: translateY(0);
   }
@@ -1323,7 +1397,7 @@ h2 {
     right: 22px;
     min-width: 190px;
     min-height: 68px;
-    font-size: 23px;
+    font-size: 27px;
     line-height: 1;
   }
 
@@ -1339,10 +1413,22 @@ h2 {
   }
 
   .game-options label,
-  .manager-panel summary,
   .selection-strip span {
     font-size: 12px;
     line-height: 1.15;
+  }
+
+  .manager-panel summary {
+    min-height: 54px;
+    font-size: 23px;
+    line-height: 1.15;
+  }
+
+  .manager-panel summary::after {
+    width: 34px;
+    min-height: 34px;
+    padding: 0;
+    font-size: 14px;
   }
 
   .game-options label {
@@ -1376,6 +1462,10 @@ h2 {
 
   .manager-panel {
     min-height: 1480px;
+  }
+
+  .manager-panel:not([open]) {
+    min-height: 0;
   }
 
   .edit-list {
@@ -1429,14 +1519,14 @@ h2 {
   }
 
   .record-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-    padding: 12px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 8px;
+    padding: 9px;
   }
 
   .record-row-title {
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 14px;
+    gap: 8px;
   }
 
   .record-row-title strong {
@@ -1449,14 +1539,16 @@ h2 {
   }
 
   .record-players {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-column: 1;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
   }
 
   .record-players span {
-    padding: 7px 8px;
-    font-size: 14px;
+    max-width: 160px;
+    padding: 5px 7px;
+    font-size: 12px;
   }
 
   .record-players::before {
@@ -1701,6 +1793,39 @@ h2 {
     padding: 10px;
   }
 
+  .records-screen {
+    min-height: 100svh;
+    align-content: start;
+  }
+
+  .records-panel {
+    width: calc(100vw - 12px);
+    min-height: calc(100svh - 12px);
+    margin-top: 6px;
+  }
+
+  .record-average {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .record-list {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .record-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .record-row-title {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .record-meta {
+    text-align: left;
+  }
+
   .setup-heading {
     grid-template-columns: 88px 158px;
     min-height: 38px;
@@ -1730,7 +1855,7 @@ h2 {
   }
 
   .app-logo small {
-    font-size: 5px;
+    font-size: 6px;
     transform: none;
   }
 
@@ -1767,7 +1892,7 @@ h2 {
     min-width: 88px;
     min-height: 38px;
     padding: 0 8px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .member-box,
@@ -1780,9 +1905,20 @@ h2 {
   }
 
   .game-options label,
-  .manager-panel summary,
   .selection-strip span {
     font-size: 11px;
+  }
+
+  .manager-panel summary {
+    min-height: 42px;
+    font-size: 18px;
+  }
+
+  .manager-panel summary::after {
+    width: 28px;
+    min-height: 28px;
+    padding: 0;
+    font-size: 12px;
   }
 
   .game-options label {
@@ -1800,12 +1936,12 @@ h2 {
   }
 
   .selection-card {
-    min-height: 48px;
-    padding: 8px 10px;
+    min-height: 60px;
+    padding: 11px 12px;
   }
 
   .selection-card strong {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .member-form {
@@ -1928,7 +2064,7 @@ h2 {
     min-width: 118px;
     min-height: 38px;
     padding: 0 12px;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1;
     box-shadow: 0 5px 10px rgba(15, 23, 42, 0.14);
   }
