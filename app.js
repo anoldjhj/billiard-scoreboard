@@ -828,6 +828,9 @@ function announceScoreState(player, before) {
 
 function isYellowBall(player, index) {
   if (player.status === "win") return false;
+  if (state.players.length === 3 && !hasRankedWinner()) {
+    return yellowByOriginalRule(index, state.players.length);
+  }
   if (typeof player.ballYellow === "boolean") return player.ballYellow;
   return yellowByOriginalRule(index, state.players.length);
 }
@@ -859,7 +862,7 @@ function orderedActivePlayersAfter(index) {
 }
 
 function averageFor(player) {
-  return (player.score / state.inning).toFixed(1);
+  return (player.score / (player.finishedAtInning || state.inning)).toFixed(1);
 }
 
 function recalcHigh(player) {
@@ -876,6 +879,7 @@ function createPlayer(member) {
     runs: [],
     status: "playing",
     rank: null,
+    finishedAtInning: null,
     ballYellow: null,
     finish: { threeC: state.finish.threeC, bank: state.finish.bank },
     finishGoal: { threeC: state.finish.threeC, bank: state.finish.bank },
@@ -1096,6 +1100,7 @@ function assignRank(player) {
   if (player.rank) return;
   const ranks = state.players.map((candidate) => candidate.rank).filter(Boolean);
   player.rank = ranks.length + 1;
+  player.finishedAtInning = state.inning;
 }
 
 function saveMatchResult(winner) {
@@ -1116,7 +1121,7 @@ function saveMatchResult(winner) {
       highRun: player.high,
       average: averageFor(player),
       score: player.score,
-      inning: state.inning,
+      inning: player.finishedAtInning || state.inning,
     })),
   };
 

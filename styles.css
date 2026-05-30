@@ -83,6 +83,7 @@ button:disabled {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  align-content: start;
   gap: 16px;
   padding: 22px;
   background: var(--surface);
@@ -1802,6 +1803,7 @@ h2 {
     width: calc(100vw - 12px);
     min-height: calc(100svh - 12px);
     margin-top: 6px;
+    align-content: start;
   }
 
   .record-average {
@@ -1932,16 +1934,21 @@ h2 {
   }
 
   .selection-strip {
+    display: flex;
     gap: 8px;
   }
 
-  .selection-card {
-    min-height: 60px;
-    padding: 11px 12px;
+  .selection-strip .selection-card {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 54px;
+    padding: 9px 8px;
   }
 
   .selection-card strong {
-    font-size: 20px;
+    gap: 5px;
+    padding: 0;
+    font-size: 15px;
   }
 
   .member-form {
