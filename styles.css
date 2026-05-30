@@ -2467,6 +2467,14 @@ h2 {
     transform: translateX(-50%);
   }
 
+  .board[data-players="3"] .player-card.is-active .inning-score strong::before,
+  .board[data-players="4"] .player-card.is-active .inning-score strong::before {
+    top: 4px;
+    font-size: 8px;
+    letter-spacing: -0.08em;
+    white-space: nowrap;
+  }
+
   .board[data-players="3"] .player-card.is-active .inning-score > span,
   .board[data-players="4"] .player-card.is-active .inning-score > span {
     gap: 1px;
