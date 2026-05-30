@@ -2466,6 +2466,19 @@ h2 {
     letter-spacing: 0.02em;
     transform: translateX(-50%);
   }
+
+  .board[data-players="3"] .player-card.is-active .inning-score > span,
+  .board[data-players="4"] .player-card.is-active .inning-score > span {
+    gap: 1px;
+    font-size: clamp(8px, 1.55vw, 11px);
+    letter-spacing: -0.04em;
+    transform: translateY(-2px);
+  }
+
+  .board[data-players="3"] .player-card.is-active .inning-score small,
+  .board[data-players="4"] .player-card.is-active .inning-score small {
+    font-size: inherit;
+  }
 }
 
 .selection-strip strong .member-label-target {
