@@ -936,6 +936,7 @@ function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = 
   const currentIndex = state.active;
   const current = state.players[currentIndex];
   const next = state.players[playerIndex];
+  const shouldFollowPreviousColor = followPreviousColor || current?.status === "win";
   const previousColor =
     current && typeof current.ballYellow === "boolean" ? current.ballYellow : current ? isYellowBall(current, currentIndex) : null;
   const preservedNextColor =
@@ -949,7 +950,14 @@ function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = 
   const inningChanged = playerIndex <= currentIndex;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
-  adjustTurnBallColor(next, playerIndex, previousColor, preservedNextColor, adjustBallColor && inningChanged, followPreviousColor);
+  adjustTurnBallColor(
+    next,
+    playerIndex,
+    previousColor,
+    preservedNextColor,
+    adjustBallColor && inningChanged,
+    shouldFollowPreviousColor,
+  );
   resetTimer(true);
 }
 
@@ -1113,8 +1121,6 @@ function checkWinnerForRankedPlay(player) {
       saveMatchResult(player);
       state.resultSaved = true;
     }
-  } else if (state.players[state.active] === player) {
-    beginTurn(nextPlayerIndex(state.active), { adjustBallColor: false, followPreviousColor: true });
   }
 
   renderScoreboard();
