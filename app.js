@@ -928,11 +928,12 @@ function updatePlayerStatus(player) {
   player.status = "win";
 }
 
-function beginTurn(playerIndex, { adjustBallColor = true } = {}) {
+function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = false } = {}) {
   const currentIndex = state.active;
   const current = state.players[currentIndex];
   const next = state.players[playerIndex];
-  const previousColor = current && current.status !== "win" ? isYellowBall(current, currentIndex) : null;
+  const previousColor =
+    current && typeof current.ballYellow === "boolean" ? current.ballYellow : current ? isYellowBall(current, currentIndex) : null;
   const preservedNextColor =
     !adjustBallColor && next && next.status !== "win" ? isYellowBall(next, playerIndex) : null;
   if (current && current.status !== "win") {
@@ -944,12 +945,16 @@ function beginTurn(playerIndex, { adjustBallColor = true } = {}) {
   const inningChanged = playerIndex <= currentIndex;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
-  adjustTurnBallColor(next, playerIndex, previousColor, preservedNextColor, adjustBallColor && inningChanged);
+  adjustTurnBallColor(next, playerIndex, previousColor, preservedNextColor, adjustBallColor && inningChanged, followPreviousColor);
   resetTimer(true);
 }
 
-function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust) {
+function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust, followPreviousColor) {
   if (!player || player.status === "win" || !hasRankedWinner()) return;
+  if (followPreviousColor && typeof previousColor === "boolean") {
+    player.ballYellow = !previousColor;
+    return;
+  }
   if (typeof preservedColor === "boolean") {
     player.ballYellow = preservedColor;
     return;
@@ -1009,7 +1014,9 @@ function handleScoreTouch(playerIndex) {
     speakTurn();
   } else {
     const before = scoreSnapshot(state.players[playerIndex]);
+    const previousColor = isYellowBall(state.players[playerIndex], playerIndex);
     addScore(playerIndex, 1);
+    if (state.players[playerIndex].status === "win") state.players[playerIndex].ballYellow = previousColor;
     announceScoreState(state.players[playerIndex], before);
     if (!state.gameEnded) resetTimer(true);
   }
@@ -1088,7 +1095,7 @@ function checkWinnerForRankedPlay(player) {
       state.resultSaved = true;
     }
   } else if (state.players[state.active] === player) {
-    beginTurn(nextPlayerIndex(state.active), { adjustBallColor: false });
+    beginTurn(nextPlayerIndex(state.active), { adjustBallColor: false, followPreviousColor: true });
   }
 
   renderScoreboard();
