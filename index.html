@@ -11,7 +11,7 @@
     <title>PLAY Billiards Scoreboard</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
-    <link rel="stylesheet" href="styles.css?v=20260531-33" />
+    <link rel="stylesheet" href="styles.css?v=20260531-34" />
   </head>
   <body>
     <main class="app-shell">
@@ -162,7 +162,11 @@
             <button type="button" data-quick-score="1">+1</button>
             <button type="button" data-quick-score="3">+3</button>
             <button type="button" data-quick-score="5">+5</button>
-            <button class="icon-button undo-quick-button" id="undoButton" type="button" aria-label="되돌리기">↶</button>
+            <button class="icon-button undo-quick-button" id="undoButton" type="button" aria-label="되돌리기">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 7H5m0 0 3-3M5 7l3 3m-3-3h8a6 6 0 1 1-5.2 9" />
+              </svg>
+            </button>
           </div>
           <div class="header-actions">
             <span class="limit-chip" id="limitChip">제한 없음</span>
@@ -184,6 +188,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260531-33"></script>
+    <script src="app.js?v=20260531-34"></script>
   </body>
 </html>
