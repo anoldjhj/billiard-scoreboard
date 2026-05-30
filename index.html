@@ -11,7 +11,7 @@
     <title>PLAY Billiards Scoreboard</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
-    <link rel="stylesheet" href="styles.css?v=20260530-28" />
+    <link rel="stylesheet" href="styles.css?v=20260530-29" />
   </head>
   <body>
     <main class="app-shell">
@@ -158,13 +158,13 @@
               <button id="inningDownButton" type="button" aria-label="이닝 내리기">▼</button>
             </div>
           </div>
+          <div class="quick-score-actions" aria-label="현재 선수 점수 빠르게 올리기">
+            <button type="button" data-quick-score="1">+1</button>
+            <button type="button" data-quick-score="3">+3</button>
+            <button type="button" data-quick-score="5">+5</button>
+          </div>
           <div class="header-actions">
             <span class="limit-chip" id="limitChip">제한 없음</span>
-            <div class="quick-score-actions" aria-label="현재 선수 점수 빠르게 올리기">
-              <button type="button" data-quick-score="1">+1</button>
-              <button type="button" data-quick-score="3">+3</button>
-              <button type="button" data-quick-score="5">+5</button>
-            </div>
             <button class="start-button" id="startButton" type="button">경기시작</button>
             <button class="turn-change-button" id="turnSwitchButton" type="button">선수변경</button>
             <button class="icon-button" id="undoButton" type="button" aria-label="되돌리기">↶</button>
@@ -184,6 +184,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260530-28"></script>
+    <script src="app.js?v=20260530-29"></script>
   </body>
 </html>

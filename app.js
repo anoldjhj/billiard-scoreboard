@@ -692,7 +692,7 @@ function createPlayerCard(player, index) {
   const stats = document.createElement("div");
 
   card.className = `player-card player-${index + 1}`;
-  card.classList.toggle("is-active", index === state.active);
+  card.classList.toggle("is-active", index === state.active && player.status !== "win");
   card.classList.toggle("is-winner", player.status === "win");
   card.dataset.player = String(index);
 
