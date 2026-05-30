@@ -80,6 +80,7 @@ const els = {
   inningValue: $("#inningValue"),
   inningUpButton: $("#inningUpButton"),
   inningDownButton: $("#inningDownButton"),
+  quickScoreButtons: $$("[data-quick-score]"),
   startButton: $("#startButton"),
   turnSwitchButton: $("#turnSwitchButton"),
   homeButton: $("#homeButton"),
@@ -670,6 +671,9 @@ function renderScoreboard() {
   els.turnSwitchButton.disabled = state.gameEnded;
   els.inningUpButton.disabled = state.gameEnded;
   els.inningDownButton.disabled = state.gameEnded || state.inning <= 1;
+  els.quickScoreButtons.forEach((button) => {
+    button.disabled = !state.gameStarted || state.gameEnded;
+  });
   els.scoreScreen.classList.toggle("is-ended", state.gameEnded);
 
   els.scoreBoard.dataset.players = String(state.players.length);
@@ -1008,20 +1012,35 @@ function nextPlayerIndex(fromIndex = state.active) {
 function handleScoreTouch(playerIndex) {
   if (!state.gameStarted || state.gameEnded) return;
   if (state.players[playerIndex].status === "win") return;
-  snapshot();
   if (playerIndex !== state.active) {
+    snapshot();
     beginTurn(playerIndex);
     speakTurn();
   } else {
-    const before = scoreSnapshot(state.players[playerIndex]);
-    const previousColor = isYellowBall(state.players[playerIndex], playerIndex);
-    addScore(playerIndex, 1);
-    if (state.players[playerIndex].status === "win") state.players[playerIndex].ballYellow = previousColor;
-    announceScoreState(state.players[playerIndex], before);
-    if (!state.gameEnded) resetTimer(true);
+    scoreActivePlayer(1);
+    return;
   }
   renderScoreboard();
   checkWinnerForRankedPlay(state.players[playerIndex]);
+}
+
+function scoreActivePlayer(points) {
+  if (!state.gameStarted || state.gameEnded) return;
+  const playerIndex = state.active;
+  const player = state.players[playerIndex];
+  if (!player || player.status === "win") return;
+
+  snapshot();
+  const before = scoreSnapshot(player);
+  const previousColor = isYellowBall(player, playerIndex);
+  for (let point = 0; point < points && player.status !== "win"; point += 1) {
+    addScore(playerIndex, 1);
+  }
+  if (player.status === "win") player.ballYellow = previousColor;
+  announceScoreState(player, before);
+  if (!state.gameEnded) resetTimer(true);
+  renderScoreboard();
+  checkWinnerForRankedPlay(player);
 }
 
 function switchTurn() {
@@ -1511,6 +1530,9 @@ els.recordList.addEventListener("click", (event) => {
 });
 els.startButton.addEventListener("click", startMatch);
 els.turnSwitchButton.addEventListener("click", switchTurn);
+els.quickScoreButtons.forEach((button) => {
+  button.addEventListener("click", () => scoreActivePlayer(Number(button.dataset.quickScore)));
+});
 els.homeButton.addEventListener("click", goHome);
 els.gameType.addEventListener("change", () => {
   applyDefaultFinishSettings();
