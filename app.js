@@ -963,8 +963,8 @@ function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = 
 
 function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust, followPreviousColor) {
   if (!player || player.status === "win" || !hasRankedWinner()) return;
-  if (shouldAdjust && activePlayerCount() === 3) {
-    normalizeRemainingBallColors(index, previousColor);
+  if (shouldAdjust && usesThreePlayerBallRotation()) {
+    rotateRemainingBallColorsFromFirstSlot();
     return;
   }
   if (typeof previousColor === "boolean") {
@@ -993,27 +993,35 @@ function activePlayerCount() {
   return state.players.filter((player) => player.status !== "win").length;
 }
 
-function normalizeRemainingBallColors(startIndex, previousColor) {
-  const activeOrder = orderedActivePlayersFrom(startIndex);
-  if (!activeOrder.length) return;
+function usesThreePlayerBallRotation() {
+  return state.playerCount === 3 || activePlayerCount() === 3;
+}
 
-  const first = activeOrder[0];
-  const firstIndex = state.players.indexOf(first);
-  let nextColor = isYellowBall(first, firstIndex);
-  if (typeof previousColor === "boolean" && nextColor === previousColor) nextColor = !previousColor;
+function rotateRemainingBallColorsFromFirstSlot() {
+  const firstIndex = state.players.findIndex((player) => player.status !== "win");
+  if (firstIndex < 0) return;
 
-  activeOrder.forEach((player, orderIndex) => {
-    player.ballYellow = orderIndex % 2 === 0 ? nextColor : !nextColor;
+  const firstColor = !isYellowBall(state.players[firstIndex], firstIndex);
+  let orderIndex = 0;
+  state.players.forEach((player) => {
+    if (player.status === "win") return;
+    player.ballYellow = orderIndex % 2 === 0 ? firstColor : !firstColor;
+    orderIndex += 1;
   });
 }
 
-function orderedActivePlayersFrom(index) {
-  const ordered = [];
-  for (let step = 0; step < state.players.length; step += 1) {
-    const player = state.players[(index + step) % state.players.length];
-    if (player?.status !== "win") ordered.push(player);
-  }
-  return ordered;
+function normalizeRemainingBallColors(startIndex, previousColor) {
+  const nextPlayer = state.players[startIndex];
+  if (!nextPlayer || nextPlayer.status === "win") return;
+
+  let nextColor = isYellowBall(nextPlayer, startIndex);
+  if (typeof previousColor === "boolean") nextColor = !previousColor;
+
+  state.players.forEach((player, index) => {
+    if (player.status === "win") return;
+    const slotDistance = (index - startIndex + state.players.length) % state.players.length;
+    player.ballYellow = slotDistance % 2 === 0 ? nextColor : !nextColor;
+  });
 }
 
 function nextPlayerIndex(fromIndex = state.active) {
