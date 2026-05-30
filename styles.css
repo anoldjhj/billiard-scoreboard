@@ -2470,7 +2470,7 @@ h2 {
   .board[data-players="3"] .player-card.is-active .inning-score strong::before,
   .board[data-players="4"] .player-card.is-active .inning-score strong::before {
     top: 4px;
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: -0.08em;
     white-space: nowrap;
   }

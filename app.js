@@ -963,7 +963,11 @@ function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = 
 
 function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust, followPreviousColor) {
   if (!player || player.status === "win" || !hasRankedWinner()) return;
-  if (followPreviousColor && typeof previousColor === "boolean") {
+  if (shouldAdjust && activePlayerCount() === 3) {
+    normalizeRemainingBallColors(index, previousColor);
+    return;
+  }
+  if (typeof previousColor === "boolean") {
     player.ballYellow = !previousColor;
     return;
   }
@@ -983,6 +987,10 @@ function adjustTurnBallColor(player, index, previousColor, preservedColor, shoul
 
 function hasRankedWinner() {
   return state.players.some((player) => player.rank);
+}
+
+function activePlayerCount() {
+  return state.players.filter((player) => player.status !== "win").length;
 }
 
 function normalizeRemainingBallColors(startIndex, previousColor) {
@@ -1108,6 +1116,7 @@ function checkWinner(player) {
 
 function checkWinnerForRankedPlay(player) {
   if (player.status !== "win") return;
+  freezeDisplayedBallColors();
   assignRank(player);
 
   const remainingPlayers = state.players.filter((candidate) => candidate.status !== "win").length;
@@ -1126,6 +1135,12 @@ function checkWinnerForRankedPlay(player) {
   renderScoreboard();
   playVictorySound();
   speakText(`${player.name} 승리`);
+}
+
+function freezeDisplayedBallColors() {
+  state.players.forEach((player, index) => {
+    if (player.status !== "win") player.ballYellow = isYellowBall(player, index);
+  });
 }
 
 function assignRank(player) {
