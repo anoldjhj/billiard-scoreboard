@@ -989,10 +989,11 @@ function beginTurn(playerIndex) {
 function adjustTurnBallColor(player, index, shouldAdjust) {
   if (!player || player.status === "win" || !hasRankedWinner()) return;
   if (!shouldAdjust) return;
-  if (!usesThreePlayerBallRotation()) return;
+  if (activePlayerCount() < 2 || activePlayerCount() > 3) return;
   const previousIndex = previousPlayerIndex(index);
   const previousColor = isYellowBall(state.players[previousIndex], previousIndex);
   const currentColor = isYellowBall(player, index);
+  if (activePlayerCount() === 2 && currentColor !== previousColor) return;
   const firstColor = currentColor === previousColor ? !previousColor : currentColor;
   alternateRemainingBallColors(index, firstColor);
 }
@@ -1007,10 +1008,6 @@ function canEndRankedMatch() {
 
 function activePlayerCount() {
   return state.players.filter((player) => player.status !== "win").length;
-}
-
-function usesThreePlayerBallRotation() {
-  return activePlayerCount() === 3;
 }
 
 function alternateRemainingBallColors(startIndex, firstColor) {
