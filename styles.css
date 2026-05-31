@@ -270,6 +270,16 @@ h2 {
   color: #94a3b8;
 }
 
+.finish-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5px;
+}
+
+.finish-custom-input[hidden] {
+  display: none;
+}
+
 .game-options select,
 .game-options input,
 .member-form input {

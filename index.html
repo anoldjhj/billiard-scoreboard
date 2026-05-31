@@ -11,7 +11,7 @@
     <title>PLAY Billiards Scoreboard</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
-    <link rel="stylesheet" href="styles.css?v=20260531-46" />
+    <link rel="stylesheet" href="styles.css?v=20260531-55" />
   </head>
   <body>
     <main class="app-shell">
@@ -57,11 +57,33 @@
               </label>
               <label class="finish-option" id="finishThreeCField">
                 3C 마무리
-                <input id="finishThreeC" type="number" min="0" value="1" inputmode="numeric" />
+                <span class="finish-control">
+                  <select id="finishThreeC">
+                    <option value="0">0</option>
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="custom">입력</option>
+                  </select>
+                  <input id="finishThreeCCustom" class="finish-custom-input" type="number" min="0" inputmode="numeric" placeholder="입력" aria-label="3C 마무리 직접 입력" hidden />
+                </span>
               </label>
               <label class="finish-option">
                 Bank 마무리
-                <input id="finishBank" type="number" min="0" value="0" inputmode="numeric" />
+                <span class="finish-control">
+                  <select id="finishBank">
+                    <option value="0" selected>0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="custom">입력</option>
+                  </select>
+                  <input id="finishBankCustom" class="finish-custom-input" type="number" min="0" inputmode="numeric" placeholder="입력" aria-label="Bank 마무리 직접 입력" hidden />
+                </span>
               </label>
               <label>
                 제한시간
@@ -188,6 +210,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260531-46"></script>
+    <script src="app.js?v=20260531-55"></script>
   </body>
 </html>

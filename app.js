@@ -72,7 +72,9 @@ const els = {
   voiceStyle: $("#voiceStyle"),
   finishThreeCField: $("#finishThreeCField"),
   finishThreeC: $("#finishThreeC"),
+  finishThreeCCustom: $("#finishThreeCCustom"),
   finishBank: $("#finishBank"),
+  finishBankCustom: $("#finishBankCustom"),
   timerButton: $("#timerButton"),
   timerValue: $("#timerValue"),
   matchTimerValue: $("#matchTimerValue"),
@@ -148,8 +150,8 @@ function loadSettings() {
   els.gameType.value = gameType;
   els.playerCount.value = String(playerCount);
   els.shotLimit.value = settings.shotLimit || "none";
-  els.finishThreeC.value = settings.finish?.threeC ?? (gameType === "four-ball" ? "1" : "0");
-  els.finishBank.value = settings.finish?.bank ?? "0";
+  setFinishControlValue(els.finishThreeC, els.finishThreeCCustom, settings.finish?.threeC ?? (gameType === "four-ball" ? 1 : 0));
+  setFinishControlValue(els.finishBank, els.finishBankCustom, settings.finish?.bank ?? 0);
 
   renderFinishOptions();
   normalizeSelected();
@@ -164,8 +166,8 @@ function saveSettings() {
       gameType: els.gameType.value,
       playerCount: Number(els.playerCount.value),
       finish: {
-        threeC: Math.max(0, Number(els.finishThreeC.value) || 0),
-        bank: Math.max(0, Number(els.finishBank.value) || 0),
+        threeC: readFinishControlValue(els.finishThreeC, els.finishThreeCCustom),
+        bank: readFinishControlValue(els.finishBank, els.finishBankCustom),
       },
       shotLimit: els.shotLimit.value,
       selected: state.selected.slice(0, Math.max(state.playerCount, state.selected.length)),
@@ -322,21 +324,53 @@ function deleteMember(index) {
 
 function readFinishSettings() {
   state.finish = {
-    threeC: state.gameType === "four-ball" ? Math.max(0, Number(els.finishThreeC.value) || 0) : 0,
-    bank: Math.max(0, Number(els.finishBank.value) || 0),
+    threeC: state.gameType === "four-ball" ? readFinishControlValue(els.finishThreeC, els.finishThreeCCustom) : 0,
+    bank: readFinishControlValue(els.finishBank, els.finishBankCustom),
   };
+}
+
+function readFinishControlValue(select, customInput) {
+  const value = select.value === "custom" ? customInput.value : select.value;
+  return Math.max(0, Number(value) || 0);
+}
+
+function setFinishControlValue(select, customInput, value) {
+  const normalized = Math.max(0, Number(value) || 0);
+  if (normalized <= 5) {
+    select.value = String(normalized);
+  } else {
+    select.value = "custom";
+    customInput.value = String(normalized);
+  }
+  renderFinishCustomInput(select, customInput);
+}
+
+function renderFinishCustomInput(select, customInput, focusInput = false) {
+  const showCustomInput = select.value === "custom";
+  select.hidden = showCustomInput;
+  customInput.hidden = !showCustomInput;
+  if (showCustomInput && focusInput) customInput.focus();
+}
+
+function commitFinishCustomInput(select, customInput) {
+  setFinishControlValue(select, customInput, customInput.value);
+  readFinishSettings();
+  saveSettings();
 }
 
 function renderFinishOptions() {
   const isFourBall = els.gameType.value === "four-ball";
   els.finishThreeC.disabled = !isFourBall;
+  els.finishThreeCCustom.disabled = !isFourBall;
   els.finishThreeCField.classList.toggle("is-disabled", !isFourBall);
+  renderFinishCustomInput(els.finishThreeC, els.finishThreeCCustom);
+  renderFinishCustomInput(els.finishBank, els.finishBankCustom);
 }
 
 function applyDefaultFinishSettings() {
   const isFourBall = els.gameType.value === "four-ball";
-  els.finishThreeC.value = isFourBall ? "1" : "0";
-  els.finishBank.value = "0";
+  setFinishControlValue(els.finishThreeC, els.finishThreeCCustom, isFourBall ? 1 : 0);
+  setFinishControlValue(els.finishBank, els.finishBankCustom, 0);
   renderFinishOptions();
 }
 
@@ -665,8 +699,9 @@ function renderScoreboard() {
   renderMatchTimer();
   els.inningValue.textContent = state.inning;
   els.limitChip.textContent = state.timeLimit ? `제한 ${state.timeLimit}초` : "제한 없음";
-  els.startButton.disabled = state.gameStarted;
-  els.startButton.textContent = state.gameEnded ? "재경기" : state.gameStarted ? "경기중" : "경기시작";
+  const canEndMatch = canEndRankedMatch();
+  els.startButton.disabled = state.gameStarted && !canEndMatch;
+  els.startButton.textContent = state.gameEnded ? "재경기" : canEndMatch ? "경기종료" : state.gameStarted ? "경기중" : "경기시작";
   els.undoButton.disabled = state.gameEnded;
   els.turnSwitchButton.disabled = state.gameEnded;
   els.inningUpButton.disabled = state.gameEnded;
@@ -932,15 +967,12 @@ function updatePlayerStatus(player) {
   player.status = "win";
 }
 
-function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = false } = {}) {
+function beginTurn(playerIndex) {
   const currentIndex = state.active;
   const current = state.players[currentIndex];
   const next = state.players[playerIndex];
-  const shouldFollowPreviousColor = followPreviousColor || current?.status === "win";
   const previousColor =
     current && typeof current.ballYellow === "boolean" ? current.ballYellow : current ? isYellowBall(current, currentIndex) : null;
-  const preservedNextColor =
-    !adjustBallColor && next && next.status !== "win" ? isYellowBall(next, playerIndex) : null;
   if (current && current.status !== "win") {
     if (typeof current.ballYellow !== "boolean") current.ballYellow = previousColor;
     current.runs.push(current.turn);
@@ -950,43 +982,27 @@ function beginTurn(playerIndex, { adjustBallColor = true, followPreviousColor = 
   const inningChanged = playerIndex <= currentIndex;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
-  adjustTurnBallColor(
-    next,
-    playerIndex,
-    previousColor,
-    preservedNextColor,
-    adjustBallColor && inningChanged,
-    shouldFollowPreviousColor,
-  );
+  adjustTurnBallColor(next, playerIndex, inningChanged);
   resetTimer(true);
 }
 
-function adjustTurnBallColor(player, index, previousColor, preservedColor, shouldAdjust, followPreviousColor) {
+function adjustTurnBallColor(player, index, shouldAdjust) {
   if (!player || player.status === "win" || !hasRankedWinner()) return;
-  if (shouldAdjust && usesThreePlayerBallRotation()) {
-    rotateRemainingBallColorsFromFirstSlot();
-    return;
-  }
-  if (typeof previousColor === "boolean") {
-    player.ballYellow = !previousColor;
-    return;
-  }
-  if (typeof preservedColor === "boolean") {
-    player.ballYellow = preservedColor;
-    return;
-  }
-
-  if (shouldAdjust) {
-    normalizeRemainingBallColors(index, previousColor);
-    return;
-  }
-
-  const nextColor = isYellowBall(player, index);
-  if (typeof player.ballYellow !== "boolean") player.ballYellow = nextColor;
+  if (!shouldAdjust) return;
+  if (!usesThreePlayerBallRotation()) return;
+  const previousIndex = previousPlayerIndex(index);
+  const previousColor = isYellowBall(state.players[previousIndex], previousIndex);
+  const currentColor = isYellowBall(player, index);
+  const firstColor = currentColor === previousColor ? !previousColor : currentColor;
+  alternateRemainingBallColors(index, firstColor);
 }
 
 function hasRankedWinner() {
   return state.players.some((player) => player.rank);
+}
+
+function canEndRankedMatch() {
+  return state.gameStarted && state.players.length > 2 && hasRankedWinner();
 }
 
 function activePlayerCount() {
@@ -994,40 +1010,32 @@ function activePlayerCount() {
 }
 
 function usesThreePlayerBallRotation() {
-  return state.playerCount === 3 || activePlayerCount() === 3;
+  return activePlayerCount() === 3;
 }
 
-function rotateRemainingBallColorsFromFirstSlot() {
-  const firstIndex = state.players.findIndex((player) => player.status !== "win");
-  if (firstIndex < 0) return;
-
-  const firstColor = !isYellowBall(state.players[firstIndex], firstIndex);
+function alternateRemainingBallColors(startIndex, firstColor) {
   let orderIndex = 0;
-  state.players.forEach((player) => {
-    if (player.status === "win") return;
+  for (let step = 0; step < state.players.length; step += 1) {
+    const player = state.players[(startIndex + step) % state.players.length];
+    if (player.status === "win") continue;
     player.ballYellow = orderIndex % 2 === 0 ? firstColor : !firstColor;
     orderIndex += 1;
-  });
-}
-
-function normalizeRemainingBallColors(startIndex, previousColor) {
-  const nextPlayer = state.players[startIndex];
-  if (!nextPlayer || nextPlayer.status === "win") return;
-
-  let nextColor = isYellowBall(nextPlayer, startIndex);
-  if (typeof previousColor === "boolean") nextColor = !previousColor;
-
-  state.players.forEach((player, index) => {
-    if (player.status === "win") return;
-    const slotDistance = (index - startIndex + state.players.length) % state.players.length;
-    player.ballYellow = slotDistance % 2 === 0 ? nextColor : !nextColor;
-  });
+  }
 }
 
 function nextPlayerIndex(fromIndex = state.active) {
   for (let step = 1; step <= state.players.length; step += 1) {
     const nextIndex = (fromIndex + step) % state.players.length;
     if (state.players[nextIndex]?.status !== "win") return nextIndex;
+  }
+
+  return fromIndex;
+}
+
+function previousPlayerIndex(fromIndex) {
+  for (let step = 1; step <= state.players.length; step += 1) {
+    const previousIndex = (fromIndex - step + state.players.length) % state.players.length;
+    if (state.players[previousIndex]?.status !== "win") return previousIndex;
   }
 
   return fromIndex;
@@ -1454,6 +1462,10 @@ function openBoard() {
 }
 
 function startMatch() {
+  if (canEndRankedMatch()) {
+    endRankedMatch();
+    return;
+  }
   if (state.gameStarted) return;
   if (state.gameEnded) {
     prepareRematch();
@@ -1468,6 +1480,20 @@ function startMatch() {
   state.matchElapsed = 0;
   resetTimer(true);
   startMatchTimer();
+  renderScoreboard();
+}
+
+function endRankedMatch() {
+  const winner = state.players.find((player) => player.rank === 1);
+  if (!winner) return;
+  state.gameEnded = true;
+  state.gameStarted = false;
+  stopTimer();
+  stopMatchTimer();
+  if (!state.resultSaved) {
+    saveMatchResult(winner);
+    state.resultSaved = true;
+  }
   renderScoreboard();
 }
 
@@ -1596,13 +1622,17 @@ els.playerCount.addEventListener("change", () => {
 });
 els.shotLimit.addEventListener("change", saveSettings);
 els.finishThreeC.addEventListener("change", () => {
+  renderFinishCustomInput(els.finishThreeC, els.finishThreeCCustom, true);
   readFinishSettings();
   saveSettings();
 });
 els.finishBank.addEventListener("change", () => {
+  renderFinishCustomInput(els.finishBank, els.finishBankCustom, true);
   readFinishSettings();
   saveSettings();
 });
+els.finishThreeCCustom.addEventListener("change", () => commitFinishCustomInput(els.finishThreeC, els.finishThreeCCustom));
+els.finishBankCustom.addEventListener("change", () => commitFinishCustomInput(els.finishBank, els.finishBankCustom));
 els.timerButton.addEventListener("click", () => {
   if (!state.gameStarted || state.gameEnded) return;
   if (state.timerId) stopTimer();
