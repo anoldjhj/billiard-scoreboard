@@ -867,10 +867,10 @@ function announceScoreState(player, before) {
 
 function isYellowBall(player, index) {
   if (player.status === "win") return false;
+  if (typeof player.ballYellow === "boolean") return player.ballYellow;
   if (state.players.length === 3 && !hasRankedWinner()) {
     return yellowByOriginalRule(index, state.players.length);
   }
-  if (typeof player.ballYellow === "boolean") return player.ballYellow;
   return yellowByOriginalRule(index, state.players.length);
 }
 
@@ -971,10 +971,10 @@ function beginTurn(playerIndex) {
   const currentIndex = state.active;
   const current = state.players[currentIndex];
   const next = state.players[playerIndex];
-  const previousColor =
+  const currentColor =
     current && typeof current.ballYellow === "boolean" ? current.ballYellow : current ? isYellowBall(current, currentIndex) : null;
   if (current && current.status !== "win") {
-    if (typeof current.ballYellow !== "boolean") current.ballYellow = previousColor;
+    if (typeof current.ballYellow !== "boolean") current.ballYellow = currentColor;
     current.runs.push(current.turn);
     current.turn = 0;
     recalcHigh(current);
@@ -982,20 +982,17 @@ function beginTurn(playerIndex) {
   const inningChanged = playerIndex <= currentIndex;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
-  adjustTurnBallColor(next, playerIndex, inningChanged);
+  if (inningChanged) arrangeBallColorsForNewInning();
   resetTimer(true);
 }
 
-function adjustTurnBallColor(player, index, shouldAdjust) {
-  if (!player || player.status === "win" || !hasRankedWinner()) return;
-  if (!shouldAdjust) return;
-  if (activePlayerCount() < 2 || activePlayerCount() > 3) return;
-  const previousIndex = previousPlayerIndex(index);
-  const previousColor = isYellowBall(state.players[previousIndex], previousIndex);
-  const currentColor = isYellowBall(player, index);
-  if (activePlayerCount() === 2 && currentColor !== previousColor) return;
-  const firstColor = currentColor === previousColor ? !previousColor : currentColor;
-  alternateRemainingBallColors(index, firstColor);
+function arrangeBallColorsForNewInning() {
+  const firstIndex = state.players.findIndex((player) => player.status !== "win");
+  if (firstIndex < 0 || activePlayerCount() < 2) return;
+  const lastIndex = findLastActivePlayerIndex();
+  if (lastIndex < 0) return;
+  // Skipped players count as played. Start opposite the last slot, then rebuild every remaining card in order.
+  alternateRemainingBallColors(firstIndex, !isYellowBall(state.players[lastIndex], lastIndex));
 }
 
 function hasRankedWinner() {
@@ -1029,13 +1026,12 @@ function nextPlayerIndex(fromIndex = state.active) {
   return fromIndex;
 }
 
-function previousPlayerIndex(fromIndex) {
-  for (let step = 1; step <= state.players.length; step += 1) {
-    const previousIndex = (fromIndex - step + state.players.length) % state.players.length;
-    if (state.players[previousIndex]?.status !== "win") return previousIndex;
+function findLastActivePlayerIndex() {
+  for (let index = state.players.length - 1; index >= 0; index -= 1) {
+    if (state.players[index]?.status !== "win") return index;
   }
 
-  return fromIndex;
+  return -1;
 }
 
 function handleScoreTouch(playerIndex) {
