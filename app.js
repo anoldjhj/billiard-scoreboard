@@ -980,19 +980,19 @@ function beginTurn(playerIndex) {
     recalcHigh(current);
   }
   const inningChanged = playerIndex <= currentIndex;
+  const lastIndex = inningChanged ? findLastActivePlayerIndex() : -1;
+  const lastColor = lastIndex >= 0 ? isYellowBall(state.players[lastIndex], lastIndex) : null;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
-  if (inningChanged) arrangeBallColorsForNewInning();
+  if (inningChanged) arrangeBallColorsForNewInning(lastColor);
   resetTimer(true);
 }
 
-function arrangeBallColorsForNewInning() {
+function arrangeBallColorsForNewInning(lastColor) {
   const firstIndex = state.players.findIndex((player) => player.status !== "win");
-  if (firstIndex < 0 || activePlayerCount() < 2) return;
-  const lastIndex = findLastActivePlayerIndex();
-  if (lastIndex < 0) return;
+  if (firstIndex < 0 || activePlayerCount() < 2 || typeof lastColor !== "boolean") return;
   // Skipped players count as played. Start opposite the last slot, then rebuild every remaining card in order.
-  alternateRemainingBallColors(firstIndex, !isYellowBall(state.players[lastIndex], lastIndex));
+  alternateRemainingBallColors(firstIndex, !lastColor);
 }
 
 function hasRankedWinner() {
