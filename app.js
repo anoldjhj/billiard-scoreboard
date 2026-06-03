@@ -981,7 +981,12 @@ function beginTurn(playerIndex) {
   }
   const inningChanged = playerIndex <= currentIndex;
   const lastIndex = inningChanged ? findLastActivePlayerIndex() : -1;
-  const lastColor = lastIndex >= 0 ? isYellowBall(state.players[lastIndex], lastIndex) : null;
+  const lastColor =
+    current?.status === "win" && typeof current.ballYellow === "boolean"
+      ? current.ballYellow
+      : lastIndex >= 0
+        ? isYellowBall(state.players[lastIndex], lastIndex)
+        : null;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
   if (inningChanged) arrangeBallColorsForNewInning(lastColor);
