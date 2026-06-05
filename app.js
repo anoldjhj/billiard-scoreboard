@@ -198,16 +198,25 @@ function renderSelections() {
       const label = document.createElement("span");
       const value = document.createElement("strong");
       const member = state.members[state.selected[slot]];
+      const canSwap = state.nextPick !== slot && state.selected[state.nextPick] !== null && state.selected[slot] !== null;
 
       item.type = "button";
       item.className = "selection-card";
       item.classList.toggle("is-picking", state.nextPick === slot);
+      item.classList.toggle("can-swap", canSwap);
       item.dataset.selectionSlot = String(slot);
       item.setAttribute("aria-label", `선수${slot + 1} 박스 선택`);
       label.textContent = `선수${slot + 1}`;
       if (member) appendNameTarget(value, member);
       else value.textContent = selectionText(slot);
       item.append(label, value);
+      if (canSwap) {
+        const swap = document.createElement("span");
+        swap.className = "selection-swap-button";
+        swap.dataset.swapSlot = String(slot);
+        swap.textContent = "Swap";
+        item.append(swap);
+      }
       return item;
     }),
   );
@@ -269,6 +278,16 @@ function pickMember(index) {
 
 function selectPlayerSlot(slot) {
   state.nextPick = Math.min(Math.max(0, slot), state.playerCount - 1);
+  saveSettings();
+  renderMembers();
+}
+
+function swapSelectedSlots(slot) {
+  const targetSlot = Math.min(Math.max(0, slot), state.playerCount - 1);
+  const sourceSlot = state.nextPick;
+  if (targetSlot === sourceSlot || state.selected[sourceSlot] === null || state.selected[targetSlot] === null) return;
+  [state.selected[sourceSlot], state.selected[targetSlot]] = [state.selected[targetSlot], state.selected[sourceSlot]];
+  state.nextPick = targetSlot;
   saveSettings();
   renderMembers();
 }
@@ -703,7 +722,7 @@ function renderScoreboard() {
   els.startButton.disabled = state.gameStarted && !canEndMatch;
   els.startButton.textContent = state.gameEnded ? "재경기" : canEndMatch ? "경기종료" : state.gameStarted ? "경기중" : "경기시작";
   els.undoButton.disabled = state.gameEnded;
-  els.turnSwitchButton.disabled = state.gameEnded;
+  els.turnSwitchButton.disabled = false;
   els.inningUpButton.disabled = state.gameEnded;
   els.inningDownButton.disabled = state.gameEnded || state.inning <= 1;
   els.quickScoreButtons.forEach((button) => {
@@ -1040,6 +1059,8 @@ function findLastActivePlayerIndex() {
 }
 
 function handleScoreTouch(playerIndex) {
+  if (state.gameEnded) return;
+  if (!state.gameStarted) startMatch();
   if (!state.gameStarted || state.gameEnded) return;
   if (state.players[playerIndex].status === "win") return;
   if (playerIndex !== state.active) {
@@ -1074,8 +1095,7 @@ function scoreActivePlayer(points) {
 }
 
 function switchTurn() {
-  if (state.gameEnded) return;
-  if (!state.gameStarted) {
+  if (state.gameEnded || !state.gameStarted) {
     state.players.unshift(state.players.pop());
     state.active = 0;
     renderScoreboard();
@@ -1467,6 +1487,7 @@ function startMatch() {
   if (state.gameStarted) return;
   if (state.gameEnded) {
     prepareRematch();
+    startMatch();
     return;
   }
   snapshot();
@@ -1569,6 +1590,13 @@ els.editList.addEventListener("click", (event) => {
   if (pickButton) pickMember(Number(pickButton.dataset.pickIndex));
 });
 els.selectionStrip.addEventListener("click", (event) => {
+  const swapButton = event.target.closest("[data-swap-slot]");
+  if (swapButton) {
+    event.stopPropagation();
+    swapSelectedSlots(Number(swapButton.dataset.swapSlot));
+    return;
+  }
+
   const slotButton = event.target.closest("[data-selection-slot]");
   if (slotButton) selectPlayerSlot(Number(slotButton.dataset.selectionSlot));
 });
