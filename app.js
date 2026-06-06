@@ -303,6 +303,10 @@ function displayName(name) {
   );
 }
 
+function compactSetupLabels() {
+  return isCompactViewport() && !els.setupScreen.classList.contains("is-hidden");
+}
+
 function applyLanguage() {
   document.documentElement.lang = state.language;
   document.documentElement.setAttribute("translate", "no");
@@ -327,34 +331,37 @@ function applyLanguage() {
   text("#winnerTitle", t("win"));
   text(".winner-dialog button", t("ok"));
 
-  setLabelText(els.gameType, t("gameType"));
-  setLabelText(els.playerCount, t("playerCount"));
-  setLabelText(els.finishThreeC, t("finishThreeC"));
-  setLabelText(els.finishBank, t("finishBank"));
-  setLabelText(els.shotLimit, t("timeLimit"));
-  setLabelText(els.warningSound, t("warningSound"));
-  setLabelText(els.languageSelect, t("language"));
+  const compactSetup = compactSetupLabels();
+  setLabelText(els.gameType, state.language === "en" && compactSetup ? "Type" : t("gameType"));
+  setLabelText(els.playerCount, state.language === "en" && compactSetup ? "Plyrs" : t("playerCount"));
+  setLabelText(els.finishThreeC, state.language === "en" && compactSetup ? "3C" : t("finishThreeC"));
+  setLabelText(els.finishBank, state.language === "en" && compactSetup ? "Bank" : t("finishBank"));
+  setLabelText(els.shotLimit, state.language === "en" && compactSetup ? "Clock" : t("timeLimit"));
+  setLabelText(els.warningSound, state.language === "en" && compactSetup ? "Warn" : t("warningSound"));
+  setLabelText(els.languageSelect, state.language === "en" && compactSetup ? "Lang" : t("language"));
   setLabelText(els.voiceSelect, t("voice"));
-  setLabelText(els.voiceStyle, t("voiceStyle"));
+  setLabelText(els.voiceStyle, state.language === "en" && compactSetup ? "Style" : t("voiceStyle"));
   setLabelText(els.recordGameType, t("gameType"));
   setLabelText(els.recordPlayerSelect, t("playerSelect"));
 
   setOptionText(els.gameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
-  setOptionText(els.gameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
+  setOptionText(els.gameType, "three-cushion", state.language === "en" ? (compactSetup ? "3C" : "3 Cushion") : "3구");
   setOptionText(els.recordGameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
   setOptionText(els.recordGameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
-  [2, 3, 4].forEach((count) => setOptionText(els.playerCount, String(count), state.language === "en" ? `${count} Players` : `${count}명`));
+  [2, 3, 4].forEach((count) =>
+    setOptionText(els.playerCount, String(count), state.language === "en" ? (compactSetup ? `${count}P` : `${count} Players`) : `${count}명`),
+  );
   [els.finishThreeC, els.finishBank].forEach((select) => setOptionText(select, "custom", t("customInput")));
-  setOptionText(els.shotLimit, "none", t("noLimit"));
+  setOptionText(els.shotLimit, "none", state.language === "en" && compactSetup ? "No" : t("noLimit"));
   [30, 40, 50, 60].forEach((seconds) => setOptionText(els.shotLimit, String(seconds), `${seconds}${t("seconds")}`));
   setOptionText(els.warningSound, "on", t("use"));
   setOptionText(els.warningSound, "off", t("off"));
-  setOptionText(els.languageSelect, "ko", t("korean"));
-  setOptionText(els.languageSelect, "en", t("english"));
-  setOptionText(els.voiceStyle, "bright", t("voiceBright"));
-  setOptionText(els.voiceStyle, "young", t("voiceYoung"));
-  setOptionText(els.voiceStyle, "clear", t("voiceClear"));
-  setOptionText(els.voiceStyle, "calm", t("voiceCalm"));
+  setOptionText(els.languageSelect, "ko", state.language === "en" && compactSetup ? "KOR" : t("korean"));
+  setOptionText(els.languageSelect, "en", state.language === "en" && compactSetup ? "ENG" : t("english"));
+  setOptionText(els.voiceStyle, "bright", state.language === "en" && compactSetup ? "Brt" : t("voiceBright"));
+  setOptionText(els.voiceStyle, "young", state.language === "en" && compactSetup ? "Yng" : t("voiceYoung"));
+  setOptionText(els.voiceStyle, "clear", state.language === "en" && compactSetup ? "Clr" : t("voiceClear"));
+  setOptionText(els.voiceStyle, "calm", state.language === "en" && compactSetup ? "Calm" : t("voiceCalm"));
 
   els.finishThreeCCustom.placeholder = t("customInput");
   els.finishThreeCCustom.setAttribute("aria-label", `${t("finishThreeC")} ${t("customInput")}`);
@@ -1778,7 +1785,7 @@ function showSetup() {
   els.recordsScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
-  renderMembers();
+  applyLanguage();
 }
 
 function canReturnToBoard() {
@@ -1926,7 +1933,7 @@ function goHome() {
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
   els.recordsScreen.classList.add("is-hidden");
-  renderMembers();
+  applyLanguage();
 }
 
 function setPreferredOrientation(orientation) {
@@ -2069,6 +2076,7 @@ els.scoreBoard.addEventListener("click", (event) => {
 function handleViewportChange() {
   syncVisualViewport();
   if (!els.scoreScreen.classList.contains("is-hidden")) renderScoreboard();
+  else if (!els.setupScreen.classList.contains("is-hidden")) applyLanguage();
 }
 
 window.addEventListener("resize", handleViewportChange);
