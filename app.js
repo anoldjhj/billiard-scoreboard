@@ -284,6 +284,13 @@ function currentLocale() {
   return state.language === "en" ? "en-US" : "ko-KR";
 }
 
+function isCompactViewport() {
+  const viewport = window.visualViewport;
+  const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
+  const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  return Math.min(width, height) <= 520 && Math.max(width, height) <= 980;
+}
+
 function displayName(name) {
   if (state.language !== "en") return name;
   return (
@@ -1049,10 +1056,16 @@ function renderScoreboard() {
   els.inningValue.textContent = state.inning;
   els.limitChip.textContent = state.timeLimit ? `${t("limitPrefix")} ${state.timeLimit}${t("seconds")}` : `${t("limitPrefix")} ${t("noLimit")}`;
   els.startButton.disabled = false;
-  els.startButton.textContent = state.gameEnded ? t("rematch") : state.gameStarted ? t("endMatch") : t("startMatch");
-  els.startButton.dataset.shortText = state.gameEnded ? t("rematch") : state.gameStarted ? t("endMatchShort") : t("startMatch");
-  els.turnSwitchButton.dataset.shortText = t("changePlayerShort");
-  els.homeButton.dataset.shortText = t("setupShort");
+  const compactActions = isCompactViewport();
+  els.startButton.textContent = state.gameEnded
+    ? t("rematch")
+    : state.gameStarted
+      ? compactActions
+        ? t("endMatchShort")
+        : t("endMatch")
+      : t("startMatch");
+  els.turnSwitchButton.textContent = compactActions ? t("changePlayerShort") : t("changePlayer");
+  els.homeButton.textContent = compactActions ? t("setupShort") : t("setup");
   els.undoButton.disabled = state.gameEnded;
   els.turnSwitchButton.disabled = false;
   els.inningUpButton.disabled = state.gameEnded;
@@ -2053,8 +2066,13 @@ els.scoreBoard.addEventListener("click", (event) => {
   const turnButton = event.target.closest("[data-turn-index]");
   if (turnButton) reduceTurn(Number(turnButton.dataset.turnIndex));
 });
-window.addEventListener("resize", syncVisualViewport);
-window.visualViewport?.addEventListener("resize", syncVisualViewport);
+function handleViewportChange() {
+  syncVisualViewport();
+  if (!els.scoreScreen.classList.contains("is-hidden")) renderScoreboard();
+}
+
+window.addEventListener("resize", handleViewportChange);
+window.visualViewport?.addEventListener("resize", handleViewportChange);
 window.visualViewport?.addEventListener("scroll", syncVisualViewport);
 
 if ("speechSynthesis" in window) {
