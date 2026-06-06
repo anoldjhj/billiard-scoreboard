@@ -245,6 +245,8 @@ h2 {
 
 .game-options .language-option {
   grid-column: 5;
+  justify-self: stretch;
+  min-width: 0;
 }
 
 .game-options .sound-option,
@@ -611,6 +613,13 @@ h2 {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.selection-strip .member-label-name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  line-height: 1.05;
 }
 
 .member-label-target {
@@ -2121,22 +2130,39 @@ h2 {
     grid-template-rows: 18px 38px;
   }
 
+  .game-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .game-options .voice-option,
+  .game-options .language-option {
+    grid-column: auto;
+  }
+
+  .game-options .sound-option,
+  .game-options .language-option,
+  .game-options .voice-option {
+    grid-row: auto;
+  }
+
   .game-options select,
   .game-options input {
     min-height: 38px;
     font-size: 14px;
+    width: 100%;
+    min-width: 0;
   }
 
   .selection-strip {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 
   .selection-strip .selection-card {
-    flex: 1 1 0;
     min-width: 0;
-    min-height: 54px;
-    padding: 9px 8px 28px;
+    min-height: 74px;
+    padding: 10px 10px 24px;
   }
 
   .selection-swap-button {
@@ -2151,7 +2177,7 @@ h2 {
   .selection-card strong {
     gap: 5px;
     padding: 0;
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .member-form {
@@ -2392,6 +2418,37 @@ h2 {
     min-width: 46px;
     height: 46px;
     font-size: 13px;
+  }
+
+  .start-button,
+  .turn-change-button,
+  .settings-button {
+    position: relative;
+    color: transparent;
+    min-width: 42px;
+    overflow: hidden;
+  }
+
+  .start-button::after,
+  .turn-change-button::after,
+  .settings-button::after {
+    content: attr(data-short-text);
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: currentColor;
+    color: #c2410c;
+    font: inherit;
+    white-space: nowrap;
+  }
+
+  .turn-change-button::after {
+    color: #075985;
+  }
+
+  .settings-button::after {
+    color: #334155;
   }
 
   .icon-button {

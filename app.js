@@ -59,8 +59,11 @@ const I18N = {
     playerBoardAria: "선수 점수판",
     startMatch: "경기시작",
     endMatch: "경기종료",
+    endMatchShort: "종료",
     rematch: "재경기",
     changePlayer: "선수변경",
+    changePlayerShort: "변경",
+    setupShort: "설정",
     win: "승리",
     player: "선수",
     noneSelected: "선택 없음",
@@ -135,8 +138,11 @@ const I18N = {
     playerBoardAria: "Player scoreboard",
     startMatch: "Start",
     endMatch: "End Match",
+    endMatchShort: "End",
     rematch: "Rematch",
     changePlayer: "Change Player",
+    changePlayerShort: "Change",
+    setupShort: "Set",
     win: "Win",
     player: "Player",
     noneSelected: "No Selection",
@@ -1044,6 +1050,9 @@ function renderScoreboard() {
   els.limitChip.textContent = state.timeLimit ? `${t("limitPrefix")} ${state.timeLimit}${t("seconds")}` : `${t("limitPrefix")} ${t("noLimit")}`;
   els.startButton.disabled = false;
   els.startButton.textContent = state.gameEnded ? t("rematch") : state.gameStarted ? t("endMatch") : t("startMatch");
+  els.startButton.dataset.shortText = state.gameEnded ? t("rematch") : state.gameStarted ? t("endMatchShort") : t("startMatch");
+  els.turnSwitchButton.dataset.shortText = t("changePlayerShort");
+  els.homeButton.dataset.shortText = t("setupShort");
   els.undoButton.disabled = state.gameEnded;
   els.turnSwitchButton.disabled = false;
   els.inningUpButton.disabled = state.gameEnded;
