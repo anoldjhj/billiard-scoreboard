@@ -350,6 +350,7 @@ h2 {
   background: #e0f2fe;
   color: #075985;
   font-size: 13px;
+  white-space: nowrap;
   box-shadow: inset 0 -2px 0 rgba(14, 165, 233, 0.16);
 }
 
@@ -2119,6 +2120,18 @@ h2 {
     font-size: 18px;
   }
 
+  .member-title-actions {
+    gap: 5px;
+  }
+
+  .compact-action {
+    min-width: 58px;
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 11px;
+    line-height: 1;
+  }
+
   .game-options label,
   .selection-strip span {
     font-size: 11px;
@@ -2137,10 +2150,12 @@ h2 {
   }
 
   .game-options label {
-    grid-template-rows: 18px 38px;
+    grid-template-rows: auto 38px;
+    gap: 1px;
     font-size: 9.5px;
     overflow: visible;
     position: relative;
+    line-height: 1.05;
   }
 
   .game-options {
@@ -2178,7 +2193,7 @@ h2 {
     content: "";
     position: absolute;
     right: 4px;
-    bottom: 15px;
+    bottom: 14px;
     width: 6px;
     height: 6px;
     border-right: 2px solid currentColor;

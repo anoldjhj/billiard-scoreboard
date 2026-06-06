@@ -89,6 +89,7 @@ const I18N = {
     appTitle: "PLAY Billiards Scoreboard 3/4 Ball",
     matchSettings: "Match Settings",
     returnBoard: "Back to Board",
+    returnBoardShort: "Board",
     startBoard: "Start Board",
     records: "Records",
     matchRecords: "Match Records",
@@ -320,18 +321,18 @@ function applyLanguage() {
   text(".member-title h2", t("matchSettings"));
   text(".manager-summary-title", t("managerTitle"));
   text("#openBoardButton", t("startBoard"));
-  text("#returnBoardButton", t("returnBoard"));
+  const compactSetup = compactSetupLabels();
+  text("#returnBoardButton", state.language === "en" && compactSetup ? t("returnBoardShort") : t("returnBoard"));
   text("#openRecordsButton", t("records"));
   text(".records-header h1", t("matchRecords"));
   text(".record-average div span", t("recordAverage"));
-  text("#returnBoardFromRecordsButton", t("returnBoard"));
+  text("#returnBoardFromRecordsButton", state.language === "en" && isCompactViewport() ? t("returnBoardShort") : t("returnBoard"));
   text("#backToSetupButton", t("backToSetup"));
   text("#homeButton", t("setup"));
   text("#turnSwitchButton", t("changePlayer"));
   text("#winnerTitle", t("win"));
   text(".winner-dialog button", t("ok"));
 
-  const compactSetup = compactSetupLabels();
   setLabelText(els.gameType, state.language === "en" && compactSetup ? "Type" : t("gameType"));
   setLabelText(els.playerCount, state.language === "en" && compactSetup ? "Plyrs" : t("playerCount"));
   setLabelText(els.finishThreeC, state.language === "en" && compactSetup ? "3C" : t("finishThreeC"));
