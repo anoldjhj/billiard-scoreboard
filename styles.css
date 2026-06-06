@@ -2140,6 +2140,7 @@ h2 {
     grid-template-rows: 18px 38px;
     font-size: 9.5px;
     overflow: visible;
+    position: relative;
   }
 
   .game-options {
@@ -2164,7 +2165,26 @@ h2 {
     font-size: 11.5px;
     width: 100%;
     min-width: 0;
-    padding: 0 14px 0 5px;
+    padding: 0 10px 0 5px;
+  }
+
+  .game-options select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: none;
+  }
+
+  .game-options label:has(select)::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 15px;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    pointer-events: none;
+    transform: rotate(45deg);
   }
 
   .selection-strip {
@@ -2190,6 +2210,7 @@ h2 {
   }
 
   .selection-card strong {
+    grid-template-rows: minmax(0, 1fr) 20px;
     gap: 5px;
     padding: 0;
     font-size: 14px;
@@ -2197,7 +2218,8 @@ h2 {
   }
 
   .selection-strip .member-label-name {
-    max-height: 18px;
+    white-space: normal;
+    max-height: 36px;
     overflow: hidden;
   }
 
