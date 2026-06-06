@@ -4,6 +4,161 @@ const SETTINGS_KEY = "billiards-settings-v1";
 const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
+const LANGUAGE_KEY = "billiards-language-v1";
+const I18N = {
+  ko: {
+    appTitle: "PLAY 당구점수판 3/4구",
+    matchSettings: "경기설정",
+    returnBoard: "점수판으로",
+    startBoard: "점수판 시작",
+    records: "기록보기",
+    matchRecords: "경기 기록",
+    gameType: "경기방식",
+    playerCount: "인원수",
+    finishThreeC: "3C 마무리",
+    finishBank: "Bank 마무리",
+    customInput: "입력",
+    timeLimit: "제한시간",
+    noLimit: "없음",
+    seconds: "초",
+    warningSound: "경고음",
+    use: "사용",
+    off: "끄기",
+    language: "언어/Language",
+    korean: "한국어",
+    english: "English",
+    voice: "음성",
+    voiceStyle: "음성스타일",
+    autoSelect: "자동 선택",
+    voiceBright: "밝은 여성",
+    voiceYoung: "어린 톤",
+    voiceClear: "또렷한 안내",
+    voiceCalm: "차분한 톤",
+    selectedPlayers: "선택된 선수",
+    managerTitle: "선수 등록/편집",
+    memberName: "선수 이름",
+    targetScore: "점수",
+    targetScoreAria: "목표점수",
+    add: "등록",
+    update: "수정",
+    edit: "편집",
+    delete: "삭제",
+    setup: "설정",
+    backToSetup: "설정으로",
+    recordAverage: "평균 Aver.",
+    playerSelect: "선수 선택",
+    recentRecords: "최근 30게임 기록",
+    scoreboard: "점수판",
+    timerAria: "타이머 일시정지 또는 다시 시작",
+    matchTimeAria: "전체 경기시간",
+    inningAdjustAria: "이닝 수동 조정",
+    inningUpAria: "이닝 올리기",
+    inningDownAria: "이닝 내리기",
+    quickScoreAria: "현재 선수 점수 빠르게 올리기",
+    undoAria: "되돌리기",
+    playerBoardAria: "선수 점수판",
+    startMatch: "경기시작",
+    endMatch: "경기종료",
+    rematch: "재경기",
+    changePlayer: "선수변경",
+    win: "승리",
+    player: "선수",
+    noneSelected: "선택 없음",
+    boxSelect: "박스 선택",
+    score: "점수",
+    inningScoreMinus: "이닝스코어 1점 빼기",
+    savedTwoRecordsEmpty: "저장된 2인 경기 기록이 없습니다.",
+    savedRecordsEmpty: "저장된 경기 기록이 없습니다.",
+    recordDeleteAria: "기록 삭제",
+    peopleSuffix: "인",
+    choosePlayersAlert: "명의 선수를 선택해 주세요.",
+    limitPrefix: "제한",
+    pointSuffix: "점",
+    minusOne: "마이너스 일",
+    bankShot: "뱅크샷입니다",
+    remainingCount: "개 남았습니다",
+    remainingScore: "점 남았습니다",
+    matchEnded: "경기종료",
+    wonSentence: "님이 승리하였습니다",
+    ok: "확인",
+  },
+  en: {
+    appTitle: "PLAY Billiards Scoreboard 3/4 Ball",
+    matchSettings: "Match Settings",
+    returnBoard: "Back to Board",
+    startBoard: "Start Board",
+    records: "Records",
+    matchRecords: "Match Records",
+    gameType: "Game Type",
+    playerCount: "Players",
+    finishThreeC: "3C Finish",
+    finishBank: "Bank Finish",
+    customInput: "Custom",
+    timeLimit: "Shot Clock",
+    noLimit: "None",
+    seconds: "sec",
+    warningSound: "Warning",
+    use: "On",
+    off: "Off",
+    language: "언어/Language",
+    korean: "Korean",
+    english: "English",
+    voice: "Voice",
+    voiceStyle: "Voice Style",
+    autoSelect: "Auto",
+    voiceBright: "Bright Female",
+    voiceYoung: "Young Tone",
+    voiceClear: "Clear Guide",
+    voiceCalm: "Calm Tone",
+    selectedPlayers: "Selected Players",
+    managerTitle: "Player Add/Edit",
+    memberName: "Player Name",
+    targetScore: "Score",
+    targetScoreAria: "Score",
+    add: "Add",
+    update: "Update",
+    edit: "Edit",
+    delete: "Delete",
+    setup: "Settings",
+    backToSetup: "Settings",
+    recordAverage: "Average",
+    playerSelect: "Player",
+    recentRecords: "Recent 30 Match Records",
+    scoreboard: "Scoreboard",
+    timerAria: "Pause or restart timer",
+    matchTimeAria: "Total match time",
+    inningAdjustAria: "Manual inning adjustment",
+    inningUpAria: "Increase inning",
+    inningDownAria: "Decrease inning",
+    quickScoreAria: "Quickly add score for current player",
+    undoAria: "Undo",
+    playerBoardAria: "Player scoreboard",
+    startMatch: "Start",
+    endMatch: "End Match",
+    rematch: "Rematch",
+    changePlayer: "Change Player",
+    win: "Win",
+    player: "Player",
+    noneSelected: "No Selection",
+    boxSelect: "box select",
+    score: "score",
+    inningScoreMinus: "subtract 1 run point",
+    savedTwoRecordsEmpty: "No saved 2-player match records.",
+    savedRecordsEmpty: "No saved match records.",
+    recordDeleteAria: "delete record",
+    peopleSuffix: " players",
+    choosePlayersAlert: " players.",
+    limitPrefix: "Limit",
+    pointSuffix: " points",
+    minusOne: "minus one",
+    bankShot: "Bank shot",
+    remainingCount: " remaining",
+    remainingScore: " points remaining",
+    matchEnded: "Match ended",
+    wonSentence: "won",
+    ok: "OK",
+  },
+};
 const VOICE_STYLES = {
   bright: { rate: 1.1, pitch: 1.8 },
   young: { rate: 1.38, pitch: 2 },
@@ -18,6 +173,7 @@ const DEFAULT_MEMBERS = [
 ];
 
 const state = {
+  language: localStorage.getItem(LANGUAGE_KEY) || "ko",
   gameType: "four-ball",
   playerCount: 2,
   finish: {
@@ -46,6 +202,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 let audioContext = null;
 let preferredVoice = null;
+let englishVoice = null;
 
 const els = {
   setupScreen: $("#setupScreen"),
@@ -58,7 +215,9 @@ const els = {
   addMemberButton: $("#addMemberButton"),
   selectionStrip: $("#selectionStrip"),
   openBoardButton: $("#openBoardButton"),
+  returnBoardButton: $("#returnBoardButton"),
   openRecordsButton: $("#openRecordsButton"),
+  returnBoardFromRecordsButton: $("#returnBoardFromRecordsButton"),
   backToSetupButton: $("#backToSetupButton"),
   recordGameType: $("#recordGameType"),
   recordPlayerSelect: $("#recordPlayerSelect"),
@@ -68,6 +227,7 @@ const els = {
   playerCount: $("#playerCount"),
   shotLimit: $("#shotLimit"),
   warningSound: $("#warningSound"),
+  languageSelect: $("#languageSelect"),
   voiceSelect: $("#voiceSelect"),
   voiceStyle: $("#voiceStyle"),
   finishThreeCField: $("#finishThreeCField"),
@@ -92,6 +252,128 @@ const els = {
   winnerTitle: $("#winnerTitle"),
   winnerText: $("#winnerText"),
 };
+
+function t(key) {
+  return I18N[state.language]?.[key] || I18N.ko[key] || key;
+}
+
+function text(selector, value) {
+  const element = $(selector);
+  if (element) element.textContent = value;
+}
+
+function setLabelText(control, value) {
+  const label = control?.closest("label");
+  if (!label) return;
+  const node = [...label.childNodes].find((child) => child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+  if (node) node.textContent = `\n                ${value}\n                `;
+}
+
+function setOptionText(select, value, label) {
+  const option = select?.querySelector(`option[value="${value}"]`);
+  if (option) option.textContent = label;
+}
+
+function currentLocale() {
+  return state.language === "en" ? "en-US" : "ko-KR";
+}
+
+function displayName(name) {
+  if (state.language !== "en") return name;
+  return (
+    {
+      선수1: "Player 1",
+      선수2: "Player 2",
+      회원A: "Member A",
+      회원B: "Member B",
+    }[name] || name
+  );
+}
+
+function applyLanguage() {
+  document.documentElement.lang = state.language;
+  document.documentElement.setAttribute("translate", "no");
+  document.documentElement.classList.add("notranslate");
+  document.body.setAttribute("translate", "no");
+  document.body.classList.add("notranslate");
+  document.title = state.language === "en" ? "PLAY Billiards Scoreboard" : "PLAY Billiards Scoreboard";
+  els.languageSelect.value = state.language;
+
+  text(".setup-panel h1", t("appTitle"));
+  text(".member-title h2", t("matchSettings"));
+  text(".manager-summary-title", t("managerTitle"));
+  text("#openBoardButton", t("startBoard"));
+  text("#returnBoardButton", t("returnBoard"));
+  text("#openRecordsButton", t("records"));
+  text(".records-header h1", t("matchRecords"));
+  text(".record-average div span", t("recordAverage"));
+  text("#returnBoardFromRecordsButton", t("returnBoard"));
+  text("#backToSetupButton", t("backToSetup"));
+  text("#homeButton", t("setup"));
+  text("#turnSwitchButton", t("changePlayer"));
+  text("#winnerTitle", t("win"));
+  text(".winner-dialog button", t("ok"));
+
+  setLabelText(els.gameType, t("gameType"));
+  setLabelText(els.playerCount, t("playerCount"));
+  setLabelText(els.finishThreeC, t("finishThreeC"));
+  setLabelText(els.finishBank, t("finishBank"));
+  setLabelText(els.shotLimit, t("timeLimit"));
+  setLabelText(els.warningSound, t("warningSound"));
+  setLabelText(els.languageSelect, t("language"));
+  setLabelText(els.voiceSelect, t("voice"));
+  setLabelText(els.voiceStyle, t("voiceStyle"));
+  setLabelText(els.recordGameType, t("gameType"));
+  setLabelText(els.recordPlayerSelect, t("playerSelect"));
+
+  setOptionText(els.gameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
+  setOptionText(els.gameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
+  setOptionText(els.recordGameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
+  setOptionText(els.recordGameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
+  [2, 3, 4].forEach((count) => setOptionText(els.playerCount, String(count), state.language === "en" ? `${count} Players` : `${count}명`));
+  [els.finishThreeC, els.finishBank].forEach((select) => setOptionText(select, "custom", t("customInput")));
+  setOptionText(els.shotLimit, "none", t("noLimit"));
+  [30, 40, 50, 60].forEach((seconds) => setOptionText(els.shotLimit, String(seconds), `${seconds}${t("seconds")}`));
+  setOptionText(els.warningSound, "on", t("use"));
+  setOptionText(els.warningSound, "off", t("off"));
+  setOptionText(els.languageSelect, "ko", t("korean"));
+  setOptionText(els.languageSelect, "en", t("english"));
+  setOptionText(els.voiceStyle, "bright", t("voiceBright"));
+  setOptionText(els.voiceStyle, "young", t("voiceYoung"));
+  setOptionText(els.voiceStyle, "clear", t("voiceClear"));
+  setOptionText(els.voiceStyle, "calm", t("voiceCalm"));
+
+  els.finishThreeCCustom.placeholder = t("customInput");
+  els.finishThreeCCustom.setAttribute("aria-label", `${t("finishThreeC")} ${t("customInput")}`);
+  els.finishBankCustom.placeholder = t("customInput");
+  els.finishBankCustom.setAttribute("aria-label", `${t("finishBank")} ${t("customInput")}`);
+  els.memberName.placeholder = t("memberName");
+  els.memberTarget.placeholder = t("targetScore");
+  els.memberTarget.setAttribute("aria-label", t("targetScoreAria"));
+  els.setupScreen.setAttribute("aria-label", t("matchSettings"));
+  $(".member-box")?.setAttribute("aria-label", t("selectedPlayers"));
+  $(".game-options")?.setAttribute("aria-label", t("matchSettings"));
+  els.recordsScreen.setAttribute("aria-label", t("records"));
+  $(".record-average")?.setAttribute("aria-label", t("recordAverage"));
+  els.scoreScreen.setAttribute("aria-label", t("scoreboard"));
+  els.selectionStrip.setAttribute("aria-label", t("selectedPlayers"));
+  els.editList.setAttribute("aria-label", t("managerTitle"));
+  els.recordList.setAttribute("aria-label", t("recentRecords"));
+  els.timerButton.setAttribute("aria-label", t("timerAria"));
+  $(".match-time")?.setAttribute("aria-label", t("matchTimeAria"));
+  $(".inning-adjust")?.setAttribute("aria-label", t("inningAdjustAria"));
+  els.inningUpButton.setAttribute("aria-label", t("inningUpAria"));
+  els.inningDownButton.setAttribute("aria-label", t("inningDownAria"));
+  $(".quick-score-actions")?.setAttribute("aria-label", t("quickScoreAria"));
+  els.undoButton.setAttribute("aria-label", t("undoAria"));
+  els.scoreBoard.setAttribute("aria-label", t("playerBoardAria"));
+
+  els.addMemberButton.textContent = state.editIndex === null ? t("add") : t("update");
+  renderVoiceOptions();
+  renderMembers();
+  renderScoreboard();
+  if (!els.recordsScreen.classList.contains("is-hidden")) renderRecords();
+}
 
 function normalizeSelected() {
   const maxIndex = Math.max(0, state.members.length - 1);
@@ -144,11 +426,13 @@ function loadSettings() {
   const gameType = ["four-ball", "three-cushion"].includes(settings.gameType) ? settings.gameType : state.gameType;
   state.gameType = gameType;
   state.playerCount = playerCount;
+  state.language = ["ko", "en"].includes(settings.language) ? settings.language : localStorage.getItem(LANGUAGE_KEY) || state.language;
   if (Array.isArray(settings.selected)) state.selected = settings.selected.map((index) => (Number.isInteger(index) ? index : null));
   state.nextPick = Number.isInteger(settings.nextPick) ? settings.nextPick : state.nextPick;
 
   els.gameType.value = gameType;
   els.playerCount.value = String(playerCount);
+  els.languageSelect.value = state.language;
   els.shotLimit.value = settings.shotLimit || "none";
   setFinishControlValue(els.finishThreeC, els.finishThreeCCustom, settings.finish?.threeC ?? (gameType === "four-ball" ? 1 : 0));
   setFinishControlValue(els.finishBank, els.finishBankCustom, settings.finish?.bank ?? 0);
@@ -170,6 +454,7 @@ function saveSettings() {
         bank: readFinishControlValue(els.finishBank, els.finishBankCustom),
       },
       shotLimit: els.shotLimit.value,
+      language: state.language,
       selected: state.selected.slice(0, Math.max(state.playerCount, state.selected.length)),
       nextPick: state.nextPick,
     }),
@@ -178,7 +463,7 @@ function saveSettings() {
 
 function selectionText(slot) {
   const member = state.members[state.selected[slot]];
-  return member ? `${member.name} ${member.target}` : "선택 없음";
+  return member ? `${member.name} ${member.target}` : t("noneSelected");
 }
 
 function appendNameTarget(parent, member) {
@@ -186,7 +471,7 @@ function appendNameTarget(parent, member) {
   const target = document.createElement("span");
   name.className = "member-label-name";
   target.className = "member-label-target";
-  name.textContent = member.name;
+  name.textContent = displayName(member.name);
   target.textContent = member.target;
   parent.replaceChildren(name, target);
 }
@@ -205,8 +490,8 @@ function renderSelections() {
       item.classList.toggle("is-picking", state.nextPick === slot);
       item.classList.toggle("can-swap", canSwap);
       item.dataset.selectionSlot = String(slot);
-      item.setAttribute("aria-label", `선수${slot + 1} 박스 선택`);
-      label.textContent = `선수${slot + 1}`;
+      item.setAttribute("aria-label", `${t("player")} ${slot + 1} ${t("boxSelect")}`);
+      label.textContent = `${t("player")} ${slot + 1}`;
       if (member) appendNameTarget(value, member);
       else value.textContent = selectionText(slot);
       item.append(label, value);
@@ -225,6 +510,7 @@ function renderSelections() {
 function renderMembers() {
   normalizeSelected();
   els.memberCount.textContent = `${state.members.length}`;
+  renderReturnBoardActions();
   renderSelections();
 
   els.editList.replaceChildren(
@@ -243,7 +529,7 @@ function renderMembers() {
       pick.className = "edit-info";
       pick.dataset.pickIndex = String(index);
       appendNameTarget(pick, member);
-      pick.setAttribute("aria-label", `${member.name} 선택`);
+      pick.setAttribute("aria-label", `${displayName(member.name)} ${t("playerSelect")}`);
 
       badge.className = "selection-badge";
       badge.textContent = selectedSlot > -1 ? String(selectedSlot + 1) : "";
@@ -251,14 +537,14 @@ function renderMembers() {
       edit.type = "button";
       edit.className = "edit-button";
       edit.dataset.editIndex = String(index);
-      edit.textContent = "편집";
-      edit.setAttribute("aria-label", `${member.name} 편집`);
+      edit.textContent = t("edit");
+      edit.setAttribute("aria-label", `${displayName(member.name)} ${t("edit")}`);
 
       remove.type = "button";
       remove.className = "delete-button";
       remove.dataset.deleteIndex = String(index);
-      remove.textContent = "삭제";
-      remove.setAttribute("aria-label", `${member.name} 삭제`);
+      remove.textContent = t("delete");
+      remove.setAttribute("aria-label", `${displayName(member.name)} ${t("delete")}`);
 
       row.append(pick, badge, edit, remove);
       return row;
@@ -313,7 +599,7 @@ function saveMemberFromForm() {
   state.editIndex = null;
   els.memberName.value = "";
   els.memberTarget.value = "";
-  els.addMemberButton.textContent = "등록";
+  els.addMemberButton.textContent = t("add");
   saveMembers();
   renderMembers();
 }
@@ -324,7 +610,7 @@ function editMember(index) {
   state.editIndex = index;
   els.memberName.value = member.name;
   els.memberTarget.value = member.target;
-  els.addMemberButton.textContent = "수정";
+  els.addMemberButton.textContent = t("update");
   els.memberName.focus();
 }
 
@@ -526,8 +812,8 @@ function renderVoiceOptions() {
     .sort((a, b) => Number(b.lang.toLowerCase().startsWith("ko")) - Number(a.lang.toLowerCase().startsWith("ko")));
 
   els.voiceSelect.replaceChildren(
-    new Option("없음", "off"),
-    new Option("자동 선택", "auto"),
+    new Option(t("off"), "off"),
+    new Option(t("autoSelect"), "auto"),
     ...sortedVoices.map((voice) => new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)),
   );
   els.voiceSelect.value = [...els.voiceSelect.options].some((option) => option.value === current) ? current : "auto";
@@ -535,12 +821,12 @@ function renderVoiceOptions() {
 }
 
 function speakScore(score) {
-  speakText(`${score}점`, "ko-KR");
+  speakLocalizedText(spokenScoreText(score));
 }
 
 function speakPenaltyScore(score, wasPositiveRun) {
   if (wasPositiveRun) {
-    speakText(`마이너스 일, ${score}점`, "ko-KR");
+    speakLocalizedText(`${t("minusOne")}, ${spokenScoreText(score)}`);
     return;
   }
 
@@ -592,12 +878,50 @@ function speakText(text, lang = "ko-KR") {
   window.speechSynthesis.speak(utterance);
 }
 
+function findEnglishVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  if (englishVoice && voices.includes(englishVoice)) return englishVoice;
+  englishVoice =
+    voices.find((voice) => voice.lang.toLowerCase() === "en-us") ||
+    voices.find((voice) => voice.lang.toLowerCase().startsWith("en")) ||
+    null;
+  return englishVoice;
+}
+
+function speakEnglishText(text) {
+  if (!("speechSynthesis" in window)) return;
+  if (localStorage.getItem(VOICE_KEY) === "off") return;
+  window.speechSynthesis.cancel();
+  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.calm;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.voice = findEnglishVoice();
+  utterance.rate = style.rate;
+  utterance.pitch = style.pitch;
+  window.speechSynthesis.speak(utterance);
+}
+
+function speakLocalizedText(text, lang = currentLocale()) {
+  if (state.language === "en") {
+    speakEnglishText(text);
+    return;
+  }
+  speakText(text, lang);
+}
+
+function spokenScoreText(score) {
+  if (state.language !== "en") return `${score}${t("pointSuffix")}`;
+  return `${score} ${Number(score) === 1 ? "point" : "points"}`;
+}
+
 function speakTurn() {
   if (localStorage.getItem(VOICE_KEY) === "off") {
     playTurnSound();
     return;
   }
-  speakText("TURN", "en-US");
+  speakEnglishText("turn");
 }
 
 function getAudioContext() {
@@ -717,10 +1041,9 @@ function renderScoreboard() {
   renderTimer();
   renderMatchTimer();
   els.inningValue.textContent = state.inning;
-  els.limitChip.textContent = state.timeLimit ? `제한 ${state.timeLimit}초` : "제한 없음";
-  const canEndMatch = canEndRankedMatch();
-  els.startButton.disabled = state.gameStarted && !canEndMatch;
-  els.startButton.textContent = state.gameEnded ? "재경기" : canEndMatch ? "경기종료" : state.gameStarted ? "경기중" : "경기시작";
+  els.limitChip.textContent = state.timeLimit ? `${t("limitPrefix")} ${state.timeLimit}${t("seconds")}` : `${t("limitPrefix")} ${t("noLimit")}`;
+  els.startButton.disabled = false;
+  els.startButton.textContent = state.gameEnded ? t("rematch") : state.gameStarted ? t("endMatch") : t("startMatch");
   els.undoButton.disabled = state.gameEnded;
   els.turnSwitchButton.disabled = false;
   els.inningUpButton.disabled = state.gameEnded;
@@ -755,14 +1078,14 @@ function createPlayerCard(player, index) {
   target.textContent = player.target;
   name.type = "button";
   name.className = "name-button";
-  name.textContent = player.name;
+  name.textContent = displayName(player.name);
   top.append(target, name);
 
   scoreBox.type = "button";
   scoreBox.className = isYellowBall(player, index) ? "score-box yellow" : "score-box";
   scoreBox.dataset.scoreIndex = String(index);
   scoreBox.disabled = state.gameEnded || player.status === "win";
-  scoreBox.setAttribute("aria-label", `${player.name} 점수`);
+  scoreBox.setAttribute("aria-label", `${displayName(player.name)} ${t("score")}`);
   scoreContent.className = "score-content";
   score.textContent = scoreText(player);
   score.classList.toggle("result-text", player.status !== "playing");
@@ -808,7 +1131,7 @@ function createTurnButton(player, index) {
   button.className = "stat inning-score";
   button.dataset.turnIndex = String(index);
   button.disabled = state.gameEnded || player.status === "win";
-  button.setAttribute("aria-label", `${player.name} 이닝스코어 1점 빼기`);
+  button.setAttribute("aria-label", `${displayName(player.name)} ${t("inningScoreMinus")}`);
   value.textContent = player.turn;
   const hint = document.createElement("small");
   hint.textContent = "/ -1";
@@ -860,24 +1183,24 @@ function announceScoreState(player, before) {
       return;
     }
     if (player.status === "bank") {
-      speakText("뱅크샷입니다");
+      speakLocalizedText(t("bankShot"));
       return;
     }
   }
 
   if (player.status === "threeC") {
-    speakText(`${player.finish.threeC}개 남았습니다`);
+    speakLocalizedText(`${player.finish.threeC}${t("remainingCount")}`);
     return;
   }
 
   if (player.status === "bank") {
-    speakText(`${player.finish.bank}개 남았습니다`);
+    speakLocalizedText(`${player.finish.bank}${t("remainingCount")}`);
     return;
   }
 
   const remaining = player.target - player.score;
   if (remaining === 10 || remaining === 5 || (remaining > 0 && remaining <= 3)) {
-    speakText(`${remaining}점 남았습니다`);
+    speakLocalizedText(state.language === "en" ? `${spokenScoreText(remaining)} remaining` : `${remaining}${t("remainingScore")}`);
     return;
   }
 
@@ -1023,10 +1346,6 @@ function hasRankedWinner() {
   return state.players.some((player) => player.rank);
 }
 
-function canEndRankedMatch() {
-  return state.gameStarted && state.players.length > 2 && hasRankedWinner();
-}
-
 function activePlayerCount() {
   return state.players.filter((player) => player.status !== "win").length;
 }
@@ -1141,9 +1460,9 @@ function checkWinner(player) {
   }
   renderScoreboard();
   playVictorySound();
-  speakText(`경기종료 ${player.name} 님이 승리하였습니다`);
+  speakLocalizedText(`${t("matchEnded")} ${displayName(player.name)} ${t("wonSentence")}`);
   if (!els.winnerDialog.showModal) return;
-  els.winnerTitle.textContent = `${player.name} 승리`;
+  els.winnerTitle.textContent = `${displayName(player.name)} ${t("win")}`;
   els.winnerText.textContent = "";
   els.winnerDialog.showModal();
 }
@@ -1168,7 +1487,7 @@ function checkWinnerForRankedPlay(player) {
 
   renderScoreboard();
   playVictorySound();
-  speakText(`${player.name} 승리`);
+  speakLocalizedText(`${displayName(player.name)} ${t("win")}`);
 }
 
 function freezeDisplayedBallColors() {
@@ -1251,7 +1570,7 @@ function renderRecordPlayers(results = resultsForGameType()) {
     ...names.map((name) => {
       const option = document.createElement("option");
       option.value = name;
-      option.textContent = name;
+      option.textContent = displayName(name);
       return option;
     }),
   );
@@ -1275,7 +1594,7 @@ function renderRecords() {
   if (results.length === 0) {
     const empty = document.createElement("div");
     empty.className = "record-empty";
-    empty.textContent = "저장된 2인 경기 기록이 없습니다.";
+    empty.textContent = t("savedTwoRecordsEmpty");
     els.recordList.replaceChildren(empty);
     return;
   }
@@ -1293,14 +1612,14 @@ function renderRecords() {
       title.className = "record-row-title";
       meta.className = "record-meta";
       players.className = "record-players";
-      winner.textContent = `${result.winner} 승리`;
-      meta.textContent = `${date.toLocaleDateString("ko-KR")} ${formatDuration(result.duration || 0)} · ${result.inning} inning`;
+      winner.textContent = `${displayName(result.winner)} ${t("win")}`;
+      meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning`;
       title.append(winner, meta);
 
       result.players.forEach((player) => {
         const item = document.createElement("span");
         const targetText = player.target ? ` (${player.target})` : "";
-        item.textContent = `${player.name}${targetText} High ${player.highRun} Aver ${player.average}`;
+        item.textContent = `${displayName(player.name)}${targetText} High ${player.highRun} Aver ${player.average}`;
         players.append(item);
       });
 
@@ -1326,7 +1645,7 @@ function renderRecords() {
   if (results.length === 0) {
     const empty = document.createElement("div");
     empty.className = "record-empty";
-    empty.textContent = "저장된 경기 기록이 없습니다.";
+    empty.textContent = t("savedRecordsEmpty");
     els.recordList.replaceChildren(empty);
     return;
   }
@@ -1352,17 +1671,17 @@ function createRecordRow(result, index) {
   deleteButton.className = "record-delete";
   deleteButton.type = "button";
   deleteButton.dataset.deleteResult = key;
-  deleteButton.textContent = "삭제";
-  deleteButton.setAttribute("aria-label", `${result.winner} 기록 삭제`);
-  winner.textContent = `${result.winner} 승리`;
-  meta.textContent = `${date.toLocaleDateString("ko-KR")} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}인`;
+  deleteButton.textContent = t("delete");
+  deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
+  winner.textContent = `${displayName(result.winner)} ${t("win")}`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(winner, meta);
 
   result.players.forEach((player) => {
     const item = document.createElement("span");
     const targetText = player.target ? ` (${player.target})` : "";
     const rankText = player.rank ? ` ${rankTextForRecord(player.rank)}` : "";
-    item.textContent = `${player.name}${rankText}${targetText} High ${player.highRun} Aver ${player.average}`;
+    item.textContent = `${displayName(player.name)}${rankText}${targetText} High ${player.highRun} Aver ${player.average}`;
     players.append(item);
   });
 
@@ -1396,16 +1715,16 @@ function createRecordRow(result, index) {
   deleteButton.className = "record-delete";
   deleteButton.type = "button";
   deleteButton.dataset.deleteResult = key;
-  deleteButton.textContent = "삭제";
-  deleteButton.setAttribute("aria-label", `${result.winner} 기록 삭제`);
+  deleteButton.textContent = t("delete");
+  deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
 
   standings.textContent = recordStandingsText(result);
-  meta.textContent = `${date.toLocaleDateString("ko-KR")} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}인`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(standings, meta);
 
   result.players.forEach((player) => {
     const item = document.createElement("span");
-    item.textContent = `${player.name} High ${player.highRun} Aver ${player.average}`;
+    item.textContent = `${displayName(player.name)} High ${player.highRun} Aver ${player.average}`;
     players.append(item);
   });
 
@@ -1415,8 +1734,8 @@ function createRecordRow(result, index) {
 
 function recordStandingsText(result) {
   const rankedPlayers = result.players.filter((player) => player.rank).sort((a, b) => a.rank - b.rank);
-  if (!rankedPlayers.length) return `${result.winner} Win`;
-  return rankedPlayers.map((player) => `${player.name}${rankTextForRecord(player.rank)}`).join(", ");
+  if (!rankedPlayers.length) return `${displayName(result.winner)} Win`;
+  return rankedPlayers.map((player) => `${displayName(player.name)}${rankTextForRecord(player.rank)}`).join(", ");
 }
 
 function showRecords() {
@@ -1424,6 +1743,7 @@ function showRecords() {
   document.body.classList.remove("score-mode");
   syncVisualViewport();
   renderRecords();
+  renderReturnBoardActions();
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
   els.recordsScreen.classList.remove("is-hidden");
@@ -1439,26 +1759,66 @@ function showSetup() {
   renderMembers();
 }
 
-function readSelectedPlayers() {
+function canReturnToBoard() {
+  return state.gameStarted && !state.gameEnded;
+}
+
+function renderReturnBoardActions() {
+  const canReturn = canReturnToBoard();
+  els.returnBoardButton.hidden = !canReturn;
+  els.returnBoardFromRecordsButton.hidden = !canReturn;
+}
+
+function returnToBoard() {
+  if (!canReturnToBoard()) return;
+  setPreferredOrientation("landscape");
+  document.body.classList.add("score-mode");
+  syncVisualViewport();
+  els.setupScreen.classList.add("is-hidden");
+  els.recordsScreen.classList.add("is-hidden");
+  els.scoreScreen.classList.remove("is-hidden");
+  renderScoreboard();
+  requestAnimationFrame(syncVisualViewport);
+}
+
+function readSelectedMembers() {
   normalizeSelected();
   const selectedIndexes = state.selected.slice(0, state.playerCount);
   if (selectedIndexes.includes(null) || new Set(selectedIndexes).size !== state.playerCount) {
-    if (window.alert) window.alert(`${state.playerCount}명의 선수를 선택해 주세요.`);
-    return false;
+    if (window.alert) {
+      const message =
+        state.language === "en"
+          ? `Please select ${state.playerCount}${t("choosePlayersAlert")}`
+          : `${state.playerCount}${t("choosePlayersAlert")}`;
+      window.alert(message);
+    }
+    return null;
   }
   const members = selectedIndexes.map((index) => state.members[index]);
-  if (members.some((member) => !member)) return false;
+  if (members.some((member) => !member)) return null;
 
+  return members;
+}
+
+function readSelectedPlayers() {
+  const members = readSelectedMembers();
+  if (!members) return false;
   state.players = members.map(createPlayer);
   return true;
 }
 
 function openBoard() {
   setPreferredOrientation("landscape");
-  state.gameType = els.gameType.value;
-  state.playerCount = Number(els.playerCount.value);
+  const nextGameType = els.gameType.value;
+  const nextPlayerCount = Number(els.playerCount.value);
+  const selectedMembers = readSelectedMembers();
+  if (!selectedMembers) return;
+
+  endCurrentMatch({ render: false, announce: false });
+  state.gameType = nextGameType;
+  state.playerCount = nextPlayerCount;
   readFinishSettings();
-  if (!readSelectedPlayers()) return;
+  state.players = selectedMembers.map(createPlayer);
   saveSettings();
   stopTimer();
   stopMatchTimer();
@@ -1480,11 +1840,11 @@ function openBoard() {
 }
 
 function startMatch() {
-  if (canEndRankedMatch()) {
-    endRankedMatch();
+  if (state.gameStarted) {
+    snapshot();
+    endCurrentMatch();
     return;
   }
-  if (state.gameStarted) return;
   if (state.gameEnded) {
     prepareRematch();
     startMatch();
@@ -1502,18 +1862,19 @@ function startMatch() {
   renderScoreboard();
 }
 
-function endRankedMatch() {
+function endCurrentMatch({ render = true, announce = true } = {}) {
   const winner = state.players.find((player) => player.rank === 1);
-  if (!winner) return;
+  freezeDisplayedBallColors();
   state.gameEnded = true;
   state.gameStarted = false;
   stopTimer();
   stopMatchTimer();
-  if (!state.resultSaved) {
+  if (winner && !state.resultSaved) {
     saveMatchResult(winner);
     state.resultSaved = true;
   }
-  renderScoreboard();
+  if (render) renderScoreboard();
+  if (announce) speakLocalizedText(t("matchEnded"));
 }
 
 function prepareRematch() {
@@ -1538,16 +1899,11 @@ function prepareRematch() {
 
 function goHome() {
   setPreferredOrientation("portrait");
-  stopTimer();
-  stopMatchTimer();
   document.body.classList.remove("score-mode");
   syncVisualViewport();
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
   els.recordsScreen.classList.add("is-hidden");
-  state.gameStarted = false;
-  state.gameEnded = false;
-  state.resultSaved = false;
   renderMembers();
 }
 
@@ -1601,7 +1957,9 @@ els.selectionStrip.addEventListener("click", (event) => {
   if (slotButton) selectPlayerSlot(Number(slotButton.dataset.selectionSlot));
 });
 els.openBoardButton.addEventListener("click", openBoard);
+els.returnBoardButton.addEventListener("click", returnToBoard);
 els.openRecordsButton.addEventListener("click", showRecords);
+els.returnBoardFromRecordsButton.addEventListener("click", returnToBoard);
 els.backToSetupButton.addEventListener("click", showSetup);
 els.recordGameType.addEventListener("change", renderRecords);
 els.recordPlayerSelect.addEventListener("change", renderRecords);
@@ -1637,6 +1995,12 @@ els.warningSound.addEventListener("change", () => {
   localStorage.setItem(WARNING_SOUND_KEY, els.warningSound.value);
   saveSettings();
   if (els.warningSound.value !== "off") playWarningSound(false);
+});
+els.languageSelect.addEventListener("change", () => {
+  state.language = els.languageSelect.value === "en" ? "en" : "ko";
+  localStorage.setItem(LANGUAGE_KEY, state.language);
+  saveSettings();
+  applyLanguage();
 });
 els.playerCount.addEventListener("change", () => {
   state.playerCount = Number(els.playerCount.value);
@@ -1699,5 +2063,4 @@ syncVisualViewport();
 loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
-renderMembers();
-renderScoreboard();
+applyLanguage();

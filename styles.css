@@ -243,7 +243,12 @@ h2 {
   grid-column: span 2;
 }
 
+.game-options .language-option {
+  grid-column: 5;
+}
+
 .game-options .sound-option,
+.game-options .language-option,
 .game-options .voice-option {
   grid-row: 2;
 }
@@ -387,6 +392,12 @@ h2 {
   font-size: 31px;
   line-height: 1;
   letter-spacing: 0.02em;
+}
+
+.records-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .records-header .secondary-action {
@@ -568,19 +579,20 @@ h2 {
 
 .selection-swap-button {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  min-width: 56px;
-  min-height: 28px;
+  right: 0;
+  bottom: 0;
+  min-width: 42px;
+  min-height: 24px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(30, 64, 175, 0.42);
-  border-radius: 999px;
+  border-radius: 6px 0 6px 0;
   background: #dbeafe;
   color: #1e3a8a;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 950;
-  box-shadow: 0 4px 10px rgba(30, 64, 175, 0.14);
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(30, 64, 175, 0.12);
   pointer-events: auto;
 }
 
@@ -645,12 +657,24 @@ h2 {
   cursor: pointer;
   min-height: 34px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 10px;
   color: var(--ink);
   font-size: 20px;
   font-weight: 900;
+}
+
+.manager-panel summary #memberCount {
+  min-width: 44px;
+  min-height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 850;
 }
 
 .manager-panel summary::after {
@@ -2116,12 +2140,12 @@ h2 {
   }
 
   .selection-swap-button {
-    right: 6px;
-    bottom: 5px;
-    min-width: 48px;
-    min-height: 23px;
-    border-radius: 999px;
-    font-size: 10px;
+    right: 0;
+    bottom: 0;
+    min-width: 36px;
+    min-height: 20px;
+    border-radius: 5px 0 5px 0;
+    font-size: 9px;
   }
 
   .selection-card strong {
