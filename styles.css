@@ -1599,6 +1599,49 @@ h2 {
     white-space: nowrap;
   }
 
+  .game-options {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+  }
+
+  .game-options label:nth-child(-n + 4) {
+    grid-column: span 5;
+  }
+
+  .game-options label:nth-child(n + 5) {
+    grid-column: span 4;
+  }
+
+  .game-options label:nth-child(5) {
+    order: 5;
+  }
+
+  .game-options label:nth-child(6) {
+    order: 6;
+  }
+
+  .game-options label:nth-child(8) {
+    order: 7;
+  }
+
+  .game-options label:nth-child(9) {
+    order: 8;
+  }
+
+  .game-options label:nth-child(7) {
+    order: 9;
+  }
+
+  .game-options .voice-option,
+  .game-options .language-option {
+    grid-column: span 4;
+  }
+
+  .game-options .sound-option,
+  .game-options .language-option,
+  .game-options .voice-option {
+    grid-row: auto;
+  }
+
   .game-options select,
   .game-options input {
     min-height: 46px;
@@ -2165,16 +2208,44 @@ h2 {
   }
 
   .game-options {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(20, minmax(0, 1fr));
     gap: 6px;
   }
 
+  .game-options label:nth-child(-n + 4) {
+    grid-column: span 5;
+  }
+
+  .game-options label:nth-child(n + 5) {
+    grid-column: span 4;
+  }
+
+  .game-options label:nth-child(5) {
+    order: 5;
+  }
+
+  .game-options label:nth-child(6) {
+    order: 6;
+  }
+
+  .game-options label:nth-child(8) {
+    order: 7;
+  }
+
+  .game-options label:nth-child(9) {
+    order: 8;
+  }
+
+  .game-options label:nth-child(7) {
+    order: 9;
+  }
+
   .game-options .voice-option {
-    grid-column: span 2;
+    grid-column: span 4;
   }
 
   .game-options .language-option {
-    grid-column: auto;
+    grid-column: span 4;
     font-size: 10px;
   }
 

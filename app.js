@@ -1,4 +1,4 @@
-const MEMBER_KEY = "billiards-members-v1";
+﻿const MEMBER_KEY = "billiards-members-v1";
 const RESULT_KEY = "billiards-results-v1";
 const SETTINGS_KEY = "billiards-settings-v1";
 const VOICE_KEY = "billiards-voice-v1";
@@ -10,6 +10,7 @@ const I18N = {
     appTitle: "PLAY 당구점수판 3/4구",
     matchSettings: "경기설정",
     returnBoard: "점수판으로",
+    returnBoardShort: "점수판",
     startBoard: "점수판 시작",
     records: "기록보기",
     matchRecords: "경기 기록",
@@ -178,7 +179,6 @@ const DEFAULT_MEMBERS = [
   { name: "회원A", target: 20 },
   { name: "회원B", target: 20 },
 ];
-
 const state = {
   language: localStorage.getItem(LANGUAGE_KEY) || "ko",
   gameType: "four-ball",
@@ -210,6 +210,7 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 let audioContext = null;
 let preferredVoice = null;
 let englishVoice = null;
+let voiceOptionsSignature = "";
 
 const els = {
   setupScreen: $("#setupScreen"),
@@ -801,21 +802,44 @@ function formatDuration(totalSeconds) {
   return `${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
 }
 
+function findSelectedVoice(voices = "speechSynthesis" in window ? window.speechSynthesis.getVoices() : []) {
+  const selectedVoiceURI = localStorage.getItem(VOICE_KEY);
+  if (selectedVoiceURI === "off") return "off";
+  if (selectedVoiceURI && selectedVoiceURI !== "auto") {
+    const selected = voices.find((voice) => voice.voiceURI === selectedVoiceURI) || null;
+    if (selected) return selected;
+    localStorage.removeItem(VOICE_KEY);
+  }
+  return null;
+}
+
+function limitedVoiceOptions(voices) {
+  const uniqueVoices = voices.filter(
+    (voice, index, list) => list.findIndex((candidate) => candidate.voiceURI === voice.voiceURI) === index,
+  );
+  const languageVoices = (prefix) => uniqueVoices.filter((voice) => voice.lang.toLowerCase().startsWith(prefix)).slice(0, 5);
+  return [
+    ...languageVoices("ko").map((voice, index) => ({ voice, label: "Korean " + (index + 1) + " - " + voice.name })),
+    ...languageVoices("en").map((voice, index) => ({ voice, label: "English " + (index + 1) + " - " + voice.name })),
+  ];
+}
+
 function findPreferredVoice() {
   if (!("speechSynthesis" in window)) return null;
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return null;
-  const selectedVoiceURI = localStorage.getItem(VOICE_KEY);
-  if (selectedVoiceURI === "off") return null;
-  if (selectedVoiceURI && selectedVoiceURI !== "auto") {
-    preferredVoice = voices.find((voice) => voice.voiceURI === selectedVoiceURI) || null;
-    if (preferredVoice) return preferredVoice;
+  const selectedVoice = findSelectedVoice(voices);
+  if (selectedVoice === "off") return null;
+  if (selectedVoice) {
+    preferredVoice = selectedVoice;
+    return preferredVoice;
   }
-  const koreanVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith("ko"));
-  const femaleHints = ["female", "woman", "yuna", "sora", "narae", "유나", "소라", "나래", "여성"];
+  const localePrefix = state.language === "en" ? "en" : "ko";
+  const localeVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
+  const femaleHints = ["female", "woman", "yuna", "sora", "narae"];
   preferredVoice =
-    koreanVoices.find((voice) => femaleHints.some((hint) => voice.name.toLowerCase().includes(hint))) ||
-    koreanVoices[0] ||
+    localeVoices.find((voice) => femaleHints.some((hint) => voice.name.toLowerCase().includes(hint))) ||
+    localeVoices[0] ||
     voices.find((voice) => femaleHints.some((hint) => voice.name.toLowerCase().includes(hint))) ||
     null;
   return preferredVoice;
@@ -824,17 +848,23 @@ function findPreferredVoice() {
 function renderVoiceOptions() {
   if (!("speechSynthesis" in window) || !els.voiceSelect) return;
   const voices = window.speechSynthesis.getVoices();
+  const voiceChoices = limitedVoiceOptions(voices);
+  const signature = state.language + "|" + voiceChoices.map(({ voice }) => voice.voiceURI).join("|");
   const current = localStorage.getItem(VOICE_KEY) || "auto";
-  const sortedVoices = voices
-    .slice()
-    .sort((a, b) => Number(b.lang.toLowerCase().startsWith("ko")) - Number(a.lang.toLowerCase().startsWith("ko")));
-
+  if (signature === voiceOptionsSignature && els.voiceSelect.options.length) {
+    els.voiceSelect.value = [...els.voiceSelect.options].some((option) => option.value === current)
+      ? current
+      : els.voiceSelect.options[0]?.value || "";
+    return;
+  }
+  voiceOptionsSignature = signature;
   els.voiceSelect.replaceChildren(
-    new Option(t("off"), "off"),
-    new Option(t("autoSelect"), "auto"),
-    ...sortedVoices.map((voice) => new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)),
+    ...voiceChoices.map(({ voice, label }) => new Option(label + " (" + voice.lang + ")", voice.voiceURI)),
   );
-  els.voiceSelect.value = [...els.voiceSelect.options].some((option) => option.value === current) ? current : "auto";
+  els.voiceSelect.value = [...els.voiceSelect.options].some((option) => option.value === current)
+    ? current
+    : els.voiceSelect.options[0]?.value || "";
+  if (els.voiceSelect.value) localStorage.setItem(VOICE_KEY, els.voiceSelect.value);
   findPreferredVoice();
 }
 
@@ -844,50 +874,21 @@ function speakScore(score) {
 
 function speakPenaltyScore(score, wasPositiveRun) {
   if (wasPositiveRun) {
-    speakLocalizedText(`${t("minusOne")}, ${spokenScoreText(score)}`);
+    speakLocalizedText(t("minusOne") + ", " + spokenScoreText(score));
     return;
   }
-
   speakScore(score);
 }
 
 function koreanCount(value) {
-  const number = Math.max(0, Number(value) || 0);
-  const native = [
-    "영",
-    "하나",
-    "둘",
-    "셋",
-    "넷",
-    "다섯",
-    "여섯",
-    "일곱",
-    "여덟",
-    "아홉",
-    "열",
-    "열하나",
-    "열둘",
-    "열셋",
-    "열넷",
-    "열다섯",
-    "열여섯",
-    "열일곱",
-    "열여덟",
-    "열아홉",
-  ];
-  if (native[number]) return native[number];
-  if (number < 30) return `스물 ${native[number - 20]}`;
-  if (number < 40) return `서른 ${native[number - 30] || ""}`.trim();
-  if (number < 50) return `마흔 ${native[number - 40] || ""}`.trim();
-  if (number < 60) return `쉰 ${native[number - 50] || ""}`.trim();
-  return String(number);
+  return String(Math.max(0, Number(value) || 0));
 }
 
 function speakText(text, lang = "ko-KR") {
   if (!("speechSynthesis" in window)) return;
   if (localStorage.getItem(VOICE_KEY) === "off") return;
   window.speechSynthesis.cancel();
-  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.calm;
+  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.clear;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
   utterance.voice = preferredVoice || findPreferredVoice();
@@ -900,6 +901,12 @@ function findEnglishVoice() {
   if (!("speechSynthesis" in window)) return null;
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return null;
+  const selectedVoice = findSelectedVoice(voices);
+  if (selectedVoice === "off") return null;
+  if (selectedVoice) {
+    englishVoice = selectedVoice;
+    return englishVoice;
+  }
   if (englishVoice && voices.includes(englishVoice)) return englishVoice;
   englishVoice =
     voices.find((voice) => voice.lang.toLowerCase() === "en-us") ||
@@ -912,7 +919,7 @@ function speakEnglishText(text) {
   if (!("speechSynthesis" in window)) return;
   if (localStorage.getItem(VOICE_KEY) === "off") return;
   window.speechSynthesis.cancel();
-  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.calm;
+  const style = VOICE_STYLES[localStorage.getItem(VOICE_STYLE_KEY)] || VOICE_STYLES.clear;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "en-US";
   utterance.voice = findEnglishVoice();
@@ -920,7 +927,6 @@ function speakEnglishText(text) {
   utterance.pitch = style.pitch;
   window.speechSynthesis.speak(utterance);
 }
-
 function speakLocalizedText(text, lang = currentLocale()) {
   if (state.language === "en") {
     speakEnglishText(text);
@@ -1641,7 +1647,7 @@ function renderRecords() {
       meta.className = "record-meta";
       players.className = "record-players";
       winner.textContent = `${displayName(result.winner)} ${t("win")}`;
-      meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning`;
+      meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning`;
       title.append(winner, meta);
 
       result.players.forEach((player) => {
@@ -1702,7 +1708,7 @@ function createRecordRow(result, index) {
   deleteButton.textContent = t("delete");
   deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
   winner.textContent = `${displayName(result.winner)} ${t("win")}`;
-  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning 쨌 ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(winner, meta);
 
   result.players.forEach((player) => {
@@ -1747,7 +1753,7 @@ function createRecordRow(result, index) {
   deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
 
   standings.textContent = recordStandingsText(result);
-  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning 쨌 ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(standings, meta);
 
   result.players.forEach((player) => {
@@ -2018,10 +2024,12 @@ els.gameType.addEventListener("change", () => {
 els.voiceSelect.addEventListener("change", () => {
   localStorage.setItem(VOICE_KEY, els.voiceSelect.value);
   preferredVoice = null;
+  englishVoice = null;
   findPreferredVoice();
   speakScore(1);
 });
-els.voiceStyle.value = localStorage.getItem(VOICE_STYLE_KEY) || "calm";
+if (!localStorage.getItem(VOICE_STYLE_KEY)) localStorage.setItem(VOICE_STYLE_KEY, "clear");
+els.voiceStyle.value = localStorage.getItem(VOICE_STYLE_KEY) || "clear";
 els.voiceStyle.addEventListener("change", () => {
   localStorage.setItem(VOICE_STYLE_KEY, els.voiceStyle.value);
   speakScore(1);
@@ -2035,6 +2043,8 @@ els.warningSound.addEventListener("change", () => {
 els.languageSelect.addEventListener("change", () => {
   state.language = els.languageSelect.value === "en" ? "en" : "ko";
   localStorage.setItem(LANGUAGE_KEY, state.language);
+  preferredVoice = null;
+  englishVoice = null;
   saveSettings();
   applyLanguage();
 });
@@ -2106,3 +2116,5 @@ loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
 applyLanguage();
+
+
