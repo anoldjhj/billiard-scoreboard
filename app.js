@@ -222,7 +222,6 @@ const els = {
   addMemberButton: $("#addMemberButton"),
   selectionStrip: $("#selectionStrip"),
   openBoardButton: $("#openBoardButton"),
-  returnBoardButton: $("#returnBoardButton"),
   openRecordsButton: $("#openRecordsButton"),
   returnBoardFromRecordsButton: $("#returnBoardFromRecordsButton"),
   backToSetupButton: $("#backToSetupButton"),
@@ -321,7 +320,6 @@ function applyLanguage() {
   text(".member-title h2", t("matchSettings"));
   text(".manager-summary-title", t("managerTitle"));
   const compactSetup = false;
-  text("#returnBoardButton", state.language === "en" && compactSetup ? t("returnBoardShort") : t("returnBoard"));
   text("#openRecordsButton", t("records"));
   text(".records-header h1", t("matchRecords"));
   text(".record-average div span", t("recordAverage"));
@@ -1797,7 +1795,6 @@ function renderReturnBoardActions() {
   const canReturn = canReturnToBoard();
   els.openBoardButton.textContent = canReturn ? t("returnBoard") : t("startBoard");
   els.openBoardButton.setAttribute("aria-label", canReturn ? t("returnBoard") : t("startBoard"));
-  els.returnBoardButton.hidden = true;
   els.returnBoardFromRecordsButton.hidden = !canReturn;
 }
 
@@ -1997,7 +1994,6 @@ els.selectionStrip.addEventListener("click", (event) => {
   if (slotButton) selectPlayerSlot(Number(slotButton.dataset.selectionSlot));
 });
 els.openBoardButton.addEventListener("click", handleSetupBoardAction);
-els.returnBoardButton.addEventListener("click", returnToBoard);
 els.openRecordsButton.addEventListener("click", showRecords);
 els.returnBoardFromRecordsButton.addEventListener("click", returnToBoard);
 els.backToSetupButton.addEventListener("click", showSetup);
