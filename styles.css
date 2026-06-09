@@ -1289,20 +1289,20 @@ h2 {
 .score-box span {
   display: block;
   color: #05070d;
-  font-size: clamp(132px, 20vw, 240px);
+  font-size: clamp(150px, 22vw, 270px);
   line-height: 0.85;
   font-weight: 950;
   letter-spacing: 0;
 }
 
 .score-box span.result-text {
-  font-size: clamp(86px, 13vw, 150px);
+  font-size: clamp(96px, 14vw, 170px);
   line-height: 0.95;
   letter-spacing: 0;
 }
 
 .score-box span.status-bank {
-  font-size: clamp(48px, 8vw, 92px);
+  font-size: clamp(56px, 8.8vw, 104px);
 }
 
 .finish-count {
@@ -1327,6 +1327,7 @@ h2 {
 
 .score-box span.status-three-c {
   color: #26364a;
+  font-size: clamp(118px, 17vw, 210px);
   text-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
 }
 
@@ -1871,15 +1872,19 @@ h2 {
   }
 
   .score-screen:not(.is-hidden) .score-box span {
-    font-size: clamp(78px, calc(var(--viewport-height, 100dvh) * 0.16), 150px);
+    font-size: clamp(92px, calc(var(--viewport-height, 100dvh) * 0.18), 172px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.result-text {
-    font-size: clamp(42px, calc(var(--viewport-height, 100dvh) * 0.08), 86px);
+    font-size: clamp(50px, calc(var(--viewport-height, 100dvh) * 0.09), 96px);
+  }
+
+  .score-screen:not(.is-hidden) .score-box span.status-three-c {
+    font-size: clamp(78px, calc(var(--viewport-height, 100dvh) * 0.15), 142px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-bank {
-    font-size: clamp(32px, calc(var(--viewport-height, 100dvh) * 0.06), 58px);
+    font-size: clamp(38px, calc(var(--viewport-height, 100dvh) * 0.07), 68px);
   }
 
   .score-screen:not(.is-hidden) .finish-count {
@@ -2035,8 +2040,8 @@ h2 {
   }
 
   .setup-heading {
-    grid-template-columns: 88px 158px;
-    min-height: 38px;
+    grid-template-columns: 88px minmax(0, 158px);
+    min-height: 46px;
     gap: 8px;
   }
 
@@ -2068,10 +2073,10 @@ h2 {
   }
 
   .setup-heading > div:last-child {
-    min-height: 38px;
+    min-height: 46px;
     width: 158px;
     max-width: 158px;
-    overflow: hidden;
+    overflow: visible;
     padding-right: 0;
   }
 
@@ -2082,10 +2087,11 @@ h2 {
   }
 
   .setup-panel h1 {
-    font-size: 15px;
-    line-height: 1.12;
-    white-space: nowrap;
-    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.08;
+    white-space: normal;
+    overflow: visible;
+    text-wrap: balance;
   }
 
   .records-header h1 {
@@ -2150,37 +2156,41 @@ h2 {
   }
 
   .game-options label {
-    grid-template-rows: auto 38px;
-    gap: 1px;
-    font-size: 9.5px;
+    grid-template-rows: auto 40px;
+    gap: 2px;
+    font-size: 10px;
     overflow: visible;
     position: relative;
     line-height: 1.05;
   }
 
   .game-options {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
   }
 
+  .game-options .voice-option {
+    grid-column: span 2;
+  }
+
   .game-options .language-option {
-    grid-column: 5;
-    font-size: 9.5px;
+    grid-column: auto;
+    font-size: 10px;
   }
 
   .game-options .sound-option,
   .game-options .language-option,
   .game-options .voice-option {
-    grid-row: 2;
+    grid-row: auto;
   }
 
   .game-options select,
   .game-options input {
-    min-height: 38px;
-    font-size: 11.5px;
+    min-height: 40px;
+    font-size: 12px;
     width: 100%;
     min-width: 0;
-    padding: 0 10px 0 5px;
+    padding: 0 11px 0 6px;
   }
 
   .game-options select {
@@ -2529,15 +2539,19 @@ h2 {
   }
 
   .score-box span {
-    font-size: clamp(78px, 16vw, 150px);
+    font-size: clamp(92px, 18vw, 172px);
   }
 
   .score-box span.result-text {
-    font-size: clamp(42px, 8vw, 86px);
+    font-size: clamp(50px, 9vw, 96px);
+  }
+
+  .score-box span.status-three-c {
+    font-size: clamp(78px, 15vw, 142px);
   }
 
   .score-box span.status-bank {
-    font-size: clamp(32px, 6vw, 58px);
+    font-size: clamp(38px, 7vw, 68px);
   }
 
   .finish-count {

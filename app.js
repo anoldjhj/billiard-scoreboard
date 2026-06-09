@@ -320,8 +320,7 @@ function applyLanguage() {
   text(".setup-panel h1", t("appTitle"));
   text(".member-title h2", t("matchSettings"));
   text(".manager-summary-title", t("managerTitle"));
-  text("#openBoardButton", t("startBoard"));
-  const compactSetup = compactSetupLabels();
+  const compactSetup = false;
   text("#returnBoardButton", state.language === "en" && compactSetup ? t("returnBoardShort") : t("returnBoard"));
   text("#openRecordsButton", t("records"));
   text(".records-header h1", t("matchRecords"));
@@ -333,36 +332,36 @@ function applyLanguage() {
   text("#winnerTitle", t("win"));
   text(".winner-dialog button", t("ok"));
 
-  setLabelText(els.gameType, state.language === "en" && compactSetup ? "Type" : t("gameType"));
-  setLabelText(els.playerCount, state.language === "en" && compactSetup ? "Plyrs" : t("playerCount"));
-  setLabelText(els.finishThreeC, state.language === "en" && compactSetup ? "3C" : t("finishThreeC"));
-  setLabelText(els.finishBank, state.language === "en" && compactSetup ? "Bank" : t("finishBank"));
-  setLabelText(els.shotLimit, state.language === "en" && compactSetup ? "Clock" : t("timeLimit"));
-  setLabelText(els.warningSound, state.language === "en" && compactSetup ? "Warn" : t("warningSound"));
-  setLabelText(els.languageSelect, state.language === "en" && compactSetup ? "Lang" : t("language"));
+  setLabelText(els.gameType, t("gameType"));
+  setLabelText(els.playerCount, t("playerCount"));
+  setLabelText(els.finishThreeC, t("finishThreeC"));
+  setLabelText(els.finishBank, t("finishBank"));
+  setLabelText(els.shotLimit, t("timeLimit"));
+  setLabelText(els.warningSound, t("warningSound"));
+  setLabelText(els.languageSelect, t("language"));
   setLabelText(els.voiceSelect, t("voice"));
-  setLabelText(els.voiceStyle, state.language === "en" && compactSetup ? "Style" : t("voiceStyle"));
+  setLabelText(els.voiceStyle, t("voiceStyle"));
   setLabelText(els.recordGameType, t("gameType"));
   setLabelText(els.recordPlayerSelect, t("playerSelect"));
 
   setOptionText(els.gameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
-  setOptionText(els.gameType, "three-cushion", state.language === "en" ? (compactSetup ? "3C" : "3 Cushion") : "3구");
+  setOptionText(els.gameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
   setOptionText(els.recordGameType, "four-ball", state.language === "en" ? "4 Ball" : "4구");
   setOptionText(els.recordGameType, "three-cushion", state.language === "en" ? "3 Cushion" : "3구");
   [2, 3, 4].forEach((count) =>
-    setOptionText(els.playerCount, String(count), state.language === "en" ? (compactSetup ? `${count}P` : `${count} Players`) : `${count}명`),
+    setOptionText(els.playerCount, String(count), state.language === "en" ? `${count} Players` : `${count}명`),
   );
   [els.finishThreeC, els.finishBank].forEach((select) => setOptionText(select, "custom", t("customInput")));
-  setOptionText(els.shotLimit, "none", state.language === "en" && compactSetup ? "No" : t("noLimit"));
+  setOptionText(els.shotLimit, "none", t("noLimit"));
   [30, 40, 50, 60].forEach((seconds) => setOptionText(els.shotLimit, String(seconds), `${seconds}${t("seconds")}`));
   setOptionText(els.warningSound, "on", t("use"));
   setOptionText(els.warningSound, "off", t("off"));
-  setOptionText(els.languageSelect, "ko", state.language === "en" && compactSetup ? "KOR" : t("korean"));
-  setOptionText(els.languageSelect, "en", state.language === "en" && compactSetup ? "ENG" : t("english"));
-  setOptionText(els.voiceStyle, "bright", state.language === "en" && compactSetup ? "Brt" : t("voiceBright"));
-  setOptionText(els.voiceStyle, "young", state.language === "en" && compactSetup ? "Yng" : t("voiceYoung"));
-  setOptionText(els.voiceStyle, "clear", state.language === "en" && compactSetup ? "Clr" : t("voiceClear"));
-  setOptionText(els.voiceStyle, "calm", state.language === "en" && compactSetup ? "Calm" : t("voiceCalm"));
+  setOptionText(els.languageSelect, "ko", t("korean"));
+  setOptionText(els.languageSelect, "en", t("english"));
+  setOptionText(els.voiceStyle, "bright", t("voiceBright"));
+  setOptionText(els.voiceStyle, "young", t("voiceYoung"));
+  setOptionText(els.voiceStyle, "clear", t("voiceClear"));
+  setOptionText(els.voiceStyle, "calm", t("voiceCalm"));
 
   els.finishThreeCCustom.placeholder = t("customInput");
   els.finishThreeCCustom.setAttribute("aria-label", `${t("finishThreeC")} ${t("customInput")}`);
@@ -1082,6 +1081,7 @@ function renderScoreboard() {
     button.disabled = !state.gameStarted || state.gameEnded;
   });
   els.scoreScreen.classList.toggle("is-ended", state.gameEnded);
+  renderReturnBoardActions();
 
   els.scoreBoard.dataset.players = String(state.players.length);
   els.scoreBoard.replaceChildren(...state.players.map(createPlayerCard));
@@ -1209,7 +1209,7 @@ function announceScoreState(player, before) {
 
   if (before.status !== player.status) {
     if (player.status === "threeC") {
-      speakText("Three cushion", "en-US");
+      speakLocalizedText("Three cushion");
       return;
     }
     if (player.status === "bank") {
@@ -1795,7 +1795,9 @@ function canReturnToBoard() {
 
 function renderReturnBoardActions() {
   const canReturn = canReturnToBoard();
-  els.returnBoardButton.hidden = !canReturn;
+  els.openBoardButton.textContent = canReturn ? t("returnBoard") : t("startBoard");
+  els.openBoardButton.setAttribute("aria-label", canReturn ? t("returnBoard") : t("startBoard"));
+  els.returnBoardButton.hidden = true;
   els.returnBoardFromRecordsButton.hidden = !canReturn;
 }
 
@@ -1809,6 +1811,14 @@ function returnToBoard() {
   els.scoreScreen.classList.remove("is-hidden");
   renderScoreboard();
   requestAnimationFrame(syncVisualViewport);
+}
+
+function handleSetupBoardAction() {
+  if (canReturnToBoard()) {
+    returnToBoard();
+    return;
+  }
+  openBoard();
 }
 
 function readSelectedMembers() {
@@ -1986,7 +1996,7 @@ els.selectionStrip.addEventListener("click", (event) => {
   const slotButton = event.target.closest("[data-selection-slot]");
   if (slotButton) selectPlayerSlot(Number(slotButton.dataset.selectionSlot));
 });
-els.openBoardButton.addEventListener("click", openBoard);
+els.openBoardButton.addEventListener("click", handleSetupBoardAction);
 els.returnBoardButton.addEventListener("click", returnToBoard);
 els.openRecordsButton.addEventListener("click", showRecords);
 els.returnBoardFromRecordsButton.addEventListener("click", returnToBoard);
