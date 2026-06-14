@@ -1647,7 +1647,7 @@ function renderRecords() {
       meta.className = "record-meta";
       players.className = "record-players";
       winner.textContent = `${displayName(result.winner)} ${t("win")}`;
-      meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning`;
+      meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning`;
       title.append(winner, meta);
 
       result.players.forEach((player) => {
@@ -1708,7 +1708,7 @@ function createRecordRow(result, index) {
   deleteButton.textContent = t("delete");
   deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
   winner.textContent = `${displayName(result.winner)} ${t("win")}`;
-  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning 쨌 ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(winner, meta);
 
   result.players.forEach((player) => {
@@ -1724,6 +1724,7 @@ function createRecordRow(result, index) {
 }
 
 function rankTextForRecord(rank) {
+  if (state.language !== "en") return rank === 1 ? "승" : `${rank}위`;
   if (rank === 1) return "Win";
   if (rank === 2) return "2nd";
   if (rank === 3) return "3rd";
@@ -1753,7 +1754,7 @@ function createRecordRow(result, index) {
   deleteButton.setAttribute("aria-label", `${displayName(result.winner)} ${t("recordDeleteAria")}`);
 
   standings.textContent = recordStandingsText(result);
-  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} 쨌 ${result.inning} inning 쨌 ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
+  meta.textContent = `${date.toLocaleDateString(currentLocale())} ${formatDuration(result.duration || 0)} · ${result.inning} inning · ${result.playerCount || result.players.length}${t("peopleSuffix")}`;
   title.append(standings, meta);
 
   result.players.forEach((player) => {
@@ -1768,8 +1769,8 @@ function createRecordRow(result, index) {
 
 function recordStandingsText(result) {
   const rankedPlayers = result.players.filter((player) => player.rank).sort((a, b) => a.rank - b.rank);
-  if (!rankedPlayers.length) return `${displayName(result.winner)} Win`;
-  return rankedPlayers.map((player) => `${displayName(player.name)}${rankTextForRecord(player.rank)}`).join(", ");
+  if (!rankedPlayers.length) return `${displayName(result.winner)} ${rankTextForRecord(1)}`;
+  return rankedPlayers.map((player) => `${displayName(player.name)} ${rankTextForRecord(player.rank)}`).join(", ");
 }
 
 function showRecords() {
