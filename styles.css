@@ -477,10 +477,12 @@ h2 {
 }
 
 .record-row {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 54px;
-  gap: 6px 10px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding-right: 76px;
 }
 
 .record-row-title {
@@ -489,6 +491,7 @@ h2 {
   align-items: baseline;
   gap: 12px;
   min-width: 0;
+  padding-right: 0;
 }
 
 .record-row-title strong,
@@ -510,13 +513,12 @@ h2 {
 
 .record-players {
   position: relative;
-  grid-column: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 6px;
   min-width: 0;
   margin-top: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: visible;
 }
 
 .record-players::before {
@@ -525,8 +527,7 @@ h2 {
 
 .record-players span {
   min-width: 0;
-  flex: 0 0 auto;
-  max-width: 170px;
+  max-width: none;
   padding: 5px 7px;
   border-radius: 6px;
   background: var(--surface-soft);
@@ -539,10 +540,9 @@ h2 {
 }
 
 .record-delete {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  justify-self: end;
-  align-self: center;
+  position: absolute;
+  top: 10px;
+  right: 12px;
   min-width: 54px;
   width: auto;
   min-height: 34px;
@@ -1724,9 +1724,10 @@ h2 {
   }
 
   .record-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 6px 8px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
     padding: 9px;
+    padding-right: 70px;
   }
 
   .record-row-title {
@@ -1744,14 +1745,14 @@ h2 {
   }
 
   .record-players {
-    grid-column: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
     gap: 6px;
-    overflow-x: auto;
+    overflow: visible;
   }
 
   .record-players span {
-    max-width: 160px;
+    max-width: none;
     padding: 5px 7px;
     font-size: 12px;
   }
@@ -2070,7 +2071,8 @@ h2 {
   }
 
   .record-row {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
+    padding-right: 70px;
   }
 
   .record-row-title {
@@ -2083,58 +2085,66 @@ h2 {
   }
 
   .setup-heading {
-    width: min(354px, 100%);
-    grid-template-columns: 132px minmax(0, 210px);
-    justify-items: center;
-    justify-self: center;
-    min-height: 80px;
+    width: 100%;
+    grid-template-columns: 96px minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    justify-self: stretch;
+    min-height: 54px;
     gap: 12px;
-    text-align: center;
+    padding-right: 150px;
+    text-align: left;
   }
 
   .app-logo {
-    width: 132px;
+    width: 96px;
     height: 54px;
-    column-gap: 7px;
+    column-gap: 5px;
     row-gap: 3px;
-    padding: 9px 10px;
+    padding: 9px 8px;
   }
 
   .logo-balls {
-    gap: 4px;
+    gap: 3px;
   }
 
   .logo-balls i {
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
   }
 
   .app-logo strong {
-    font-size: 20px;
+    font-size: 18px;
     transform: translateY(2px);
   }
 
   .app-logo small {
-    font-size: 8px;
+    font-size: 7px;
     transform: none;
   }
 
   .setup-heading > div:last-child {
-    grid-column: 1 / -1;
-    min-height: auto;
+    min-height: 54px;
     width: 100%;
-    max-width: 300px;
+    max-width: none;
+    display: grid;
+    align-content: center;
     overflow: visible;
     padding-right: 0;
   }
 
   .kicker {
-    display: none;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 5px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
   }
 
   .setup-panel h1 {
-    font-size: 15px;
-    line-height: 1.12;
+    font-size: 13px;
+    line-height: 1.08;
     white-space: normal;
     overflow: visible;
     text-wrap: balance;
@@ -2148,9 +2158,9 @@ h2 {
 
   .setup-start-action {
     top: 10px;
-    right: auto;
-    left: calc(50% - 45px);
-    width: min(210px, calc(100vw - 164px));
+    right: 10px;
+    left: auto;
+    width: clamp(132px, 38vw, 150px);
     min-width: 0;
     min-height: 54px;
     border-radius: 14px;

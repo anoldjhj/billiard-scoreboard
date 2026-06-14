@@ -1597,6 +1597,29 @@ function deleteResultByKey(key) {
   renderRecords();
 }
 
+function recordAverageForPlayer(player) {
+  const savedAverage = Number(player.average);
+  if (Number.isFinite(savedAverage)) return savedAverage.toFixed(1);
+
+  const score = Number(player.score || 0);
+  const inning = Number(player.inning || player.finishedAtInning || 0);
+  if (inning > 0) return (score / inning).toFixed(1);
+  return "0.0";
+}
+
+function recordHighForPlayer(player) {
+  return Number(player.highRun ?? player.high ?? 0);
+}
+
+function recordStatsText(player) {
+  const averageLabel = state.language === "en" ? "Avg" : "Aver";
+  return `High ${recordHighForPlayer(player)} ${averageLabel} ${recordAverageForPlayer(player)}`;
+}
+
+function recordStatText(player) {
+  return `${displayName(player.name)} ${recordStatsText(player)}`;
+}
+
 function renderRecordPlayers(results = resultsForGameType()) {
   const names = [...new Set(results.flatMap((result) => result.players.map((player) => player.name)))];
   const current = els.recordPlayerSelect.value;
@@ -1622,7 +1645,7 @@ function renderRecords() {
   const average =
     playerRows.length === 0
       ? "0.0"
-      : (playerRows.reduce((sum, player) => sum + Number(player.average || 0), 0) / playerRows.length).toFixed(1);
+      : (playerRows.reduce((sum, player) => sum + Number(recordAverageForPlayer(player)), 0) / playerRows.length).toFixed(1);
 
   els.recordAverage.textContent = average;
   if (results.length === 0) {
@@ -1653,7 +1676,7 @@ function renderRecords() {
       result.players.forEach((player) => {
         const item = document.createElement("span");
         const targetText = player.target ? ` (${player.target})` : "";
-        item.textContent = `${displayName(player.name)}${targetText} High ${player.highRun} Aver ${player.average}`;
+        item.textContent = `${displayName(player.name)}${targetText} ${recordStatsText(player)}`;
         players.append(item);
       });
 
@@ -1673,7 +1696,7 @@ function renderRecords() {
   const average =
     playerRows.length === 0
       ? "0.0"
-      : (playerRows.reduce((sum, player) => sum + Number(player.average || 0), 0) / playerRows.length).toFixed(1);
+      : (playerRows.reduce((sum, player) => sum + Number(recordAverageForPlayer(player)), 0) / playerRows.length).toFixed(1);
 
   els.recordAverage.textContent = average;
   if (results.length === 0) {
@@ -1715,7 +1738,7 @@ function createRecordRow(result, index) {
     const item = document.createElement("span");
     const targetText = player.target ? ` (${player.target})` : "";
     const rankText = player.rank ? ` ${rankTextForRecord(player.rank)}` : "";
-    item.textContent = `${displayName(player.name)}${rankText}${targetText} High ${player.highRun} Aver ${player.average}`;
+    item.textContent = `${displayName(player.name)}${rankText}${targetText} ${recordStatsText(player)}`;
     players.append(item);
   });
 
@@ -1759,7 +1782,7 @@ function createRecordRow(result, index) {
 
   result.players.forEach((player) => {
     const item = document.createElement("span");
-    item.textContent = `${displayName(player.name)} High ${player.highRun} Aver ${player.average}`;
+    item.textContent = recordStatText(player);
     players.append(item);
   });
 
