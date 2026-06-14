@@ -482,7 +482,6 @@ h2 {
   grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   align-items: start;
-  padding-right: 76px;
 }
 
 .record-row-title {
@@ -491,7 +490,7 @@ h2 {
   align-items: baseline;
   gap: 12px;
   min-width: 0;
-  padding-right: 0;
+  padding-right: 70px;
 }
 
 .record-row-title strong,
@@ -514,7 +513,7 @@ h2 {
 .record-players {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   min-width: 0;
   margin-top: 0;
@@ -1727,12 +1726,12 @@ h2 {
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
     padding: 9px;
-    padding-right: 70px;
   }
 
   .record-row-title {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
+    padding-right: 62px;
   }
 
   .record-row-title strong {
@@ -1746,7 +1745,7 @@ h2 {
 
   .record-players {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
     overflow: visible;
   }
@@ -2072,12 +2071,12 @@ h2 {
 
   .record-row {
     grid-template-columns: minmax(0, 1fr);
-    padding-right: 70px;
   }
 
   .record-row-title {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
+    padding-right: 62px;
   }
 
   .record-meta {
