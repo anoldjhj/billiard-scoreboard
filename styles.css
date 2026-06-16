@@ -1799,13 +1799,13 @@ h2 {
     position: fixed;
     left: 50%;
     top: 50%;
-    width: calc(var(--viewport-height, 100dvh) - 120px);
-    height: calc(var(--viewport-width, 100dvw) - 18px);
+    width: calc(var(--viewport-height, 100dvh) - 220px);
+    height: calc(var(--viewport-width, 100dvw) - 24px);
     min-height: 0;
     display: grid;
-    grid-template-rows: 50px minmax(0, 1fr);
-    gap: 4px;
-    padding: 4px 5px;
+    grid-template-rows: 48px minmax(0, 1fr);
+    gap: 3px;
+    padding: 3px 5px;
     overflow: hidden;
     transform: translate(-50%, -50%) rotate(90deg);
     transform-origin: center;
@@ -1815,7 +1815,7 @@ h2 {
   }
 
   .score-screen:not(.is-hidden) .score-header {
-    min-height: 50px;
+    min-height: 48px;
     grid-template-columns: 86px 108px 110px minmax(116px, 1fr) auto;
     gap: 6px;
     padding: 4px 6px;
@@ -1830,7 +1830,7 @@ h2 {
 
   .score-screen:not(.is-hidden) .player-card {
     min-height: 0;
-    grid-template-rows: 28px minmax(0, 1fr) 42px;
+    grid-template-rows: 26px minmax(0, 1fr) 38px;
     gap: 4px;
     padding: 5px;
     outline-width: 0;
