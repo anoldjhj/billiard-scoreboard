@@ -1944,6 +1944,17 @@ function endCurrentMatch({ render = true, announce = true } = {}) {
   if (announce) speakLocalizedText(t("matchEnded"));
 }
 
+function saveRankedResultIfNeeded() {
+  const winner = state.players.find((player) => player.rank === 1);
+  if (!winner || state.resultSaved) return;
+  saveMatchResult(winner);
+  state.resultSaved = true;
+  state.gameEnded = true;
+  state.gameStarted = false;
+  stopTimer();
+  stopMatchTimer();
+}
+
 function prepareRematch() {
   stopTimer();
   stopMatchTimer();
@@ -1966,6 +1977,7 @@ function prepareRematch() {
 
 function goHome() {
   setPreferredOrientation("portrait");
+  saveRankedResultIfNeeded();
   document.body.classList.remove("score-mode");
   syncVisualViewport();
   els.scoreScreen.classList.add("is-hidden");

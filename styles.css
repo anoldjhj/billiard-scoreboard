@@ -2097,11 +2097,12 @@ h2 {
   }
 
   .app-logo {
-    width: 96px;
+    width: 104px;
     height: 54px;
     column-gap: 5px;
     row-gap: 3px;
     padding: 9px 8px;
+    transform: translateX(-4px);
   }
 
   .logo-balls {
