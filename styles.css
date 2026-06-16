@@ -1303,11 +1303,15 @@ h2 {
 }
 
 .score-box span.score-digits-2 {
-  font-size: clamp(104px, 15vw, 198px);
+  font-size: clamp(132px, 20vw, 250px);
+  transform: scaleX(0.78);
+  transform-origin: center;
 }
 
 .score-box span.score-digits-3 {
   font-size: clamp(82px, 12vw, 150px);
+  transform: scaleX(0.72);
+  transform-origin: center;
 }
 
 .score-box span.result-text {
@@ -2617,7 +2621,7 @@ h2 {
   }
 
   .score-box span.score-digits-2 {
-    font-size: clamp(72px, 13vw, 132px);
+    font-size: clamp(92px, 17vw, 190px);
   }
 
   .score-box span.score-digits-3 {
@@ -2788,11 +2792,15 @@ h2 {
 
   .score-box span.score-digits-2,
   .board[data-players="4"] .score-box span.score-digits-2 {
-    font-size: clamp(56px, 58cqw, 190px);
+    font-size: clamp(72px, 82cqw, 250px);
+    transform: scaleX(0.78);
+    transform-origin: center;
   }
 
   .score-box span.score-digits-3,
   .board[data-players="4"] .score-box span.score-digits-3 {
-    font-size: clamp(48px, 40cqw, 122px);
+    font-size: clamp(56px, 54cqw, 170px);
+    transform: scaleX(0.72);
+    transform-origin: center;
   }
 }
