@@ -1122,6 +1122,8 @@ function createPlayerCard(player, index) {
   scoreBox.setAttribute("aria-label", `${displayName(player.name)} ${t("score")}`);
   scoreContent.className = "score-content";
   score.textContent = scoreText(player);
+  score.classList.toggle("score-digits-2", player.status === "playing" && Math.abs(Number(player.score)) >= 10);
+  score.classList.toggle("score-digits-3", player.status === "playing" && Math.abs(Number(player.score)) >= 100);
   score.classList.toggle("result-text", player.status !== "playing");
   score.classList.toggle("status-win", player.status === "win");
   score.classList.toggle("status-three-c", player.status === "threeC");

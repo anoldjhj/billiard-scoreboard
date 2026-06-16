@@ -1191,6 +1191,14 @@ h2 {
   font-size: clamp(17px, 2.2vw, 24px);
 }
 
+.board[data-players="4"] .score-box span.score-digits-2 {
+  font-size: clamp(76px, 13vw, 132px);
+}
+
+.board[data-players="4"] .score-box span.score-digits-3 {
+  font-size: clamp(60px, 10vw, 108px);
+}
+
 .player-card {
   min-width: 0;
   display: grid;
@@ -2459,6 +2467,118 @@ h2 {
     padding: 16px;
   }
 
+  .records-screen {
+    min-height: calc(var(--viewport-height, 100svh) - 12px);
+    overflow: hidden;
+  }
+
+  .records-panel {
+    width: calc(var(--viewport-width, 100vw) - 16px);
+    min-height: calc(var(--viewport-height, 100svh) - 12px);
+    max-height: calc(var(--viewport-height, 100svh) - 12px);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    margin: 0 auto;
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .records-header {
+    align-items: center;
+    min-height: 34px;
+  }
+
+  .records-header h1 {
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  .records-header .primary-action {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .record-average {
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 92px;
+    gap: 7px;
+    padding: 7px;
+  }
+
+  .record-average label {
+    gap: 2px;
+    font-size: 10px;
+  }
+
+  .record-average select {
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .record-average div {
+    gap: 1px;
+    padding: 4px 7px;
+  }
+
+  .record-average span {
+    font-size: 9px;
+  }
+
+  .record-average strong {
+    font-size: 22px;
+  }
+
+  .record-list {
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+    padding-right: 6px;
+  }
+
+  .record-row,
+  .record-empty {
+    min-width: 0;
+    padding: 7px 8px;
+  }
+
+  .record-row {
+    gap: 5px;
+  }
+
+  .record-row-title {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding-right: 56px;
+  }
+
+  .record-row-title strong,
+  .record-standings {
+    font-size: 14px;
+  }
+
+  .record-meta {
+    font-size: 11px;
+    text-align: right;
+  }
+
+  .record-players {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .record-players span {
+    padding: 4px 5px;
+    font-size: 10px;
+  }
+
+  .record-delete {
+    top: 7px;
+    right: 8px;
+    min-width: 46px;
+    min-height: 28px;
+    font-size: 11px;
+  }
+
   .setup-heading {
     display: none;
   }
@@ -2785,4 +2905,24 @@ h2 {
 
 .edit-info .member-label-target {
   font-size: 0.82em;
+}
+
+@supports (font-size: 1cqw) {
+  .score-box {
+    container-type: inline-size;
+  }
+
+  .score-box span:not(.result-text):not(.status-three-c):not(.status-bank) {
+    font-size: clamp(72px, 88cqw, 270px);
+  }
+
+  .score-box span.score-digits-2,
+  .board[data-players="4"] .score-box span.score-digits-2 {
+    font-size: clamp(64px, 66cqw, 180px);
+  }
+
+  .score-box span.score-digits-3,
+  .board[data-players="4"] .score-box span.score-digits-3 {
+    font-size: clamp(52px, 44cqw, 132px);
+  }
 }
