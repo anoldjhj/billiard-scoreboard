@@ -2473,10 +2473,11 @@ h2 {
   }
 
   .setup-panel {
-    width: calc(var(--viewport-width, 100vw) - 16px);
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
     min-height: calc(var(--viewport-height, 100svh) - 12px);
     max-height: calc(var(--viewport-height, 100svh) - 12px);
-    grid-template-columns: minmax(0, 1.15fr) minmax(268px, 0.85fr);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr);
     grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
     margin: 0 auto;
@@ -2487,6 +2488,7 @@ h2 {
   .member-box,
   .manager-panel {
     min-height: 0;
+    min-width: 0;
     max-height: 100%;
     overflow: hidden;
   }
@@ -2636,13 +2638,77 @@ h2 {
 
   .member-box,
   .manager-panel {
-    padding: 12px;
+    padding: 10px;
+  }
+
+  .manager-panel summary {
+    min-height: 34px;
+    gap: 6px;
+    font-size: 18px;
+  }
+
+  .manager-panel summary #memberCount {
+    min-width: 34px;
+    min-height: 26px;
+    font-size: 13px;
+  }
+
+  .manager-panel summary::after {
+    width: 26px;
+    min-height: 26px;
+  }
+
+  .member-form {
+    grid-template-columns: minmax(0, 1fr) 58px 56px;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .member-form input {
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 8px;
+    font-size: 14px;
+  }
+
+  .member-form button {
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 8px;
+    font-size: 13px;
   }
 
   .edit-list {
     min-height: 0;
     max-height: none;
     overflow: auto;
+    padding-right: 4px;
+  }
+
+  .edit-row {
+    grid-template-columns: minmax(0, 1fr) 28px 42px 42px;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .edit-info {
+    min-height: 32px;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .selection-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .edit-button,
+  .delete-button {
+    min-width: 0;
+    min-height: 30px;
+    padding: 0 5px;
+    font-size: 11px;
   }
 
   .score-screen {
