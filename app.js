@@ -1095,30 +1095,20 @@ function renderScoreboard() {
 }
 
 function fitScoreTextToBoxes() {
-  els.scoreBoard.querySelectorAll(".score-box span").forEach((score) => {
+  els.scoreBoard.querySelectorAll(".score-box span.score-digits-2, .score-box span.score-digits-3").forEach((score) => {
     if (score.classList.contains("result-text") || score.classList.contains("status-three-c") || score.classList.contains("status-bank")) return;
     const box = score.closest(".score-box");
     if (!box) return;
 
-    score.style.setProperty("--score-fit-scale", "1");
-    score.style.setProperty("--score-fit-y", "0px");
+    score.style.setProperty("--score-fit-x", "1");
     const boxRect = box.getBoundingClientRect();
     const scoreRect = score.getBoundingClientRect();
     if (!boxRect.width || !boxRect.height || !scoreRect.width || !scoreRect.height) return;
 
-    const margin = Math.max(6, Math.floor(Math.min(boxRect.width, boxRect.height) * 0.08));
-    const availableWidth = Math.max(24, boxRect.width - margin * 2);
-    const availableHeight = Math.max(24, boxRect.height - margin * 2);
-    const fit = Math.min(1, availableWidth / scoreRect.width, availableHeight / scoreRect.height);
-    score.style.setProperty("--score-fit-scale", fit.toFixed(3));
-
-    const fittedRect = score.getBoundingClientRect();
-    const minTop = boxRect.top + margin;
-    const maxBottom = boxRect.bottom - margin;
-    let offsetY = 0;
-    if (fittedRect.top < minTop) offsetY = minTop - fittedRect.top;
-    if (fittedRect.bottom > maxBottom) offsetY = maxBottom - fittedRect.bottom;
-    score.style.setProperty("--score-fit-y", `${Math.round(offsetY)}px`);
+    const referenceMargin = Math.max(6, Math.floor((boxRect.height - scoreRect.height) / 2));
+    const availableWidth = Math.max(24, boxRect.width - referenceMargin * 2);
+    const fitX = Math.min(1, availableWidth / scoreRect.width);
+    score.style.setProperty("--score-fit-x", fitX.toFixed(3));
   });
 }
 
