@@ -1799,8 +1799,8 @@ h2 {
     position: fixed;
     left: 50%;
     top: 50%;
-    width: calc(var(--viewport-height, 100dvh) - 220px);
-    height: calc(var(--viewport-width, 100dvw) - 24px);
+    width: calc(var(--viewport-height, 100dvh) - 132px);
+    height: calc(var(--viewport-width, 100dvw) - 18px);
     min-height: 0;
     display: grid;
     grid-template-rows: 48px minmax(0, 1fr);
