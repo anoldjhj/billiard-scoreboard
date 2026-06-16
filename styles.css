@@ -1283,9 +1283,12 @@ h2 {
 
 .score-content {
   min-width: 0;
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
   gap: 8px;
+  overflow: hidden;
 }
 
 .score-box.yellow {
@@ -1300,16 +1303,16 @@ h2 {
   line-height: 0.85;
   font-weight: 950;
   letter-spacing: 0;
+  transform: translateY(var(--score-fit-y, 0)) scale(var(--score-fit-scale, 1));
+  transform-origin: center;
 }
 
 .score-box span.score-digits-2 {
-  transform: scaleX(var(--score-fit-x, 1));
-  transform-origin: center;
+  transform: translateY(var(--score-fit-y, 0)) scale(var(--score-fit-scale, 1));
 }
 
 .score-box span.score-digits-3 {
-  transform: scaleX(var(--score-fit-x, 1));
-  transform-origin: center;
+  transform: translateY(var(--score-fit-y, 0)) scale(var(--score-fit-scale, 1));
 }
 
 .score-box span.result-text {
@@ -1795,14 +1798,15 @@ h2 {
   .score-screen:not(.is-hidden) {
     position: fixed;
     left: 50%;
-    top: calc(50% + 1mm);
-    width: calc(var(--viewport-height, 100dvh) - 56px - 4mm);
-    height: calc(var(--viewport-width, 100dvw) - 8px);
+    top: 50%;
+    width: calc(var(--viewport-height, 100dvh) - 120px);
+    height: calc(var(--viewport-width, 100dvw) - 18px);
     min-height: 0;
     display: grid;
-    grid-template-rows: auto 1fr;
-    gap: 5px;
-    padding: 5px 7px;
+    grid-template-rows: 50px minmax(0, 1fr);
+    gap: 4px;
+    padding: 4px 5px;
+    overflow: hidden;
     transform: translate(-50%, -50%) rotate(90deg);
     transform-origin: center;
     -webkit-text-size-adjust: 100%;
@@ -1811,27 +1815,30 @@ h2 {
   }
 
   .score-screen:not(.is-hidden) .score-header {
-    min-height: 54px;
+    min-height: 50px;
     grid-template-columns: 86px 108px 110px minmax(116px, 1fr) auto;
-    gap: 7px;
-    padding: 4px 7px;
+    gap: 6px;
+    padding: 4px 6px;
   }
 
   .score-screen:not(.is-hidden) .board {
+    min-height: 0;
+    overflow: hidden;
     gap: 7px;
     padding: 7px;
   }
 
   .score-screen:not(.is-hidden) .player-card {
-    grid-template-rows: 30px minmax(124px, 1fr) 48px;
-    gap: 5px;
-    padding: 6px;
+    min-height: 0;
+    grid-template-rows: 28px minmax(0, 1fr) 42px;
+    gap: 4px;
+    padding: 5px;
     outline-width: 0;
     outline-offset: 0;
   }
 
   .score-screen:not(.is-hidden) .score-box {
-    min-height: 124px;
+    min-height: 0;
   }
 
   .score-screen:not(.is-hidden) .timer {
@@ -2467,7 +2474,9 @@ h2 {
   }
 
   .score-screen {
-    min-height: calc(100svh - 12px);
+    min-height: 0;
+    height: calc(100svh - 12px);
+    overflow: hidden;
     gap: 6px;
   }
 
@@ -2579,6 +2588,8 @@ h2 {
   }
 
   .board {
+    min-height: 0;
+    overflow: hidden;
     gap: 7px;
     padding: 7px;
   }
@@ -2590,7 +2601,8 @@ h2 {
   }
 
   .player-card {
-    grid-template-rows: 30px minmax(124px, 1fr) 48px;
+    min-height: 0;
+    grid-template-rows: 30px minmax(0, 1fr) 46px;
     gap: 5px;
     padding: 6px;
     outline-width: 0;
@@ -2611,7 +2623,7 @@ h2 {
   }
 
   .score-box {
-    min-height: 124px;
+    min-height: 0;
   }
 
   .score-box span {
@@ -2790,13 +2802,11 @@ h2 {
 
   .score-box span.score-digits-2,
   .board[data-players="4"] .score-box span.score-digits-2 {
-    transform: scaleX(var(--score-fit-x, 1));
-    transform-origin: center;
+    transform: translateY(var(--score-fit-y, 0)) scale(var(--score-fit-scale, 1));
   }
 
   .score-box span.score-digits-3,
   .board[data-players="4"] .score-box span.score-digits-3 {
-    transform: scaleX(var(--score-fit-x, 1));
-    transform-origin: center;
+    transform: translateY(var(--score-fit-y, 0)) scale(var(--score-fit-scale, 1));
   }
 }
