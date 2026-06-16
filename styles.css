@@ -2467,6 +2467,39 @@ h2 {
     padding: 16px;
   }
 
+  .setup-screen {
+    min-height: calc(var(--viewport-height, 100svh) - 12px);
+    overflow: hidden;
+  }
+
+  .setup-panel {
+    width: calc(var(--viewport-width, 100vw) - 16px);
+    min-height: calc(var(--viewport-height, 100svh) - 12px);
+    max-height: calc(var(--viewport-height, 100svh) - 12px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(268px, 0.85fr);
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+    margin: 0 auto;
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .member-box,
+  .manager-panel {
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .member-box {
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  .manager-panel[open] {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
   .records-screen {
     min-height: calc(var(--viewport-height, 100svh) - 12px);
     overflow: hidden;
@@ -2476,13 +2509,15 @@ h2 {
     width: calc(var(--viewport-width, 100vw) - 16px);
     min-height: calc(var(--viewport-height, 100svh) - 12px);
     max-height: calc(var(--viewport-height, 100svh) - 12px);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-columns: minmax(190px, 0.34fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     margin: 0 auto;
     padding: 10px;
     overflow: hidden;
   }
 
   .records-header {
+    grid-column: 1 / -1;
     align-items: center;
     min-height: 34px;
   }
@@ -2499,7 +2534,11 @@ h2 {
   }
 
   .record-average {
-    grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 92px;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: stretch;
+    align-content: start;
+    grid-template-columns: minmax(0, 1fr);
     gap: 7px;
     padding: 7px;
   }
@@ -2529,6 +2568,8 @@ h2 {
   }
 
   .record-list {
+    grid-column: 2;
+    grid-row: 2;
     min-height: 0;
     max-height: none;
     overflow: auto;
@@ -2599,7 +2640,9 @@ h2 {
   }
 
   .edit-list {
-    max-height: 102px;
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
   }
 
   .score-screen {
