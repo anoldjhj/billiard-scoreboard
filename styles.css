@@ -1800,7 +1800,7 @@ h2 {
     left: 50%;
     top: 50%;
     width: calc(var(--viewport-height, 100dvh) - 132px);
-    height: calc(var(--viewport-width, 100dvw) - 18px);
+    height: calc(var(--viewport-width, 100dvw) - 14px);
     min-height: 0;
     display: grid;
     grid-template-rows: 48px minmax(0, 1fr);
@@ -2475,7 +2475,7 @@ h2 {
 
   .score-screen {
     min-height: 0;
-    height: calc(100svh - 12px);
+    height: calc(100svh - 23px);
     overflow: hidden;
     gap: 6px;
   }
