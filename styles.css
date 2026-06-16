@@ -1302,6 +1302,14 @@ h2 {
   letter-spacing: 0;
 }
 
+.score-box span.score-digits-2 {
+  font-size: clamp(112px, 16vw, 210px);
+}
+
+.score-box span.score-digits-3 {
+  font-size: clamp(82px, 12vw, 150px);
+}
+
 .score-box span.result-text {
   font-size: clamp(96px, 14vw, 170px);
   line-height: 0.95;
@@ -2450,7 +2458,7 @@ h2 {
   }
 }
 
-@media (orientation: landscape) and (max-height: 430px) {
+@media (orientation: landscape) and (max-width: 960px) {
   .app-shell {
     padding: max(6px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
       max(6px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
@@ -2863,6 +2871,14 @@ h2 {
     font-size: clamp(92px, 18vw, 172px);
   }
 
+  .score-box span.score-digits-2 {
+    font-size: clamp(78px, 14vw, 140px);
+  }
+
+  .score-box span.score-digits-3 {
+    font-size: clamp(60px, 10vw, 110px);
+  }
+
   .score-box span.result-text {
     font-size: clamp(50px, 9vw, 96px);
   }
@@ -2949,7 +2965,7 @@ h2 {
   }
 }
 
-@media (orientation: portrait), (orientation: landscape) and (max-height: 430px) {
+@media (orientation: portrait), (orientation: landscape) and (max-width: 960px) {
   .inning-score {
     isolation: isolate;
   }
@@ -3027,11 +3043,11 @@ h2 {
 
   .score-box span.score-digits-2,
   .board[data-players="4"] .score-box span.score-digits-2 {
-    font-size: clamp(64px, 66cqw, 180px);
+    font-size: clamp(60px, 62cqw, 170px);
   }
 
   .score-box span.score-digits-3,
   .board[data-players="4"] .score-box span.score-digits-3 {
-    font-size: clamp(52px, 44cqw, 132px);
+    font-size: clamp(48px, 40cqw, 122px);
   }
 }
