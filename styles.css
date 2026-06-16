@@ -1303,7 +1303,7 @@ h2 {
 }
 
 .score-box span.score-digits-2 {
-  font-size: clamp(112px, 16vw, 210px);
+  font-size: clamp(104px, 15vw, 198px);
 }
 
 .score-box span.score-digits-3 {
@@ -2464,261 +2464,6 @@ h2 {
       max(6px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
   }
 
-  .setup-screen,
-  .records-screen {
-    place-items: start center;
-  }
-
-  .setup-panel,
-  .records-panel {
-    gap: 10px;
-    padding: 16px;
-  }
-
-  .setup-screen {
-    min-height: calc(var(--viewport-height, 100svh) - 12px);
-    overflow: hidden;
-  }
-
-  .setup-panel {
-    width: calc(100vw - 16px);
-    max-width: calc(100vw - 16px);
-    min-height: calc(var(--viewport-height, 100svh) - 12px);
-    max-height: calc(var(--viewport-height, 100svh) - 12px);
-    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr);
-    grid-template-rows: minmax(0, 1fr);
-    align-items: stretch;
-    margin: 0 auto;
-    padding: 10px;
-    overflow: hidden;
-  }
-
-  .member-box,
-  .manager-panel {
-    min-height: 0;
-    min-width: 0;
-    max-height: 100%;
-    overflow: hidden;
-  }
-
-  .member-box {
-    grid-template-rows: auto auto minmax(0, 1fr);
-  }
-
-  .manager-panel[open] {
-    display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr);
-  }
-
-  .records-screen {
-    min-height: calc(var(--viewport-height, 100svh) - 12px);
-    overflow: hidden;
-  }
-
-  .records-panel {
-    width: calc(var(--viewport-width, 100vw) - 16px);
-    min-height: calc(var(--viewport-height, 100svh) - 12px);
-    max-height: calc(var(--viewport-height, 100svh) - 12px);
-    grid-template-columns: minmax(190px, 0.34fr) minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    margin: 0 auto;
-    padding: 10px;
-    overflow: hidden;
-  }
-
-  .records-header {
-    grid-column: 1 / -1;
-    align-items: center;
-    min-height: 34px;
-  }
-
-  .records-header h1 {
-    font-size: 21px;
-    line-height: 1;
-  }
-
-  .records-header .primary-action {
-    min-height: 32px;
-    padding: 0 10px;
-    font-size: 13px;
-  }
-
-  .record-average {
-    grid-column: 1;
-    grid-row: 2;
-    align-self: stretch;
-    align-content: start;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 7px;
-    padding: 7px;
-  }
-
-  .record-average label {
-    gap: 2px;
-    font-size: 10px;
-  }
-
-  .record-average select {
-    min-height: 30px;
-    padding: 0 8px;
-    font-size: 13px;
-  }
-
-  .record-average div {
-    gap: 1px;
-    padding: 4px 7px;
-  }
-
-  .record-average span {
-    font-size: 9px;
-  }
-
-  .record-average strong {
-    font-size: 22px;
-  }
-
-  .record-list {
-    grid-column: 2;
-    grid-row: 2;
-    min-height: 0;
-    max-height: none;
-    overflow: auto;
-    padding-right: 6px;
-  }
-
-  .record-row,
-  .record-empty {
-    min-width: 0;
-    padding: 7px 8px;
-  }
-
-  .record-row {
-    gap: 5px;
-  }
-
-  .record-row-title {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    padding-right: 56px;
-  }
-
-  .record-row-title strong,
-  .record-standings {
-    font-size: 14px;
-  }
-
-  .record-meta {
-    font-size: 11px;
-    text-align: right;
-  }
-
-  .record-players {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 4px;
-  }
-
-  .record-players span {
-    padding: 4px 5px;
-    font-size: 10px;
-  }
-
-  .record-delete {
-    top: 7px;
-    right: 8px;
-    min-width: 46px;
-    min-height: 28px;
-    font-size: 11px;
-  }
-
-  .setup-heading {
-    display: none;
-  }
-
-  .setup-start-action {
-    position: static;
-    min-width: 118px;
-    min-height: 38px;
-    padding: 0 12px;
-    font-size: 17px;
-    line-height: 1;
-    box-shadow: 0 5px 10px rgba(15, 23, 42, 0.14);
-  }
-
-  .member-box,
-  .manager-panel {
-    padding: 10px;
-  }
-
-  .manager-panel summary {
-    min-height: 34px;
-    gap: 6px;
-    font-size: 18px;
-  }
-
-  .manager-panel summary #memberCount {
-    min-width: 34px;
-    min-height: 26px;
-    font-size: 13px;
-  }
-
-  .manager-panel summary::after {
-    width: 26px;
-    min-height: 26px;
-  }
-
-  .member-form {
-    grid-template-columns: minmax(0, 1fr) 58px 56px;
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-
-  .member-form input {
-    min-width: 0;
-    min-height: 36px;
-    padding: 0 8px;
-    font-size: 14px;
-  }
-
-  .member-form button {
-    min-width: 0;
-    min-height: 36px;
-    padding: 0 8px;
-    font-size: 13px;
-  }
-
-  .edit-list {
-    min-height: 0;
-    max-height: none;
-    overflow: auto;
-    padding-right: 4px;
-  }
-
-  .edit-row {
-    grid-template-columns: minmax(0, 1fr) 28px 42px 42px;
-    gap: 4px;
-    padding: 5px;
-  }
-
-  .edit-info {
-    min-height: 32px;
-    gap: 8px;
-    font-size: 13px;
-  }
-
-  .selection-badge {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-  }
-
-  .edit-button,
-  .delete-button {
-    min-width: 0;
-    min-height: 30px;
-    padding: 0 5px;
-    font-size: 11px;
-  }
-
   .score-screen {
     min-height: calc(100svh - 12px);
     gap: 6px;
@@ -2872,7 +2617,7 @@ h2 {
   }
 
   .score-box span.score-digits-2 {
-    font-size: clamp(78px, 14vw, 140px);
+    font-size: clamp(72px, 13vw, 132px);
   }
 
   .score-box span.score-digits-3 {
@@ -3037,13 +2782,13 @@ h2 {
     container-type: inline-size;
   }
 
-  .score-box span:not(.result-text):not(.status-three-c):not(.status-bank) {
+  .score-box span:not(.result-text):not(.status-three-c):not(.status-bank):not(.score-digits-2):not(.score-digits-3) {
     font-size: clamp(72px, 88cqw, 270px);
   }
 
   .score-box span.score-digits-2,
   .board[data-players="4"] .score-box span.score-digits-2 {
-    font-size: clamp(60px, 62cqw, 170px);
+    font-size: clamp(56px, 58cqw, 190px);
   }
 
   .score-box span.score-digits-3,

@@ -205,6 +205,8 @@ const state = {
   history: [],
 };
 
+let preferredOrientation = "portrait";
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 let audioContext = null;
@@ -1989,10 +1991,29 @@ function goHome() {
 }
 
 function setPreferredOrientation(orientation) {
+  preferredOrientation = orientation === "landscape" ? "landscape" : "portrait";
+  if (!isPhoneViewport()) return;
   const screenOrientation = screen.orientation;
   if (!screenOrientation?.lock) return;
-  const lockTarget = orientation === "landscape" ? "landscape" : "portrait";
+  const lockTarget = preferredOrientation === "landscape" ? "landscape" : "portrait";
   screenOrientation.lock(lockTarget).catch(() => {});
+}
+
+function isPhoneViewport() {
+  const width = Math.round(window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
+  const height = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
+  const shortSide = Math.min(width, height);
+  const longSide = Math.max(width, height);
+  return shortSide <= 600 && longSide <= 960;
+}
+
+function enforceCurrentOrientation() {
+  if (!isPhoneViewport()) return;
+  if (!els.scoreScreen.classList.contains("is-hidden")) {
+    setPreferredOrientation("landscape");
+    return;
+  }
+  setPreferredOrientation("portrait");
 }
 
 function syncVisualViewport() {
@@ -2130,11 +2151,13 @@ els.scoreBoard.addEventListener("click", (event) => {
 });
 function handleViewportChange() {
   syncVisualViewport();
+  enforceCurrentOrientation();
   if (!els.scoreScreen.classList.contains("is-hidden")) renderScoreboard();
   else if (!els.setupScreen.classList.contains("is-hidden")) applyLanguage();
 }
 
 window.addEventListener("resize", handleViewportChange);
+window.addEventListener("orientationchange", () => window.setTimeout(handleViewportChange, 120));
 window.visualViewport?.addEventListener("resize", handleViewportChange);
 window.visualViewport?.addEventListener("scroll", syncVisualViewport);
 
@@ -2154,5 +2177,6 @@ loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
 applyLanguage();
+enforceCurrentOrientation();
 
 
