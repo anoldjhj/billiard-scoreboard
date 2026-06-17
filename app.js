@@ -1091,27 +1091,46 @@ function renderScoreboard() {
 
   els.scoreBoard.dataset.players = String(state.players.length);
   els.scoreBoard.replaceChildren(...state.players.map(createPlayerCard));
-  requestAnimationFrame(fitScoreTextToBoxes);
+  scheduleScoreTextFit();
+}
+
+function scheduleScoreTextFit() {
+  requestAnimationFrame(() => {
+    fitScoreTextToBoxes();
+    requestAnimationFrame(fitScoreTextToBoxes);
+  });
 }
 
 function fitScoreTextToBoxes() {
-  els.scoreBoard.querySelectorAll(".score-box span").forEach((score) => {
+  els.scoreBoard.querySelectorAll(".score-content > span").forEach((score) => {
     if (score.classList.contains("result-text") || score.classList.contains("status-three-c") || score.classList.contains("status-bank")) return;
-    const box = score.closest(".score-box");
-    if (!box) return;
+    const content = score.closest(".score-content");
+    if (!content) return;
 
-    score.style.setProperty("--score-fit-x", "1");
-    score.style.setProperty("--score-fit-y", "1");
-    const boxRect = box.getBoundingClientRect();
-    const scoreRect = score.getBoundingClientRect();
-    if (!boxRect.width || !boxRect.height || !scoreRect.width || !scoreRect.height) return;
+    score.style.fontSize = "";
+    const contentRect = content.getBoundingClientRect();
+    if (!contentRect.width) return;
 
     const oneMillimeter = 96 / 25.4;
-    const availableWidth = Math.max(24, boxRect.width - oneMillimeter * 2);
-    const availableHeight = Math.max(24, boxRect.height - oneMillimeter * 2);
-    const fit = Math.min(1, availableWidth / scoreRect.width, availableHeight / scoreRect.height);
-    score.style.setProperty("--score-fit-x", fit.toFixed(3));
-    score.style.setProperty("--score-fit-y", fit.toFixed(3));
+    const availableWidth = Math.max(24, contentRect.width - oneMillimeter * 2);
+    const baseFontSize = Number.parseFloat(getComputedStyle(score).fontSize);
+    if (!baseFontSize) return;
+
+    let low = 12;
+    let high = baseFontSize;
+    let best = low;
+    for (let step = 0; step < 12; step += 1) {
+      const next = (low + high) / 2;
+      score.style.fontSize = `${next}px`;
+      const scoreWidth = score.getBoundingClientRect().width;
+      if (scoreWidth <= availableWidth) {
+        best = next;
+        low = next;
+      } else {
+        high = next;
+      }
+    }
+    score.style.fontSize = `${best.toFixed(2)}px`;
   });
 }
 

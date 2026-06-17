@@ -1192,11 +1192,11 @@ h2 {
 }
 
 .board[data-players="4"] .score-box span.score-digits-2 {
-  font-size: clamp(76px, 13vw, 132px);
+  font-size: clamp(64px, 10vw, 112px);
 }
 
 .board[data-players="4"] .score-box span.score-digits-3 {
-  font-size: clamp(60px, 10vw, 108px);
+  font-size: clamp(52px, 8vw, 92px);
 }
 
 .player-card {
@@ -1275,10 +1275,12 @@ h2 {
   min-height: 220px;
   border: 0;
   border-radius: var(--radius);
+  padding: 0;
   background: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.42);
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 .score-content {
@@ -1304,18 +1306,6 @@ h2 {
   font-weight: 950;
   letter-spacing: 0;
   white-space: nowrap;
-  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
-  transform-origin: center;
-}
-
-.score-box span.score-digits-2 {
-  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
-  transform-origin: center;
-}
-
-.score-box span.score-digits-3 {
-  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
-  transform-origin: center;
 }
 
 .score-box span.result-text {
@@ -2626,11 +2616,11 @@ h2 {
   }
 
   .score-box span.score-digits-2 {
-    font-size: clamp(92px, 17vw, 190px);
+    font-size: clamp(72px, 13vw, 150px);
   }
 
   .score-box span.score-digits-3 {
-    font-size: clamp(60px, 10vw, 110px);
+    font-size: clamp(50px, 8vw, 92px);
   }
 
   .score-box span.result-text {
@@ -2784,26 +2774,4 @@ h2 {
 
 .edit-info .member-label-target {
   font-size: 0.82em;
-}
-
-@supports (font-size: 1cqw) {
-  .score-box {
-    container-type: inline-size;
-  }
-
-  .score-box span:not(.result-text):not(.status-three-c):not(.status-bank) {
-    font-size: clamp(72px, 88cqw, 270px);
-  }
-
-  .score-box span.score-digits-2,
-  .board[data-players="4"] .score-box span.score-digits-2 {
-    transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
-    transform-origin: center;
-  }
-
-  .score-box span.score-digits-3,
-  .board[data-players="4"] .score-box span.score-digits-3 {
-    transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
-    transform-origin: center;
-  }
 }
