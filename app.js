@@ -1848,9 +1848,15 @@ function recordStandingsText(result) {
   return rankedPlayers.map((player) => `${displayName(player.name)} ${rankTextForRecord(player.rank)}`).join(", ");
 }
 
+function setScreenMode(mode) {
+  document.body.classList.toggle("setup-mode", mode === "setup");
+  document.body.classList.toggle("records-mode", mode === "records");
+  document.body.classList.toggle("score-mode", mode === "score");
+}
+
 function showRecords() {
   setPreferredOrientation("portrait");
-  document.body.classList.remove("score-mode");
+  setScreenMode("records");
   syncVisualViewport();
   renderRecords();
   renderReturnBoardActions();
@@ -1861,7 +1867,7 @@ function showRecords() {
 
 function showSetup() {
   setPreferredOrientation("portrait");
-  document.body.classList.remove("score-mode");
+  setScreenMode("setup");
   syncVisualViewport();
   els.recordsScreen.classList.add("is-hidden");
   els.scoreScreen.classList.add("is-hidden");
@@ -1883,7 +1889,7 @@ function renderReturnBoardActions() {
 function returnToBoard() {
   if (!canReturnToBoard()) return;
   setPreferredOrientation("landscape");
-  document.body.classList.add("score-mode");
+  setScreenMode("score");
   syncVisualViewport();
   els.setupScreen.classList.add("is-hidden");
   els.recordsScreen.classList.add("is-hidden");
@@ -1950,7 +1956,7 @@ function openBoard() {
   state.inning = 1;
   state.active = 0;
   state.history = [];
-  document.body.classList.add("score-mode");
+  setScreenMode("score");
   syncVisualViewport();
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.remove("is-hidden");
@@ -2030,7 +2036,7 @@ function prepareRematch() {
 function goHome() {
   setPreferredOrientation("portrait");
   saveRankedResultIfNeeded();
-  document.body.classList.remove("score-mode");
+  setScreenMode("setup");
   syncVisualViewport();
   els.scoreScreen.classList.add("is-hidden");
   els.setupScreen.classList.remove("is-hidden");
@@ -2204,10 +2210,42 @@ function handleViewportChange() {
   else if (!els.setupScreen.classList.contains("is-hidden")) applyLanguage();
 }
 
+let lockedScrollTouchY = 0;
+
+function lockedScreenScrollTarget(target) {
+  if (!els.recordsScreen.classList.contains("is-hidden")) return target.closest(".record-list");
+  if (!els.setupScreen.classList.contains("is-hidden")) return target.closest(".edit-list");
+  return null;
+}
+
+function handleLockedScreenTouchStart(event) {
+  lockedScrollTouchY = event.touches?.[0]?.clientY || 0;
+}
+
+function handleLockedScreenTouchMove(event) {
+  if (els.recordsScreen.classList.contains("is-hidden") && els.setupScreen.classList.contains("is-hidden")) return;
+  const scrollTarget = lockedScreenScrollTarget(event.target);
+  if (!scrollTarget) {
+    event.preventDefault();
+    return;
+  }
+
+  const currentY = event.touches?.[0]?.clientY || lockedScrollTouchY;
+  const deltaY = currentY - lockedScrollTouchY;
+  lockedScrollTouchY = currentY;
+  const atTop = scrollTarget.scrollTop <= 0;
+  const atBottom = scrollTarget.scrollTop + scrollTarget.clientHeight >= scrollTarget.scrollHeight - 1;
+  if (scrollTarget.scrollHeight <= scrollTarget.clientHeight || (deltaY > 0 && atTop) || (deltaY < 0 && atBottom)) {
+    event.preventDefault();
+  }
+}
+
 window.addEventListener("resize", handleViewportChange);
 window.addEventListener("orientationchange", () => window.setTimeout(handleViewportChange, 120));
 window.visualViewport?.addEventListener("resize", handleViewportChange);
 window.visualViewport?.addEventListener("scroll", syncVisualViewport);
+document.addEventListener("touchstart", handleLockedScreenTouchStart, { passive: true });
+document.addEventListener("touchmove", handleLockedScreenTouchMove, { passive: false });
 
 if ("speechSynthesis" in window) {
   renderVoiceOptions();
@@ -2224,6 +2262,7 @@ syncVisualViewport();
 loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
+setScreenMode("setup");
 applyLanguage();
 enforceCurrentOrientation();
 
