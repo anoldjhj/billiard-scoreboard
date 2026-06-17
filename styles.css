@@ -1297,12 +1297,13 @@ h2 {
 }
 
 .score-box span {
-  display: block;
+  display: inline-block;
   color: #05070d;
   font-size: clamp(150px, 22vw, 270px);
   line-height: 0.85;
   font-weight: 950;
   letter-spacing: 0;
+  white-space: nowrap;
   transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
   transform-origin: center;
 }

@@ -1109,10 +1109,9 @@ function fitScoreTextToBoxes() {
     const oneMillimeter = 96 / 25.4;
     const availableWidth = Math.max(24, boxRect.width - oneMillimeter * 2);
     const availableHeight = Math.max(24, boxRect.height - oneMillimeter * 2);
-    const fitX = Math.min(1, availableWidth / scoreRect.width);
-    const fitY = Math.min(1, availableHeight / scoreRect.height);
-    score.style.setProperty("--score-fit-x", fitX.toFixed(3));
-    score.style.setProperty("--score-fit-y", fitY.toFixed(3));
+    const fit = Math.min(1, availableWidth / scoreRect.width, availableHeight / scoreRect.height);
+    score.style.setProperty("--score-fit-x", fit.toFixed(3));
+    score.style.setProperty("--score-fit-y", fit.toFixed(3));
   });
 }
 
