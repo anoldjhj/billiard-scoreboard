@@ -1108,12 +1108,16 @@ function fitScoreTextToBoxes() {
     if (!content) return;
 
     score.style.fontSize = "";
+    const scoreValue = Math.abs(Number(score.textContent));
+    if (!Number.isFinite(scoreValue) || scoreValue < 10) return;
+
     const contentWidth = content.clientWidth;
     if (!contentWidth) return;
 
     const oneMillimeter = 96 / 25.4;
     const availableWidth = Math.max(24, Math.floor(contentWidth - oneMillimeter * 2));
-    const baseFontSize = Math.max(180, availableWidth * 1.35);
+    const baseFontSize = Number.parseFloat(getComputedStyle(score).fontSize);
+    if (!baseFontSize || score.offsetWidth <= availableWidth) return;
 
     let low = 12;
     let high = baseFontSize;
