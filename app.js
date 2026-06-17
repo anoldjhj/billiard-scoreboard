@@ -1108,11 +1108,11 @@ function fitScoreTextToBoxes() {
     if (!content) return;
 
     score.style.fontSize = "";
-    const contentRect = content.getBoundingClientRect();
-    if (!contentRect.width) return;
+    const contentWidth = content.clientWidth;
+    if (!contentWidth) return;
 
     const oneMillimeter = 96 / 25.4;
-    const availableWidth = Math.max(24, contentRect.width - oneMillimeter * 2);
+    const availableWidth = Math.max(24, Math.floor(contentWidth - oneMillimeter * 2));
     const baseFontSize = Math.max(180, availableWidth * 1.35);
 
     let low = 12;
@@ -1121,7 +1121,7 @@ function fitScoreTextToBoxes() {
     for (let step = 0; step < 12; step += 1) {
       const next = (low + high) / 2;
       score.style.fontSize = `${next}px`;
-      const scoreWidth = score.getBoundingClientRect().width;
+      const scoreWidth = score.offsetWidth;
       if (scoreWidth <= availableWidth) {
         best = next;
         low = next;
@@ -1130,6 +1130,10 @@ function fitScoreTextToBoxes() {
       }
     }
     score.style.fontSize = `${best.toFixed(2)}px`;
+    while (score.offsetWidth > availableWidth && best > 12) {
+      best -= 0.5;
+      score.style.fontSize = `${best.toFixed(2)}px`;
+    }
   });
 }
 
