@@ -1095,20 +1095,24 @@ function renderScoreboard() {
 }
 
 function fitScoreTextToBoxes() {
-  els.scoreBoard.querySelectorAll(".score-box span.score-digits-2, .score-box span.score-digits-3").forEach((score) => {
+  els.scoreBoard.querySelectorAll(".score-box span").forEach((score) => {
     if (score.classList.contains("result-text") || score.classList.contains("status-three-c") || score.classList.contains("status-bank")) return;
     const box = score.closest(".score-box");
     if (!box) return;
 
     score.style.setProperty("--score-fit-x", "1");
+    score.style.setProperty("--score-fit-y", "1");
     const boxRect = box.getBoundingClientRect();
     const scoreRect = score.getBoundingClientRect();
     if (!boxRect.width || !boxRect.height || !scoreRect.width || !scoreRect.height) return;
 
-    const referenceMargin = Math.max(6, Math.floor((boxRect.height - scoreRect.height) / 2));
-    const availableWidth = Math.max(24, boxRect.width - referenceMargin * 2);
+    const oneMillimeter = 96 / 25.4;
+    const availableWidth = Math.max(24, boxRect.width - oneMillimeter * 2);
+    const availableHeight = Math.max(24, boxRect.height - oneMillimeter * 2);
     const fitX = Math.min(1, availableWidth / scoreRect.width);
+    const fitY = Math.min(1, availableHeight / scoreRect.height);
     score.style.setProperty("--score-fit-x", fitX.toFixed(3));
+    score.style.setProperty("--score-fit-y", fitY.toFixed(3));
   });
 }
 

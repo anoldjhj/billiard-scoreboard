@@ -1303,15 +1303,17 @@ h2 {
   line-height: 0.85;
   font-weight: 950;
   letter-spacing: 0;
+  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
+  transform-origin: center;
 }
 
 .score-box span.score-digits-2 {
-  transform: scaleX(var(--score-fit-x, 1));
+  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
   transform-origin: center;
 }
 
 .score-box span.score-digits-3 {
-  transform: scaleX(var(--score-fit-x, 1));
+  transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
   transform-origin: center;
 }
 
@@ -2794,13 +2796,13 @@ h2 {
 
   .score-box span.score-digits-2,
   .board[data-players="4"] .score-box span.score-digits-2 {
-    transform: scaleX(var(--score-fit-x, 1));
+    transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
     transform-origin: center;
   }
 
   .score-box span.score-digits-3,
   .board[data-players="4"] .score-box span.score-digits-3 {
-    transform: scaleX(var(--score-fit-x, 1));
+    transform: scale(var(--score-fit-x, 1), var(--score-fit-y, 1));
     transform-origin: center;
   }
 }
