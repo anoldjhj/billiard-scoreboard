@@ -1191,14 +1191,6 @@ h2 {
   font-size: clamp(17px, 2.2vw, 24px);
 }
 
-.board[data-players="4"] .score-box span.score-digits-2 {
-  font-size: clamp(64px, 10vw, 112px);
-}
-
-.board[data-players="4"] .score-box span.score-digits-3 {
-  font-size: clamp(52px, 8vw, 92px);
-}
-
 .player-card {
   min-width: 0;
   display: grid;
@@ -2613,14 +2605,6 @@ h2 {
 
   .score-box span {
     font-size: clamp(92px, 18vw, 172px);
-  }
-
-  .score-box span.score-digits-2 {
-    font-size: clamp(72px, 13vw, 150px);
-  }
-
-  .score-box span.score-digits-3 {
-    font-size: clamp(50px, 8vw, 92px);
   }
 
   .score-box span.result-text {

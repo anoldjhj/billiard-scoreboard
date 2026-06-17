@@ -1113,8 +1113,7 @@ function fitScoreTextToBoxes() {
 
     const oneMillimeter = 96 / 25.4;
     const availableWidth = Math.max(24, contentRect.width - oneMillimeter * 2);
-    const baseFontSize = Number.parseFloat(getComputedStyle(score).fontSize);
-    if (!baseFontSize) return;
+    const baseFontSize = Math.max(180, availableWidth * 1.35);
 
     let low = 12;
     let high = baseFontSize;
