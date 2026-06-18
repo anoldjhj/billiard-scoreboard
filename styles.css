@@ -2308,6 +2308,10 @@ h2 {
     padding: 10px;
   }
 
+  .member-box {
+    gap: 8px;
+  }
+
   .member-title h2 {
     font-size: 18px;
   }
@@ -2428,15 +2432,15 @@ h2 {
 
   .selection-strip {
     display: flex;
-    gap: 8px;
+    gap: 6px;
   }
 
   .selection-strip .selection-card {
     flex: 1 1 0;
     min-width: 0;
-    height: 104px;
-    min-height: 104px;
-    padding: 9px 7px 6px;
+    height: 74px;
+    min-height: 74px;
+    padding: 7px 7px 5px;
   }
 
   .selection-swap-button {
@@ -2449,16 +2453,16 @@ h2 {
   }
 
   .selection-card strong {
-    grid-template-rows: minmax(0, 1fr) 20px;
-    gap: 5px;
+    grid-template-rows: minmax(0, 1fr) 16px;
+    gap: 2px;
     padding: 0;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.05;
   }
 
   .selection-strip .member-label-name {
     white-space: normal;
-    max-height: 36px;
+    max-height: 30px;
     overflow: hidden;
   }
 
@@ -2466,7 +2470,7 @@ h2 {
     position: static;
     justify-self: start;
     align-self: end;
-    font-size: 14px;
+    font-size: 12px;
     padding-right: 38px;
   }
 
@@ -2488,11 +2492,14 @@ h2 {
 
   .manager-panel {
     min-height: 0;
+    gap: 8px;
   }
 
   .edit-list {
-    max-height: clamp(220px, calc(100svh - 500px), 520px);
+    max-height: clamp(260px, calc(100svh - 455px), 560px);
     padding-right: 8px;
+    padding-bottom: max(72px, env(safe-area-inset-bottom));
+    scroll-padding-bottom: max(72px, env(safe-area-inset-bottom));
   }
 
   .edit-row {
@@ -2864,7 +2871,7 @@ h2 {
 }
 
 .selection-strip strong .member-label-target {
-  font-size: 0.72em;
+  font-size: 1em;
 }
 
 .edit-info .member-label-name {
