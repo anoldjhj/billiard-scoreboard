@@ -2181,6 +2181,7 @@ h2 {
     min-height: 0;
     max-height: none;
     overflow: auto;
+    gap: 5px;
     padding-right: 10px;
     scrollbar-color: #64748b #e2e8f0;
     scrollbar-width: auto;
@@ -2194,16 +2195,44 @@ h2 {
 
   .record-row {
     grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 7px 8px;
   }
 
   .record-row-title {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-    padding-right: 62px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    padding-right: 52px;
+  }
+
+  .record-row-title strong,
+  .record-standings {
+    font-size: 13px;
   }
 
   .record-meta {
-    text-align: left;
+    font-size: 10px;
+    text-align: right;
+  }
+
+  .record-delete {
+    top: 7px;
+    right: 8px;
+    min-width: 44px;
+    min-height: 26px;
+    font-size: 11px;
+  }
+
+  .record-players {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .record-players span {
+    padding: 3px 4px;
+    border-radius: 5px;
+    font-size: 10px;
   }
 
   .setup-heading {
@@ -2438,9 +2467,11 @@ h2 {
   .selection-strip .selection-card {
     flex: 1 1 0;
     min-width: 0;
-    height: 74px;
-    min-height: 74px;
-    padding: 7px 7px 5px;
+    height: 56px;
+    min-height: 56px;
+    grid-template-rows: 14px minmax(0, 1fr);
+    gap: 2px;
+    padding: 5px 6px 4px;
   }
 
   .selection-swap-button {
@@ -2453,16 +2484,16 @@ h2 {
   }
 
   .selection-card strong {
-    grid-template-rows: minmax(0, 1fr) 16px;
-    gap: 2px;
+    grid-template-rows: minmax(0, 1fr) 14px;
+    gap: 1px;
     padding: 0;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.05;
   }
 
   .selection-strip .member-label-name {
     white-space: normal;
-    max-height: 30px;
+    max-height: 24px;
     overflow: hidden;
   }
 
