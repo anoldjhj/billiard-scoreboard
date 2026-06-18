@@ -503,6 +503,7 @@ h2 {
 .record-list {
   min-height: 0;
   display: grid;
+  align-content: start;
   gap: 8px;
   overflow: auto;
   overscroll-behavior: contain;
@@ -2180,6 +2181,7 @@ h2 {
   .record-list {
     min-height: 0;
     max-height: none;
+    align-content: start;
     overflow: auto;
     gap: 5px;
     padding-right: 10px;
@@ -2195,6 +2197,7 @@ h2 {
 
   .record-row {
     grid-template-columns: minmax(0, 1fr);
+    align-self: start;
     gap: 4px;
     padding: 7px 8px;
   }
@@ -2225,7 +2228,7 @@ h2 {
   }
 
   .record-players {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4px;
   }
 
@@ -2467,11 +2470,12 @@ h2 {
   .selection-strip .selection-card {
     flex: 1 1 0;
     min-width: 0;
-    height: 56px;
-    min-height: 56px;
-    grid-template-rows: 14px minmax(0, 1fr);
-    gap: 2px;
-    padding: 5px 6px 4px;
+    height: 48px;
+    min-height: 48px;
+    grid-template-rows: 13px minmax(0, 1fr);
+    gap: 1px;
+    overflow: hidden;
+    padding: 4px 6px 3px;
   }
 
   .selection-swap-button {
@@ -2484,25 +2488,28 @@ h2 {
   }
 
   .selection-card strong {
-    grid-template-rows: minmax(0, 1fr) 14px;
-    gap: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     padding: 0;
     font-size: 12px;
     line-height: 1.05;
   }
 
   .selection-strip .member-label-name {
-    white-space: normal;
-    max-height: 24px;
+    flex: 1 1 auto;
+    white-space: nowrap;
+    max-height: none;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .selection-strip .member-label-target {
+    flex: 0 0 auto;
     position: static;
-    justify-self: start;
-    align-self: end;
     font-size: 12px;
-    padding-right: 38px;
+    line-height: 1;
+    padding-right: 34px;
   }
 
   .member-form {
