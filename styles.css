@@ -2043,19 +2043,19 @@ h2 {
   }
 
   .score-screen:not(.is-hidden) .score-box span {
-    font-size: clamp(92px, 18vw, 172px);
+    font-size: clamp(92px, 18svh, 172px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.result-text {
-    font-size: clamp(50px, 9vw, 96px);
+    font-size: clamp(50px, 9svh, 96px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-three-c {
-    font-size: clamp(78px, 15vw, 142px);
+    font-size: clamp(78px, 15svh, 142px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-bank {
-    font-size: clamp(38px, 7vw, 68px);
+    font-size: clamp(38px, 7svh, 68px);
   }
 
   .score-screen:not(.is-hidden) .finish-count {
