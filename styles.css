@@ -2563,11 +2563,11 @@ h2 {
   }
 
   .edit-list {
-    height: 100%;
+    height: auto;
     min-height: 0;
-    max-height: none;
+    max-height: clamp(150px, calc(100svh - 560px), 420px);
     align-content: start;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding-right: 8px;
     padding-bottom: max(72px, env(safe-area-inset-bottom));
     scroll-padding-bottom: max(72px, env(safe-area-inset-bottom));
