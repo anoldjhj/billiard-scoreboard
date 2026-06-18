@@ -115,7 +115,14 @@ body.records-mode .records-screen,
   box-shadow: var(--shadow);
 }
 
+.setup-panel {
+  max-height: calc(100svh - 20px);
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
 .records-panel {
+  height: calc(100svh - 20px);
   max-height: calc(100svh - 20px);
   grid-template-rows: auto auto minmax(0, 1fr);
   overflow: hidden;
@@ -231,6 +238,11 @@ h2 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface-soft);
+}
+
+.member-box {
+  min-height: 0;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
 }
 
 .member-title {
@@ -705,6 +717,9 @@ h2 {
 
 .manager-panel {
   margin-top: 0;
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  overflow: hidden;
 }
 
 .manager-panel summary {
@@ -1569,6 +1584,10 @@ h2 {
     zoom: 0.44;
   }
 
+  .setup-panel {
+    max-height: 220svh;
+  }
+
   .setup-heading {
     display: grid;
     grid-template-columns: 172px 380px;
@@ -1742,7 +1761,7 @@ h2 {
   }
 
   .manager-panel {
-    min-height: 1480px;
+    min-height: 0;
   }
 
   .manager-panel:not([open]) {

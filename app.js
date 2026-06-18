@@ -529,6 +529,7 @@ function renderSelections() {
 }
 
 function renderMembers() {
+  const previousScrollTop = els.editList.scrollTop;
   normalizeSelected();
   els.memberCount.textContent = `${state.members.length}`;
   renderReturnBoardActions();
@@ -571,6 +572,7 @@ function renderMembers() {
       return row;
     }),
   );
+  restoreScrollablePosition(els.editList, previousScrollTop);
 }
 
 function pickMember(index) {
@@ -1672,6 +1674,10 @@ function recordStatText(player) {
   return `${displayName(player.name)} ${recordStatsText(player)}`;
 }
 
+function restoreScrollablePosition(element, scrollTop) {
+  element.scrollTop = Math.min(scrollTop, Math.max(0, element.scrollHeight - element.clientHeight));
+}
+
 function renderRecordPlayers(results = resultsForGameType()) {
   const names = [...new Set(results.flatMap((result) => result.players.map((player) => player.name)))];
   const current = els.recordPlayerSelect.value;
@@ -1688,6 +1694,7 @@ function renderRecordPlayers(results = resultsForGameType()) {
 }
 
 function renderRecords() {
+  const previousScrollTop = els.recordList.scrollTop;
   const results = resultsForGameType();
   renderRecordPlayers(results);
   const playerName = els.recordPlayerSelect.value;
@@ -1705,6 +1712,7 @@ function renderRecords() {
     empty.className = "record-empty";
     empty.textContent = t("savedTwoRecordsEmpty");
     els.recordList.replaceChildren(empty);
+    restoreScrollablePosition(els.recordList, previousScrollTop);
     return;
   }
 
@@ -1736,9 +1744,11 @@ function renderRecords() {
       return row;
     }),
   );
+  restoreScrollablePosition(els.recordList, previousScrollTop);
 }
 
 function renderRecords() {
+  const previousScrollTop = els.recordList.scrollTop;
   const results = resultsForGameType();
   renderRecordPlayers(results);
   const playerName = els.recordPlayerSelect.value;
@@ -1756,10 +1766,12 @@ function renderRecords() {
     empty.className = "record-empty";
     empty.textContent = t("savedRecordsEmpty");
     els.recordList.replaceChildren(empty);
+    restoreScrollablePosition(els.recordList, previousScrollTop);
     return;
   }
 
   els.recordList.replaceChildren(...results.map(createRecordRow));
+  restoreScrollablePosition(els.recordList, previousScrollTop);
 }
 
 function createRecordRow(result, index) {
