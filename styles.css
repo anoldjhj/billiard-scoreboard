@@ -2538,7 +2538,7 @@ h2 {
   }
 
   .selection-card.can-swap strong {
-    padding-right: 30px;
+    padding-right: 0;
   }
 
   .selection-strip .member-label-name {
@@ -2557,6 +2557,10 @@ h2 {
     font-size: 12px;
     line-height: 1;
     padding-right: 0;
+  }
+
+  .selection-strip .selection-card.can-swap .member-label-target {
+    padding-right: 30px;
   }
 
   .selection-strip .selection-card strong .member-label-name,
