@@ -2242,6 +2242,8 @@ function handleLockedScreenTouchMove(event) {
     return;
   }
 
+  if (window.matchMedia("(min-width: 481px)").matches) return;
+
   const currentY = event.touches?.[0]?.clientY || lockedScrollTouchY;
   const deltaY = currentY - lockedScrollTouchY;
   lockedScrollTouchY = currentY;
