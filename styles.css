@@ -2497,9 +2497,9 @@ h2 {
   .selection-strip {
     display: flex;
     gap: 6px;
-    height: 48px;
-    min-height: 48px;
-    max-height: 48px;
+    height: 58px;
+    min-height: 58px;
+    max-height: 58px;
     align-items: stretch;
     overflow: hidden;
   }
@@ -2507,10 +2507,10 @@ h2 {
   .selection-strip .selection-card {
     flex: 1 1 0;
     min-width: 0;
-    height: 48px;
-    min-height: 48px;
-    max-height: 48px;
-    grid-template-rows: 13px minmax(0, 1fr);
+    height: 58px;
+    min-height: 58px;
+    max-height: 58px;
+    grid-template-rows: 14px minmax(0, 1fr);
     gap: 1px;
     overflow: hidden;
     padding: 4px 6px 3px;
@@ -2526,9 +2526,10 @@ h2 {
   }
 
   .selection-card strong {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 14px;
+    align-items: stretch;
+    gap: 1px;
     min-height: 0;
     overflow: hidden;
     padding: 0;
@@ -2537,19 +2538,21 @@ h2 {
   }
 
   .selection-card.can-swap strong {
-    padding-right: 34px;
+    padding-right: 30px;
   }
 
   .selection-strip .member-label-name {
-    flex: 1 1 auto;
+    min-width: 0;
     white-space: nowrap;
-    max-height: none;
+    max-height: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .selection-strip .member-label-target {
-    flex: 0 0 auto;
+    min-width: 0;
+    justify-self: start;
+    align-self: end;
     position: static;
     font-size: 12px;
     line-height: 1;
