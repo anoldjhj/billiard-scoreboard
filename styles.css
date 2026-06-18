@@ -2465,6 +2465,11 @@ h2 {
   .selection-strip {
     display: flex;
     gap: 6px;
+    height: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    align-items: stretch;
+    overflow: hidden;
   }
 
   .selection-strip .selection-card {
@@ -2472,6 +2477,7 @@ h2 {
     min-width: 0;
     height: 48px;
     min-height: 48px;
+    max-height: 48px;
     grid-template-rows: 13px minmax(0, 1fr);
     gap: 1px;
     overflow: hidden;
@@ -2482,18 +2488,24 @@ h2 {
     right: 0;
     bottom: 0;
     min-width: 36px;
-    min-height: 28px;
+    min-height: 22px;
     border-radius: 5px 0 5px 0;
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .selection-card strong {
     display: flex;
     align-items: center;
     gap: 6px;
+    min-height: 0;
+    overflow: hidden;
     padding: 0;
     font-size: 12px;
     line-height: 1.05;
+  }
+
+  .selection-card.can-swap strong {
+    padding-right: 34px;
   }
 
   .selection-strip .member-label-name {
@@ -2509,7 +2521,12 @@ h2 {
     position: static;
     font-size: 12px;
     line-height: 1;
-    padding-right: 34px;
+    padding-right: 0;
+  }
+
+  .selection-strip .selection-card strong .member-label-name,
+  .selection-strip .selection-card strong .member-label-target {
+    font-size: 12px;
   }
 
   .member-form {
