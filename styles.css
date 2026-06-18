@@ -2127,6 +2127,32 @@ h2 {
 }
 
 @media (orientation: portrait) and (min-width: 481px) {
+  .manager-panel {
+    height: 100%;
+    min-height: 0;
+    align-self: stretch;
+    align-content: stretch;
+    overflow: hidden;
+  }
+
+  .manager-panel:not([open]) {
+    height: auto;
+    min-height: 0;
+    grid-template-rows: auto;
+    align-self: start;
+    align-content: start;
+  }
+
+  .edit-list {
+    height: auto;
+    min-height: 0;
+    max-height: clamp(320px, 52svh, 620px);
+    align-content: start;
+    overflow-y: scroll;
+    padding-bottom: max(72px, env(safe-area-inset-bottom));
+    scroll-padding-bottom: max(72px, env(safe-area-inset-bottom));
+  }
+
   .selection-strip .selection-card {
     gap: 4px;
     padding: 12px 12px 7px;
@@ -2926,6 +2952,41 @@ h2 {
   .board[data-players="4"] .stat strong {
     min-height: 32px;
     font-size: 20px;
+  }
+}
+
+@media (orientation: landscape) {
+  .setup-panel {
+    height: calc(100svh - 20px);
+    max-height: calc(100svh - 20px);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .manager-panel {
+    height: 100%;
+    min-height: 0;
+    align-self: stretch;
+    align-content: stretch;
+    overflow: hidden;
+  }
+
+  .manager-panel:not([open]) {
+    height: auto;
+    min-height: 0;
+    grid-template-rows: auto;
+    align-self: start;
+    align-content: start;
+  }
+
+  .edit-list {
+    height: auto;
+    min-height: 0;
+    max-height: clamp(160px, 42svh, 360px);
+    align-content: start;
+    overflow-y: scroll;
+    padding-bottom: max(60px, env(safe-area-inset-bottom));
+    scroll-padding-bottom: max(60px, env(safe-area-inset-bottom));
   }
 }
 
