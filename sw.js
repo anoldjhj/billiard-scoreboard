@@ -1,9 +1,9 @@
-const CACHE_NAME = "billiards-scoreboard-v248";
+const CACHE_NAME = "billiards-scoreboard-v249";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=20260618-21",
-  "./app.js?v=20260618-21",
+  "./styles.css?v=20260618-22",
+  "./app.js?v=20260618-22",
   "./manifest.json",
   "./icons/play-logo.svg",
   "./icons/icon-192.png",

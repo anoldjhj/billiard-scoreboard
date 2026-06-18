@@ -2126,6 +2126,28 @@ h2 {
   }
 }
 
+@media (orientation: portrait) and (min-width: 481px) {
+  .selection-strip .selection-card {
+    gap: 4px;
+    padding: 12px 12px 7px;
+  }
+
+  .selection-strip strong {
+    grid-template-rows: minmax(0, 1fr) 18px;
+    font-size: 18px;
+    line-height: 1.02;
+  }
+
+  .selection-strip .member-label-name {
+    line-height: 1.02;
+  }
+
+  .selection-strip .selection-card strong .member-label-target {
+    font-size: 0.86em;
+    line-height: 1;
+  }
+}
+
 @media (orientation: portrait) and (max-width: 480px) {
   .setup-screen,
   .records-screen {
