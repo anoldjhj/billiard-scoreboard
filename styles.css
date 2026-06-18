@@ -2146,11 +2146,11 @@ h2 {
   .edit-list {
     height: auto;
     min-height: 0;
-    max-height: clamp(320px, 52svh, 620px);
+    max-height: clamp(220px, 28svh, 300px);
     align-content: start;
     overflow-y: scroll;
-    padding-bottom: max(72px, env(safe-area-inset-bottom));
-    scroll-padding-bottom: max(72px, env(safe-area-inset-bottom));
+    padding-bottom: max(48px, env(safe-area-inset-bottom));
+    scroll-padding-bottom: max(48px, env(safe-area-inset-bottom));
   }
 
   .selection-strip .selection-card {
@@ -2982,11 +2982,11 @@ h2 {
   .edit-list {
     height: auto;
     min-height: 0;
-    max-height: clamp(160px, 42svh, 360px);
+    max-height: clamp(180px, 36svh, 260px);
     align-content: start;
     overflow-y: scroll;
-    padding-bottom: max(60px, env(safe-area-inset-bottom));
-    scroll-padding-bottom: max(60px, env(safe-area-inset-bottom));
+    padding-bottom: max(44px, env(safe-area-inset-bottom));
+    scroll-padding-bottom: max(44px, env(safe-area-inset-bottom));
   }
 }
 
