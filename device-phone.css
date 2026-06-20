@@ -14,3 +14,11 @@ body.device-phone .tablet-only {
 body.device-phone .phone-only {
   display: revert;
 }
+
+@media (orientation: portrait) {
+  body.device-phone .score-screen:not(.is-hidden) {
+    top: 50%;
+    width: calc(var(--viewport-height, 100dvh) - 8px);
+    height: calc(var(--viewport-width, 100dvw) - 2px);
+  }
+}

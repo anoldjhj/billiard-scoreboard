@@ -1,11 +1,11 @@
-const CACHE_NAME = "billiards-scoreboard-v258-phone-width-restore";
+const CACHE_NAME = "billiards-scoreboard-v259-phone-locked-size";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=20260620-device-split-2",
-  "./device-phone.css?v=20260620-device-split-2",
-  "./device-tablet.css?v=20260620-device-split-2",
-  "./app.js?v=20260620-device-split-2",
+  "./styles.css?v=20260620-device-split-3",
+  "./device-phone.css?v=20260620-device-split-3",
+  "./device-tablet.css?v=20260620-device-split-3",
+  "./app.js?v=20260620-device-split-3",
   "./manifest.json",
   "./icons/play-logo.svg",
   "./icons/icon-192.png",
