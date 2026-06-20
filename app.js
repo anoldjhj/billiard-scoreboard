@@ -2137,10 +2137,14 @@ function syncVisualViewport() {
   const { width, height } = readViewportSize();
   applyDeviceMode();
   const scoreViewport = readScoreViewportSize(width, height);
+  const scoreLongSide = Math.max(scoreViewport.width, scoreViewport.height);
+  const scoreShortSide = Math.min(scoreViewport.width, scoreViewport.height);
   document.documentElement.style.setProperty("--viewport-width", `${width}px`);
   document.documentElement.style.setProperty("--viewport-height", `${height}px`);
   document.documentElement.style.setProperty("--score-viewport-width", `${scoreViewport.width}px`);
   document.documentElement.style.setProperty("--score-viewport-height", `${scoreViewport.height}px`);
+  document.documentElement.style.setProperty("--score-long-side", `${scoreLongSide}px`);
+  document.documentElement.style.setProperty("--score-short-side", `${scoreShortSide}px`);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);
