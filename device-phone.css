@@ -17,6 +17,6 @@ body.device-phone .phone-only {
 
 @media (orientation: portrait) {
   body.device-phone .score-screen:not(.is-hidden) {
-    left: calc(50% + 5mm);
+    top: calc(50% + 6mm);
   }
 }
