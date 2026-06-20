@@ -15,37 +15,11 @@ body.device-phone .phone-only {
   display: revert;
 }
 
-body.device-phone {
-  --phone-safe-width: calc(
-    var(--score-short-side, var(--viewport-width, 100dvw)) - env(safe-area-inset-left, 0px) -
-      env(safe-area-inset-right, 0px)
-  );
-  --phone-safe-height: calc(
-    var(--score-long-side, var(--viewport-height, 100dvh)) - env(safe-area-inset-top, 0px) -
-      env(safe-area-inset-bottom, 0px)
-  );
-  --phone-score-width: max(var(--phone-safe-width), var(--phone-safe-height));
-  --phone-score-height: min(var(--phone-safe-width), var(--phone-safe-height));
-}
-
-@media (orientation: landscape) {
-  body.device-phone {
-    --phone-safe-width: calc(
-      var(--score-long-side, var(--viewport-width, 100dvw)) - env(safe-area-inset-left, 0px) -
-        env(safe-area-inset-right, 0px)
-    );
-    --phone-safe-height: calc(
-      var(--score-short-side, var(--viewport-height, 100dvh)) - env(safe-area-inset-top, 0px) -
-        env(safe-area-inset-bottom, 0px)
-    );
-  }
-}
-
 body.device-phone.score-mode .app-shell,
 body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
   position: fixed;
-  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
-    env(safe-area-inset-left, 0px);
+  inset: var(--phone-safe-top, 0px) var(--phone-safe-right, 0px) var(--phone-safe-bottom, 0px)
+    var(--phone-safe-left, 0px);
   width: auto;
   height: auto;
   min-width: 0;
@@ -59,8 +33,8 @@ body.device-phone .score-screen:not(.is-hidden) {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: var(--phone-score-width);
-  height: var(--phone-score-height);
+  width: var(--phone-score-width, var(--score-long-side, 100dvw));
+  height: var(--phone-score-height, var(--score-short-side, 100dvh));
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;

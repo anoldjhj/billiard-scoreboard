@@ -209,6 +209,7 @@ let preferredOrientation = "portrait";
 let currentDeviceMode = "tablet";
 let stablePhoneScoreLongSide = 0;
 let stablePhoneScoreShortSide = 0;
+let safeAreaProbe = null;
 const PHONE_VIEWPORT_LIMITS = {
   shortSide: 600,
   longSide: 960,
@@ -331,6 +332,46 @@ function readScoreViewportSize(width, height) {
     width: isLandscapeViewport ? stablePhoneScoreLongSide || width : stablePhoneScoreShortSide || width,
     height: isLandscapeViewport ? stablePhoneScoreShortSide || height : stablePhoneScoreLongSide || height,
   };
+}
+
+function readSafeAreaInsets() {
+  if (!safeAreaProbe) {
+    safeAreaProbe = document.createElement("div");
+    safeAreaProbe.style.cssText =
+      "position:fixed;top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);bottom:env(safe-area-inset-bottom,0px);left:env(safe-area-inset-left,0px);visibility:hidden;pointer-events:none;";
+    document.body.append(safeAreaProbe);
+  }
+
+  const style = getComputedStyle(safeAreaProbe);
+  const parsePx = (value) => Math.max(0, Number.parseFloat(value) || 0);
+  return {
+    top: parsePx(style.top),
+    right: parsePx(style.right),
+    bottom: parsePx(style.bottom),
+    left: parsePx(style.left),
+  };
+}
+
+function syncPhoneScoreGeometry(scoreViewport) {
+  if (currentDeviceMode !== "phone") return;
+
+  const insets = readSafeAreaInsets();
+  const isLandscapeViewport = scoreViewport.width >= scoreViewport.height;
+  const rawSafeWidth = isLandscapeViewport ? scoreViewport.width : scoreViewport.height;
+  const rawSafeHeight = isLandscapeViewport ? scoreViewport.height : scoreViewport.width;
+  const horizontalInset = isLandscapeViewport ? insets.left + insets.right : insets.top + insets.bottom;
+  const verticalInset = isLandscapeViewport ? insets.top + insets.bottom : insets.left + insets.right;
+  const safeWidth = Math.max(0, Math.round(rawSafeWidth - horizontalInset));
+  const safeHeight = Math.max(0, Math.round(rawSafeHeight - verticalInset));
+  const scoreWidth = Math.max(safeWidth, safeHeight);
+  const scoreHeight = Math.min(safeWidth, safeHeight);
+
+  document.documentElement.style.setProperty("--phone-score-width", `${scoreWidth}px`);
+  document.documentElement.style.setProperty("--phone-score-height", `${scoreHeight}px`);
+  document.documentElement.style.setProperty("--phone-safe-left", `${Math.round(insets.left)}px`);
+  document.documentElement.style.setProperty("--phone-safe-right", `${Math.round(insets.right)}px`);
+  document.documentElement.style.setProperty("--phone-safe-top", `${Math.round(insets.top)}px`);
+  document.documentElement.style.setProperty("--phone-safe-bottom", `${Math.round(insets.bottom)}px`);
 }
 
 function deviceModeFromViewport() {
@@ -2152,6 +2193,7 @@ function syncVisualViewport() {
   document.documentElement.style.setProperty("--score-viewport-height", `${scoreViewport.height}px`);
   document.documentElement.style.setProperty("--score-long-side", `${scoreLongSide}px`);
   document.documentElement.style.setProperty("--score-short-side", `${scoreShortSide}px`);
+  syncPhoneScoreGeometry(scoreViewport);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);
