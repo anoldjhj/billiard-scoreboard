@@ -14,10 +14,3 @@ body.device-phone .tablet-only {
 body.device-phone .phone-only {
   display: revert;
 }
-
-@media (orientation: landscape) {
-  body.device-phone .score-screen:not(.is-hidden) {
-    width: auto;
-    height: auto;
-  }
-}
