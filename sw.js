@@ -1,11 +1,11 @@
-const CACHE_NAME = "billiards-scoreboard-v271-phone-portrait-stable";
+const CACHE_NAME = "billiards-scoreboard-v272-phone-landscape-restore";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=20260620-score-viewport-9",
-  "./device-phone.css?v=20260620-score-viewport-9",
-  "./device-tablet.css?v=20260620-score-viewport-9",
-  "./app.js?v=20260620-score-viewport-9",
+  "./styles.css?v=20260620-score-viewport-10",
+  "./device-phone.css?v=20260620-score-viewport-10",
+  "./device-tablet.css?v=20260620-score-viewport-10",
+  "./app.js?v=20260620-score-viewport-10",
   "./manifest.json",
   "./icons/play-logo.svg",
   "./icons/icon-192.png",
