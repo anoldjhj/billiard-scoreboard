@@ -15,8 +15,14 @@ body.device-phone .phone-only {
   display: revert;
 }
 
-@media (orientation: portrait) {
+@media (orientation: landscape) {
+  body.device-phone.score-mode .app-shell,
+  body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
+    width: var(--score-viewport-width, var(--viewport-width, 100dvw));
+    min-height: var(--score-viewport-height, var(--viewport-height, 100dvh));
+  }
+
   body.device-phone .score-screen:not(.is-hidden) {
-    top: calc(50% + 6mm);
+    min-height: calc(var(--score-viewport-height, var(--viewport-height, 100svh)) - 12px);
   }
 }

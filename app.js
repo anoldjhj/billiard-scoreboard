@@ -208,6 +208,7 @@ const state = {
 let preferredOrientation = "portrait";
 let currentDeviceMode = "tablet";
 let stablePhoneScoreLongSide = 0;
+let stablePhoneScoreShortSide = 0;
 const PHONE_VIEWPORT_LIMITS = {
   shortSide: 600,
   longSide: 960,
@@ -303,25 +304,25 @@ function readViewportSize() {
 function readScoreViewportSize(width, height) {
   if (currentDeviceMode !== "phone") return { width, height };
 
-  const longSideCandidates = [
-    width,
-    height,
-    window.innerWidth,
-    window.innerHeight,
-    document.documentElement.clientWidth,
-    document.documentElement.clientHeight,
-    window.screen?.width,
-    window.screen?.height,
-    window.screen?.availWidth,
-    window.screen?.availHeight,
+  const viewport = window.visualViewport;
+  const viewportPairs = [
+    [width, height],
+    [viewport?.width, viewport?.height],
+    [window.innerWidth, window.innerHeight],
+    [document.documentElement.clientWidth, document.documentElement.clientHeight],
   ]
-    .map((value) => Math.round(Number(value) || 0))
-    .filter((value) => value > 0);
+    .map(([pairWidth, pairHeight]) => [Math.round(Number(pairWidth) || 0), Math.round(Number(pairHeight) || 0)])
+    .filter(([pairWidth, pairHeight]) => pairWidth > 0 && pairHeight > 0);
 
+  const longSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.max(pairWidth, pairHeight));
+  const shortSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.min(pairWidth, pairHeight));
   stablePhoneScoreLongSide = Math.max(stablePhoneScoreLongSide, ...longSideCandidates);
+  stablePhoneScoreShortSide = Math.max(stablePhoneScoreShortSide, ...shortSideCandidates);
+
+  const isLandscapeViewport = width >= height;
   return {
-    width,
-    height: stablePhoneScoreLongSide || height,
+    width: isLandscapeViewport ? stablePhoneScoreLongSide || width : stablePhoneScoreShortSide || width,
+    height: isLandscapeViewport ? stablePhoneScoreShortSide || height : stablePhoneScoreLongSide || height,
   };
 }
 
