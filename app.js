@@ -206,6 +206,11 @@ const state = {
 };
 
 let preferredOrientation = "portrait";
+let currentDeviceMode = "tablet";
+const PHONE_VIEWPORT_LIMITS = {
+  shortSide: 600,
+  longSide: 960,
+};
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -287,10 +292,33 @@ function currentLocale() {
   return state.language === "en" ? "en-US" : "ko-KR";
 }
 
-function isCompactViewport() {
+function readViewportSize() {
   const viewport = window.visualViewport;
-  const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
-  const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
+  const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
+  return { width, height };
+}
+
+function deviceModeFromViewport() {
+  const { width, height } = readViewportSize();
+  const shortSide = Math.min(width, height);
+  const longSide = Math.max(width, height);
+  return shortSide <= PHONE_VIEWPORT_LIMITS.shortSide && longSide <= PHONE_VIEWPORT_LIMITS.longSide ? "phone" : "tablet";
+}
+
+function applyDeviceMode() {
+  currentDeviceMode = deviceModeFromViewport();
+  const isPhone = currentDeviceMode === "phone";
+  document.documentElement.classList.toggle("device-phone", isPhone);
+  document.documentElement.classList.toggle("device-tablet", !isPhone);
+  document.body.classList.toggle("device-phone", isPhone);
+  document.body.classList.toggle("device-tablet", !isPhone);
+  document.documentElement.dataset.device = currentDeviceMode;
+  document.body.dataset.device = currentDeviceMode;
+}
+
+function isCompactViewport() {
+  const { width, height } = readViewportSize();
   return Math.min(width, height) <= 520 && Math.max(width, height) <= 980;
 }
 
@@ -2066,11 +2094,7 @@ function setPreferredOrientation(orientation) {
 }
 
 function isPhoneViewport() {
-  const width = Math.round(window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
-  const height = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
-  const shortSide = Math.min(width, height);
-  const longSide = Math.max(width, height);
-  return shortSide <= 600 && longSide <= 960;
+  return currentDeviceMode === "phone";
 }
 
 function enforceCurrentOrientation() {
@@ -2083,9 +2107,8 @@ function enforceCurrentOrientation() {
 }
 
 function syncVisualViewport() {
-  const viewport = window.visualViewport;
-  const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
-  const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+  const { width, height } = readViewportSize();
+  applyDeviceMode();
   document.documentElement.style.setProperty("--viewport-width", `${width}px`);
   document.documentElement.style.setProperty("--viewport-height", `${height}px`);
 }

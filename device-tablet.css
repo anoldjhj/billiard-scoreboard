@@ -1,0 +1,32 @@
+/*
+  Tablet-only overrides.
+  Put pad layout changes here. Selectors are scoped to body.device-tablet,
+  so they cannot affect the phone gameplay surface.
+*/
+
+body.device-tablet {
+  --active-device: tablet;
+}
+
+body.device-tablet .phone-only {
+  display: none !important;
+}
+
+body.device-tablet .tablet-only {
+  display: revert;
+}
+
+@media (orientation: portrait) {
+  body.device-tablet .setup-panel,
+  body.device-tablet .records-panel {
+    width: 840px;
+    max-width: none;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 700px) {
+  body.device-tablet .setup-panel,
+  body.device-tablet .records-panel {
+    zoom: 0.7;
+  }
+}

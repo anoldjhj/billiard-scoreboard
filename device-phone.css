@@ -1,0 +1,23 @@
+/*
+  Phone-only overrides.
+  Put handset gameplay fixes here so tablet changes stay isolated.
+*/
+
+body.device-phone {
+  --active-device: phone;
+}
+
+body.device-phone .tablet-only {
+  display: none !important;
+}
+
+body.device-phone .phone-only {
+  display: revert;
+}
+
+@media (orientation: landscape) {
+  body.device-phone .score-screen:not(.is-hidden) {
+    width: auto;
+    height: auto;
+  }
+}
