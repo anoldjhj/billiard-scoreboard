@@ -14,3 +14,69 @@ body.device-phone .tablet-only {
 body.device-phone .phone-only {
   display: revert;
 }
+
+body.device-phone {
+  --phone-safe-width: calc(
+    var(--score-short-side, var(--viewport-width, 100dvw)) - env(safe-area-inset-left, 0px) -
+      env(safe-area-inset-right, 0px)
+  );
+  --phone-safe-height: calc(
+    var(--score-long-side, var(--viewport-height, 100dvh)) - env(safe-area-inset-top, 0px) -
+      env(safe-area-inset-bottom, 0px)
+  );
+  --phone-score-width: max(var(--phone-safe-width), var(--phone-safe-height));
+  --phone-score-height: min(var(--phone-safe-width), var(--phone-safe-height));
+}
+
+@media (orientation: landscape) {
+  body.device-phone {
+    --phone-safe-width: calc(
+      var(--score-long-side, var(--viewport-width, 100dvw)) - env(safe-area-inset-left, 0px) -
+        env(safe-area-inset-right, 0px)
+    );
+    --phone-safe-height: calc(
+      var(--score-short-side, var(--viewport-height, 100dvh)) - env(safe-area-inset-top, 0px) -
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+
+body.device-phone.score-mode .app-shell,
+body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
+  position: fixed;
+  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+body.device-phone .score-screen:not(.is-hidden) {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: var(--phone-score-width);
+  height: var(--phone-score-height);
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 5px;
+  padding: 5px 7px;
+  overflow: hidden;
+  transform: none;
+  transform-origin: center;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+@media (orientation: portrait) {
+  body.device-phone .score-screen:not(.is-hidden) {
+    transform: rotate(90deg);
+  }
+}
