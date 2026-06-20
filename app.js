@@ -310,9 +310,16 @@ function readScoreViewportSize(width, height) {
     [viewport?.width, viewport?.height],
     [window.innerWidth, window.innerHeight],
     [document.documentElement.clientWidth, document.documentElement.clientHeight],
+    [window.screen?.width, window.screen?.height],
   ]
     .map(([pairWidth, pairHeight]) => [Math.round(Number(pairWidth) || 0), Math.round(Number(pairHeight) || 0)])
-    .filter(([pairWidth, pairHeight]) => pairWidth > 0 && pairHeight > 0);
+    .filter(
+      ([pairWidth, pairHeight]) =>
+        pairWidth > 0 &&
+        pairHeight > 0 &&
+        Math.min(pairWidth, pairHeight) <= PHONE_VIEWPORT_LIMITS.shortSide &&
+        Math.max(pairWidth, pairHeight) <= PHONE_VIEWPORT_LIMITS.longSide,
+    );
 
   const longSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.max(pairWidth, pairHeight));
   const shortSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.min(pairWidth, pairHeight));
