@@ -207,6 +207,7 @@ const state = {
 
 let preferredOrientation = "portrait";
 let currentDeviceMode = "tablet";
+let stablePhoneScoreLongSide = 0;
 const PHONE_VIEWPORT_LIMITS = {
   shortSide: 600,
   longSide: 960,
@@ -297,6 +298,31 @@ function readViewportSize() {
   const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
   const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
   return { width, height };
+}
+
+function readScoreViewportSize(width, height) {
+  if (currentDeviceMode !== "phone") return { width, height };
+
+  const longSideCandidates = [
+    width,
+    height,
+    window.innerWidth,
+    window.innerHeight,
+    document.documentElement.clientWidth,
+    document.documentElement.clientHeight,
+    window.screen?.width,
+    window.screen?.height,
+    window.screen?.availWidth,
+    window.screen?.availHeight,
+  ]
+    .map((value) => Math.round(Number(value) || 0))
+    .filter((value) => value > 0);
+
+  stablePhoneScoreLongSide = Math.max(stablePhoneScoreLongSide, ...longSideCandidates);
+  return {
+    width,
+    height: stablePhoneScoreLongSide || height,
+  };
 }
 
 function deviceModeFromViewport() {
@@ -2109,8 +2135,11 @@ function enforceCurrentOrientation() {
 function syncVisualViewport() {
   const { width, height } = readViewportSize();
   applyDeviceMode();
+  const scoreViewport = readScoreViewportSize(width, height);
   document.documentElement.style.setProperty("--viewport-width", `${width}px`);
   document.documentElement.style.setProperty("--viewport-height", `${height}px`);
+  document.documentElement.style.setProperty("--score-viewport-width", `${scoreViewport.width}px`);
+  document.documentElement.style.setProperty("--score-viewport-height", `${scoreViewport.height}px`);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);

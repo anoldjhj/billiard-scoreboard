@@ -1904,8 +1904,8 @@ h2 {
     position: fixed;
     left: 50%;
     top: calc(50% + 1mm);
-    width: calc(var(--viewport-height, 100dvh) - 56px - 4mm);
-    height: calc(var(--viewport-width, 100dvw) - 8px);
+    width: calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) - 56px - 4mm);
+    height: calc(var(--score-viewport-width, var(--viewport-width, 100dvw)) - 8px);
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
