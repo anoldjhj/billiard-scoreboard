@@ -207,8 +207,6 @@ const state = {
 
 let preferredOrientation = "portrait";
 let currentDeviceMode = "tablet";
-let stablePhoneScoreLongSide = 0;
-let stablePhoneScoreShortSide = 0;
 let safeAreaProbe = null;
 const PHONE_VIEWPORT_LIMITS = {
   shortSide: 600,
@@ -303,35 +301,7 @@ function readViewportSize() {
 }
 
 function readScoreViewportSize(width, height) {
-  if (currentDeviceMode !== "phone") return { width, height };
-
-  const viewport = window.visualViewport;
-  const viewportPairs = [
-    [width, height],
-    [viewport?.width, viewport?.height],
-    [window.innerWidth, window.innerHeight],
-    [document.documentElement.clientWidth, document.documentElement.clientHeight],
-    [window.screen?.width, window.screen?.height],
-  ]
-    .map(([pairWidth, pairHeight]) => [Math.round(Number(pairWidth) || 0), Math.round(Number(pairHeight) || 0)])
-    .filter(
-      ([pairWidth, pairHeight]) =>
-        pairWidth > 0 &&
-        pairHeight > 0 &&
-        Math.min(pairWidth, pairHeight) <= PHONE_VIEWPORT_LIMITS.shortSide &&
-        Math.max(pairWidth, pairHeight) <= PHONE_VIEWPORT_LIMITS.longSide,
-    );
-
-  const longSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.max(pairWidth, pairHeight));
-  const shortSideCandidates = viewportPairs.map(([pairWidth, pairHeight]) => Math.min(pairWidth, pairHeight));
-  stablePhoneScoreLongSide = Math.max(stablePhoneScoreLongSide, ...longSideCandidates);
-  stablePhoneScoreShortSide = Math.max(stablePhoneScoreShortSide, ...shortSideCandidates);
-
-  const isLandscapeViewport = width >= height;
-  return {
-    width: isLandscapeViewport ? stablePhoneScoreLongSide || width : stablePhoneScoreShortSide || width,
-    height: isLandscapeViewport ? stablePhoneScoreShortSide || height : stablePhoneScoreLongSide || height,
-  };
+  return { width, height };
 }
 
 function readSafeAreaInsets() {
@@ -356,22 +326,21 @@ function syncPhoneScoreGeometry(scoreViewport) {
   if (currentDeviceMode !== "phone") return;
 
   const insets = readSafeAreaInsets();
-  const isLandscapeViewport = scoreViewport.width >= scoreViewport.height;
-  const rawSafeWidth = isLandscapeViewport ? scoreViewport.width : scoreViewport.height;
-  const rawSafeHeight = isLandscapeViewport ? scoreViewport.height : scoreViewport.width;
-  const horizontalInset = isLandscapeViewport ? insets.left + insets.right : insets.top + insets.bottom;
-  const verticalInset = isLandscapeViewport ? insets.top + insets.bottom : insets.left + insets.right;
-  const safeWidth = Math.max(0, Math.round(rawSafeWidth - horizontalInset));
-  const safeHeight = Math.max(0, Math.round(rawSafeHeight - verticalInset));
-  const scoreWidth = Math.max(safeWidth, safeHeight);
-  const scoreHeight = Math.min(safeWidth, safeHeight);
-
-  document.documentElement.style.setProperty("--phone-score-width", `${scoreWidth}px`);
-  document.documentElement.style.setProperty("--phone-score-height", `${scoreHeight}px`);
   document.documentElement.style.setProperty("--phone-safe-left", `${Math.round(insets.left)}px`);
   document.documentElement.style.setProperty("--phone-safe-right", `${Math.round(insets.right)}px`);
   document.documentElement.style.setProperty("--phone-safe-top", `${Math.round(insets.top)}px`);
   document.documentElement.style.setProperty("--phone-safe-bottom", `${Math.round(insets.bottom)}px`);
+
+  const shellRect = document.querySelector(".app-shell")?.getBoundingClientRect();
+  const shellWidth = Math.round(shellRect?.width || 0);
+  const shellHeight = Math.round(shellRect?.height || 0);
+  const safeWidth = shellWidth || Math.max(0, Math.round(scoreViewport.width - insets.left - insets.right));
+  const safeHeight = shellHeight || Math.max(0, Math.round(scoreViewport.height - insets.top - insets.bottom));
+  const scoreLogicalWidth = Math.max(safeWidth, safeHeight);
+  const scoreLogicalHeight = Math.min(safeWidth, safeHeight);
+
+  document.documentElement.style.setProperty("--phone-score-width", `${scoreLogicalWidth}px`);
+  document.documentElement.style.setProperty("--phone-score-height", `${scoreLogicalHeight}px`);
 }
 
 function deviceModeFromViewport() {
@@ -2010,7 +1979,7 @@ function returnToBoard() {
   els.recordsScreen.classList.add("is-hidden");
   els.scoreScreen.classList.remove("is-hidden");
   renderScoreboard();
-  requestAnimationFrame(syncVisualViewport);
+  queueScoreGeometrySync();
 }
 
 function handleSetupBoardAction() {
@@ -2076,7 +2045,7 @@ function openBoard() {
   els.setupScreen.classList.add("is-hidden");
   els.scoreScreen.classList.remove("is-hidden");
   renderScoreboard();
-  requestAnimationFrame(syncVisualViewport);
+  queueScoreGeometrySync();
 }
 
 function startMatch() {
@@ -2194,6 +2163,12 @@ function syncVisualViewport() {
   document.documentElement.style.setProperty("--score-long-side", `${scoreLongSide}px`);
   document.documentElement.style.setProperty("--score-short-side", `${scoreShortSide}px`);
   syncPhoneScoreGeometry(scoreViewport);
+}
+
+function queueScoreGeometrySync() {
+  requestAnimationFrame(syncVisualViewport);
+  window.setTimeout(syncVisualViewport, 120);
+  window.setTimeout(syncVisualViewport, 300);
 }
 
 els.addMemberButton.addEventListener("click", saveMemberFromForm);
@@ -2324,8 +2299,10 @@ els.scoreBoard.addEventListener("click", (event) => {
 function handleViewportChange() {
   syncVisualViewport();
   enforceCurrentOrientation();
-  if (!els.scoreScreen.classList.contains("is-hidden")) renderScoreboard();
-  else if (!els.setupScreen.classList.contains("is-hidden")) applyLanguage();
+  if (!els.scoreScreen.classList.contains("is-hidden")) {
+    queueScoreGeometrySync();
+    renderScoreboard();
+  } else if (!els.setupScreen.classList.contains("is-hidden")) applyLanguage();
 }
 
 let lockedScrollTouchY = 0;
