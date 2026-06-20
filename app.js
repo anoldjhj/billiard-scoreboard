@@ -329,13 +329,13 @@ function syncPhoneScoreGeometry(scoreViewport) {
   document.documentElement.style.setProperty("--phone-safe-left", `${Math.round(insets.left)}px`);
   document.documentElement.style.setProperty("--phone-safe-right", `${Math.round(insets.right)}px`);
   document.documentElement.style.setProperty("--phone-safe-top", `${Math.round(insets.top)}px`);
-  document.documentElement.style.setProperty("--phone-safe-bottom", `${Math.round(insets.bottom)}px`);
+  document.documentElement.style.setProperty("--phone-safe-bottom", "0px");
 
   const shellRect = document.querySelector(".app-shell")?.getBoundingClientRect();
   const shellWidth = Math.round(shellRect?.width || 0);
   const shellHeight = Math.round(shellRect?.height || 0);
   const safeWidth = shellWidth || Math.max(0, Math.round(scoreViewport.width - insets.left - insets.right));
-  const safeHeight = shellHeight || Math.max(0, Math.round(scoreViewport.height - insets.top - insets.bottom));
+  const safeHeight = shellHeight || Math.max(0, Math.round(scoreViewport.height - insets.top));
   const scoreLogicalWidth = Math.max(safeWidth, safeHeight);
   const scoreLogicalHeight = Math.min(safeWidth, safeHeight);
 
