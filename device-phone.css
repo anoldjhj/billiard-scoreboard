@@ -50,16 +50,15 @@ body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
   height: auto;
   min-width: 0;
   min-height: 0;
-  display: grid;
-  place-items: center;
+  display: block;
   padding: 0;
   overflow: hidden;
 }
 
 body.device-phone .score-screen:not(.is-hidden) {
-  position: relative;
-  left: auto;
-  top: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
   width: var(--phone-score-width);
   height: var(--phone-score-height);
   min-height: 0;
@@ -68,7 +67,7 @@ body.device-phone .score-screen:not(.is-hidden) {
   gap: 5px;
   padding: 5px 7px;
   overflow: hidden;
-  transform: none;
+  transform: translate(-50%, -50%);
   transform-origin: center;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -77,6 +76,6 @@ body.device-phone .score-screen:not(.is-hidden) {
 
 @media (orientation: portrait) {
   body.device-phone .score-screen:not(.is-hidden) {
-    transform: rotate(90deg);
+    transform: translate(-50%, -50%) rotate(90deg);
   }
 }
