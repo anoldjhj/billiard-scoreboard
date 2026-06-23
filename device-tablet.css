@@ -388,9 +388,19 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     letter-spacing: 0.1em;
   }
 
+  body.device-tablet .app-version {
+    margin-top: 3px;
+    font-size: 10px;
+  }
+
   body.device-tablet .setup-panel h1 {
     font-size: 19px;
     line-height: 1.1;
+  }
+
+  body.device-tablet .setup-panel h1::after {
+    margin-top: 3px;
+    font-size: 10px;
   }
 
   body.device-tablet .setup-start-action {
@@ -634,8 +644,18 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     font-size: 8px;
   }
 
+  body.device-tablet .app-version {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
   body.device-tablet .setup-panel h1 {
     font-size: 22px;
+  }
+
+  body.device-tablet .setup-panel h1::after {
+    margin-top: 4px;
+    font-size: 11px;
   }
 
   body.device-tablet .setup-start-action {
@@ -692,10 +712,10 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options label {
     grid-column: span 4;
     grid-row: auto;
-    grid-template-rows: auto 76px;
-    gap: 5px;
+    grid-template-rows: auto 68px;
+    gap: 8px;
     font-size: 15px;
-    line-height: 1.08;
+    line-height: 1.22;
   }
 
   body.device-tablet .game-options label:nth-child(-n + 4) {
@@ -711,10 +731,11 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .game-options select,
   body.device-tablet .game-options input {
-    min-height: 76px;
+    min-height: 68px;
     padding: 0 12px;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 620;
+    line-height: 1.35;
   }
 
   body.device-tablet .selection-strip {

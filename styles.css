@@ -214,6 +214,15 @@ body.records-mode .records-screen,
   text-transform: uppercase;
 }
 
+.app-version {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
 h1,
 h2 {
   margin: 0;
@@ -223,6 +232,17 @@ h2 {
   font-size: 31px;
   line-height: 1.08;
   word-break: keep-all;
+}
+
+.setup-panel h1::after {
+  content: "Version v299";
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: 0.04em;
 }
 
 .member-box,
