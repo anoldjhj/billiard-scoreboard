@@ -16,17 +16,704 @@ body.device-tablet .tablet-only {
   display: revert;
 }
 
+body.device-tablet.score-mode .app-shell,
+body.device-tablet:has(.score-screen:not(.is-hidden)) .app-shell {
+  position: fixed;
+  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) 0 env(safe-area-inset-left, 0px);
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--score-long-side, 100dvw);
+  height: var(--score-short-side, 100dvh);
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 7px;
+  padding: 7px 9px;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-header {
+  min-height: 62px;
+  grid-template-columns: 104px 126px 128px minmax(138px, 1fr) auto;
+  gap: 9px;
+  padding: 5px 8px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .timer,
+body.device-tablet .score-screen:not(.is-hidden) .match-time,
+body.device-tablet .score-screen:not(.is-hidden) .inning-title {
+  min-height: 48px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .timer {
+  gap: 4px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .timer strong,
+body.device-tablet .score-screen:not(.is-hidden) .inning-main strong {
+  font-size: clamp(32px, calc(var(--score-short-side, 100dvh) * 0.043), 40px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .timer span,
+body.device-tablet .score-screen:not(.is-hidden) .inning-main span {
+  font-size: 12px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .match-time strong {
+  font-size: clamp(28px, calc(var(--score-short-side, 100dvh) * 0.04), 36px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .inning-title {
+  padding: 0 34px 0 8px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .inning-adjust {
+  right: 5px;
+  gap: 2px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .inning-adjust button {
+  width: 29px;
+  height: 21px;
+  font-size: 11px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .header-actions,
+body.device-tablet .score-screen:not(.is-hidden) .quick-score-actions {
+  gap: 5px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .quick-score-actions button {
+  min-width: 42px;
+  min-height: 48px;
+  padding: 0 6px;
+  font-size: 15px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .quick-score-actions .undo-quick-button {
+  width: 46px;
+  min-width: 46px;
+  font-size: 25px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .start-button,
+body.device-tablet .score-screen:not(.is-hidden) .turn-change-button {
+  min-height: 48px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .settings-button {
+  min-width: 52px;
+  height: 48px;
+  font-size: 13px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .icon-button {
+  width: 46px;
+  height: 48px;
+  font-size: 25px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board {
+  gap: 9px;
+  padding: 9px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"],
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] {
+  gap: 7px;
+  padding: 8px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .player-card {
+  grid-template-rows: 34px minmax(144px, 1fr) 54px;
+  gap: 6px;
+  padding: 7px;
+  outline-width: 0;
+  outline-offset: 0;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .player-topline {
+  min-height: 34px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .target {
+  min-width: 46px;
+  font-size: clamp(29px, calc(var(--score-short-side, 100dvh) * 0.043), 36px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .name-button {
+  font-size: clamp(20px, calc(var(--score-short-side, 100dvh) * 0.031), 27px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-box {
+  min-height: 144px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-box span {
+  font-size: clamp(116px, calc(var(--score-short-side, 100dvh) * 0.23), 190px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-box span.result-text {
+  font-size: clamp(62px, calc(var(--score-short-side, 100dvh) * 0.12), 104px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-box span.status-three-c {
+  font-size: clamp(98px, calc(var(--score-short-side, 100dvh) * 0.19), 160px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .score-box span.status-bank {
+  font-size: clamp(48px, calc(var(--score-short-side, 100dvh) * 0.09), 78px);
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .finish-count {
+  min-width: 62px;
+  min-height: 34px;
+  font-size: 24px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .center-controls {
+  font-size: 12px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .turn-mark {
+  width: 44px;
+  height: 40px;
+  font-size: 29px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .stat-row {
+  gap: 6px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .stat {
+  gap: 2px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .stat span {
+  font-size: 13px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .stat strong {
+  min-height: 36px;
+  font-size: 24px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .stat span,
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .stat span {
+  font-size: 11px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .stat strong,
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .stat strong {
+  min-height: 34px;
+  font-size: 21px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .player-card.is-active .inning-score strong,
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong,
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong {
+  min-height: 66px;
+  font-size: 31px;
+}
+
 @media (orientation: portrait) {
+  body.device-tablet .score-screen:not(.is-hidden) {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  body.device-tablet .setup-screen,
+  body.device-tablet .records-screen {
+    place-items: center;
+    overflow: hidden;
+  }
+
   body.device-tablet .setup-panel,
   body.device-tablet .records-panel {
-    width: 840px;
+    width: calc(100vw - 20px);
     max-width: none;
+    height: calc(100svh - 20px);
+    max-height: calc(100svh - 20px);
+    zoom: 1;
+    gap: 12px;
+    padding: 14px;
+    overflow: hidden;
+  }
+
+  body.device-tablet .setup-panel {
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  body.device-tablet .records-panel {
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  body.device-tablet .setup-heading {
+    grid-template-columns: 176px minmax(0, 1fr);
+    min-height: 68px;
+    gap: 12px;
+    padding-right: 176px;
+  }
+
+  body.device-tablet .setup-heading > div:last-child {
+    min-height: 68px;
+    max-width: none;
+    padding-right: 0;
+  }
+
+  body.device-tablet .app-logo {
+    width: 176px;
+    height: 68px;
+    column-gap: 9px;
+    row-gap: 2px;
+    padding: 10px 11px;
+  }
+
+  body.device-tablet .logo-balls {
+    gap: 5px;
+  }
+
+  body.device-tablet .logo-balls i {
+    width: 22px;
+    height: 22px;
+  }
+
+  body.device-tablet .app-logo strong {
+    font-size: 26px;
+    transform: translateY(3px);
+  }
+
+  body.device-tablet .app-logo small {
+    font-size: 9px;
+    transform: none;
+  }
+
+  body.device-tablet .kicker {
+    margin-bottom: 3px;
+    font-size: 7px;
+    letter-spacing: 0.1em;
+  }
+
+  body.device-tablet .setup-panel h1 {
+    font-size: 19px;
+    line-height: 1.1;
+  }
+
+  body.device-tablet .setup-start-action {
+    top: 14px;
+    right: 14px;
+    min-width: 150px;
+    min-height: 68px;
+    border-radius: 15px;
+    padding: 0 14px;
+    font-size: 21px;
+  }
+
+  body.device-tablet .setup-start-action::after {
+    margin-top: 4px;
+    font-size: 9px;
+  }
+
+  body.device-tablet .member-box,
+  body.device-tablet .manager-panel {
+    min-height: 0;
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  body.device-tablet .member-box {
+    grid-template-rows: auto auto auto;
+    gap: 9px;
+  }
+
+  body.device-tablet .manager-panel {
+    height: 100%;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    align-self: stretch;
+    align-content: stretch;
+  }
+
+  body.device-tablet .member-title h2,
+  body.device-tablet .manager-panel summary {
+    font-size: 18px;
+  }
+
+  body.device-tablet .game-options {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  body.device-tablet .game-options label {
+    grid-column: span 4;
+    grid-row: auto;
+    grid-template-rows: auto 38px;
+    gap: 2px;
+    font-size: 10px;
+    line-height: 1.08;
+  }
+
+  body.device-tablet .game-options label:nth-child(-n + 4) {
+    grid-column: span 5;
+  }
+
+  body.device-tablet .game-options .sound-option,
+  body.device-tablet .game-options .language-option,
+  body.device-tablet .game-options .voice-option {
+    grid-column: span 4;
+    grid-row: auto;
+  }
+
+  body.device-tablet .game-options select,
+  body.device-tablet .game-options input {
+    min-height: 38px;
+    font-size: 13px;
+    padding: 0 7px;
+  }
+
+  body.device-tablet .selection-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  body.device-tablet .selection-strip .selection-card {
+    min-height: 68px;
+    padding: 10px 9px 6px;
+  }
+
+  body.device-tablet .selection-strip strong {
+    grid-template-rows: minmax(0, 1fr) 17px;
+    font-size: 17px;
+  }
+
+  body.device-tablet .member-form {
+    grid-template-columns: minmax(0, 1fr) 74px 66px;
+    gap: 7px;
+    margin-bottom: 8px;
+  }
+
+  body.device-tablet .member-form input,
+  body.device-tablet .member-form button {
+    min-height: 42px;
+    font-size: 15px;
+  }
+
+  body.device-tablet .edit-list {
+    height: calc(100svh - 556px);
+    min-height: 0;
+    max-height: calc(100svh - 556px);
+    align-self: stretch;
+    overflow-y: auto;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+
+  body.device-tablet .record-average {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 118px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  body.device-tablet .record-average label {
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  body.device-tablet .record-average select {
+    min-height: 38px;
+    font-size: 14px;
+  }
+
+  body.device-tablet .record-average div {
+    padding: 6px 8px;
+  }
+
+  body.device-tablet .record-average span {
+    font-size: 10px;
+  }
+
+  body.device-tablet .record-average strong {
+    font-size: 26px;
+  }
+
+  body.device-tablet .record-list {
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+  }
+
+  body.device-tablet .record-row,
+  body.device-tablet .record-empty {
+    min-width: 0;
   }
 }
 
 @media (orientation: portrait) and (min-width: 700px) {
   body.device-tablet .setup-panel,
   body.device-tablet .records-panel {
-    zoom: 0.7;
+    zoom: 1;
+  }
+}
+
+@media (orientation: landscape) {
+  body.device-tablet .setup-screen,
+  body.device-tablet .records-screen {
+    place-items: center;
+  }
+
+  body.device-tablet .setup-panel,
+  body.device-tablet .records-panel {
+    width: calc(100vw - 20px);
+    height: calc(100svh - 20px);
+    max-height: calc(100svh - 20px);
+    gap: 14px;
+    padding: 14px;
+  }
+
+  body.device-tablet .setup-panel {
+    grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.95fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+  }
+
+  body.device-tablet .setup-heading {
+    grid-column: 1 / -1;
+    grid-template-columns: 220px minmax(0, 1fr);
+    min-height: 74px;
+    gap: 16px;
+    padding-right: 240px;
+  }
+
+  body.device-tablet .setup-heading > div:last-child {
+    min-height: 74px;
+    padding-right: 0;
+  }
+
+  body.device-tablet .app-logo {
+    width: 220px;
+    height: 74px;
+    column-gap: 12px;
+    row-gap: 3px;
+    padding: 10px 12px;
+  }
+
+  body.device-tablet .logo-balls {
+    gap: 6px;
+  }
+
+  body.device-tablet .logo-balls i {
+    width: 25px;
+    height: 25px;
+  }
+
+  body.device-tablet .app-logo strong {
+    font-size: 30px;
+    transform: translateY(4px);
+  }
+
+  body.device-tablet .app-logo small {
+    font-size: 10px;
+    transform: none;
+  }
+
+  body.device-tablet .kicker {
+    margin-bottom: 3px;
+    font-size: 8px;
+  }
+
+  body.device-tablet .setup-panel h1 {
+    font-size: 22px;
+  }
+
+  body.device-tablet .setup-start-action {
+    top: 14px;
+    right: 14px;
+    min-width: 210px;
+    min-height: 74px;
+    border-radius: 16px;
+    font-size: 26px;
+  }
+
+  body.device-tablet .setup-start-action::after {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  body.device-tablet .member-box,
+  body.device-tablet .manager-panel {
+    min-height: 0;
+    height: 100%;
+    align-self: stretch;
+    overflow: hidden;
+    border-color: rgba(148, 163, 184, 0.42);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.78) inset, 0 8px 18px rgba(24, 39, 75, 0.07);
+  }
+
+  body.device-tablet .member-box {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-rows: auto auto minmax(84px, 1fr);
+    gap: 10px;
+    padding: 14px;
+  }
+
+  body.device-tablet .manager-panel {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 14px;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    background: #f8fafc;
+  }
+
+  body.device-tablet .member-title h2,
+  body.device-tablet .manager-panel summary {
+    font-size: 18px;
+  }
+
+  body.device-tablet .game-options {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  body.device-tablet .game-options label {
+    grid-column: span 4;
+    grid-row: auto;
+    gap: 3px;
+    font-size: 11px;
+  }
+
+  body.device-tablet .game-options label:nth-child(-n + 4) {
+    grid-column: span 5;
+  }
+
+  body.device-tablet .game-options .sound-option,
+  body.device-tablet .game-options .language-option,
+  body.device-tablet .game-options .voice-option {
+    grid-column: span 4;
+    grid-row: auto;
+  }
+
+  body.device-tablet .game-options select,
+  body.device-tablet .game-options input {
+    min-height: 38px;
+    font-size: 14px;
+  }
+
+  body.device-tablet .selection-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    align-self: stretch;
+    align-content: stretch;
+  }
+
+  body.device-tablet .selection-strip .selection-card {
+    min-height: 86px;
+    padding: 13px 11px 7px;
+  }
+
+  body.device-tablet .selection-strip strong {
+    grid-template-rows: minmax(0, 1fr) 19px;
+    font-size: 20px;
+  }
+
+  body.device-tablet .member-form {
+    grid-template-columns: minmax(0, 1fr) 76px 68px;
+    gap: 7px;
+    margin-bottom: 10px;
+    padding: 9px 9px 9px 12px;
+  }
+
+  body.device-tablet .member-form input,
+  body.device-tablet .member-form button {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  body.device-tablet .edit-list {
+    max-height: calc(100svh - 278px);
+    height: calc(100svh - 278px);
+    min-height: 0;
+    align-self: stretch;
+    overflow-y: auto;
+    gap: 6px;
+    padding-right: 12px;
+  }
+
+  body.device-tablet .edit-row {
+    grid-template-columns: minmax(0, 1fr) 32px 52px 52px;
+    padding: 7px;
+  }
+
+  body.device-tablet .edit-info {
+    font-size: 14px;
+  }
+
+  body.device-tablet .records-panel {
+    grid-template-columns: minmax(270px, 0.35fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+  }
+
+  body.device-tablet .records-header {
+    grid-column: 1 / -1;
+  }
+
+  body.device-tablet .record-average {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    align-self: stretch;
+    gap: 12px;
+    padding: 16px;
+    border-color: rgba(148, 163, 184, 0.42);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.78) inset, 0 8px 18px rgba(24, 39, 75, 0.07);
+  }
+
+  body.device-tablet .record-average label {
+    gap: 7px;
+  }
+
+  body.device-tablet .record-average select {
+    min-height: 46px;
+  }
+
+  body.device-tablet .record-average div {
+    margin-top: 2px;
+    padding: 12px;
+  }
+
+  body.device-tablet .record-average strong {
+    font-size: 38px;
+  }
+
+  body.device-tablet .record-list {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+    gap: 7px;
+    padding: 0 12px 0 0;
+  }
+
+  body.device-tablet .record-row,
+  body.device-tablet .record-empty {
+    min-width: 0;
   }
 }
