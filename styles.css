@@ -234,17 +234,6 @@ h2 {
   word-break: keep-all;
 }
 
-.setup-panel h1::after {
-  content: "Version v299";
-  display: block;
-  margin-top: 5px;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 750;
-  line-height: 1;
-  letter-spacing: 0.04em;
-}
-
 .member-box,
 .game-options,
 .manager-panel {
@@ -2419,6 +2408,12 @@ h2 {
     white-space: normal;
     overflow: visible;
     text-wrap: balance;
+  }
+
+  .app-version {
+    margin-top: 2px;
+    font-size: 8px;
+    letter-spacing: 0.02em;
   }
 
   .records-header h1 {

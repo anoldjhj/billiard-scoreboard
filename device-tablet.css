@@ -398,11 +398,6 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     line-height: 1.1;
   }
 
-  body.device-tablet .setup-panel h1::after {
-    margin-top: 3px;
-    font-size: 10px;
-  }
-
   body.device-tablet .setup-start-action {
     top: 14px;
     right: 14px;
@@ -445,6 +440,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options {
     grid-template-columns: repeat(20, minmax(0, 1fr));
     gap: 6px;
+    align-items: start;
   }
 
   body.device-tablet .game-options label {
@@ -465,6 +461,26 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options .voice-option {
     grid-column: span 4;
     grid-row: auto;
+  }
+
+  body.device-tablet .game-options label:nth-child(5) {
+    order: 5;
+  }
+
+  body.device-tablet .game-options label:nth-child(6) {
+    order: 6;
+  }
+
+  body.device-tablet .game-options label:nth-child(7) {
+    order: 7;
+  }
+
+  body.device-tablet .game-options label:nth-child(8) {
+    order: 8;
+  }
+
+  body.device-tablet .game-options label:nth-child(9) {
+    order: 9;
   }
 
   body.device-tablet .game-options select,
@@ -653,11 +669,6 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     font-size: 22px;
   }
 
-  body.device-tablet .setup-panel h1::after {
-    margin-top: 4px;
-    font-size: 11px;
-  }
-
   body.device-tablet .setup-start-action {
     top: 14px;
     right: 14px;
@@ -707,6 +718,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options {
     grid-template-columns: repeat(20, minmax(0, 1fr));
     gap: 6px;
+    align-items: start;
   }
 
   body.device-tablet .game-options label {
@@ -727,6 +739,26 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options .voice-option {
     grid-column: span 4;
     grid-row: auto;
+  }
+
+  body.device-tablet .game-options label:nth-child(5) {
+    order: 5;
+  }
+
+  body.device-tablet .game-options label:nth-child(6) {
+    order: 6;
+  }
+
+  body.device-tablet .game-options label:nth-child(7) {
+    order: 7;
+  }
+
+  body.device-tablet .game-options label:nth-child(8) {
+    order: 8;
+  }
+
+  body.device-tablet .game-options label:nth-child(9) {
+    order: 9;
   }
 
   body.device-tablet .game-options select,

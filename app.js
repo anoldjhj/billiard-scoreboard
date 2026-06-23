@@ -5,6 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
+const APP_VERSION = "v303";
 const I18N = {
   ko: {
     appTitle: "PLAY 당구점수판 3/4구",
@@ -275,6 +276,18 @@ function t(key) {
 function text(selector, value) {
   const element = $(selector);
   if (element) element.textContent = value;
+}
+
+function renderAppVersion() {
+  const heading = document.querySelector(".setup-heading > div:last-child");
+  if (!heading) return;
+  let version = heading.querySelector(".app-version");
+  if (!version) {
+    version = document.createElement("p");
+    version.className = "app-version";
+    heading.append(version);
+  }
+  version.textContent = `Version ${APP_VERSION}`;
 }
 
 function setLabelText(control, value) {
@@ -2359,6 +2372,7 @@ loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
 setScreenMode("setup");
+renderAppVersion();
 applyLanguage();
 enforceCurrentOrientation();
 
