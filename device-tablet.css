@@ -465,7 +465,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .selection-strip {
-    grid-template-columns: repeat(var(--tablet-selected-count, 4), minmax(0, 1fr));
+    display: flex;
     width: 100%;
     gap: 7px;
   }
@@ -483,6 +483,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .selection-strip .selection-card {
+    flex: 1 1 0;
     min-height: 68px;
     width: 100%;
     padding: 10px 9px 6px;
@@ -490,7 +491,13 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .selection-strip strong {
     grid-template-rows: minmax(0, 1fr) 17px;
-    font-size: 17px;
+    font-size: 15px;
+    font-weight: 750;
+  }
+
+  body.device-tablet .selection-strip .member-label-target {
+    font-size: 0.9em;
+    font-weight: 750;
   }
 
   body.device-tablet .member-form {
@@ -711,7 +718,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .selection-strip {
-    grid-template-columns: repeat(var(--tablet-selected-count, 4), minmax(0, 1fr));
+    display: flex;
     width: 100%;
     gap: 8px;
     align-self: start;
@@ -744,6 +751,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .selection-strip .selection-card {
+    flex: 1 1 0;
     width: 100%;
     min-height: 104px;
     aspect-ratio: auto;
@@ -752,7 +760,13 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .selection-strip strong {
     grid-template-rows: minmax(0, 1fr) 19px;
-    font-size: 20px;
+    font-size: 17px;
+    font-weight: 750;
+  }
+
+  body.device-tablet .selection-strip .member-label-target {
+    font-size: 0.9em;
+    font-weight: 750;
   }
 
   body.device-tablet .member-form {
