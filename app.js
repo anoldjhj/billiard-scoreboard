@@ -570,6 +570,7 @@ function appendNameTarget(parent, member) {
 }
 
 function renderSelections() {
+  els.selectionStrip.dataset.selectedCount = String(state.playerCount);
   els.selectionStrip.replaceChildren(
     ...Array.from({ length: state.playerCount }, (_, slot) => {
       const item = document.createElement("button");

@@ -168,7 +168,7 @@ body.device-tablet .score-screen:not(.is-hidden) .score-box {
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span {
-  font-size: clamp(156px, calc(var(--score-short-side, 100dvh) * 0.36), 292px);
+  font-size: clamp(176px, calc(var(--score-short-side, 100dvh) * 0.42), 332px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span.result-text {
@@ -262,18 +262,31 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .stat 
 body.device-tablet .score-screen:not(.is-hidden) .player-card.is-active .inning-score strong,
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong,
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong {
-  position: static;
-  min-height: 34px;
-  align-content: center;
-  padding: 0 5px;
-  font-size: 24px;
-  box-shadow: inset 0 3px 0 #64748b;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 72px;
+  align-content: end;
+  padding: 0 8px 8px;
+  font-size: 48px;
+  z-index: 3;
+  box-shadow: inset 0 3px 0 #64748b, 0 -4px 10px rgba(15, 23, 42, 0.16);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .player-card.is-active .inning-score strong::before,
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong::before,
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong::before {
-  content: none;
+  content: "Run / -1";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transform: translateX(-50%);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .player-card.is-active .inning-score > span,
@@ -287,7 +300,15 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong,
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong {
-  font-size: 21px;
+  min-height: 68px;
+  font-size: 42px;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong::before,
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong::before {
+  top: 5px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 @media (orientation: portrait) {
@@ -652,8 +673,8 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     grid-row: auto;
     grid-template-rows: auto 76px;
     gap: 5px;
-    font-size: 22px;
-    line-height: 1;
+    font-size: 15px;
+    line-height: 1.08;
   }
 
   body.device-tablet .game-options label:nth-child(-n + 4) {
@@ -670,7 +691,8 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options select,
   body.device-tablet .game-options input {
     min-height: 76px;
-    font-size: 28px;
+    padding: 0 12px;
+    font-size: 21px;
     font-weight: 850;
   }
 
@@ -680,6 +702,18 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     align-self: start;
     align-content: start;
     justify-content: start;
+  }
+
+  body.device-tablet .selection-strip[data-selected-count="2"] {
+    --tablet-selected-count: 2;
+  }
+
+  body.device-tablet .selection-strip[data-selected-count="3"] {
+    --tablet-selected-count: 3;
+  }
+
+  body.device-tablet .selection-strip[data-selected-count="4"] {
+    --tablet-selected-count: 4;
   }
 
   body.device-tablet .selection-strip:has(.selection-card:nth-child(2):last-child) {
