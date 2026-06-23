@@ -472,15 +472,19 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .game-options label:nth-child(7) {
-    order: 7;
+    order: 9;
+  }
+
+  body.device-tablet .game-options .language-option {
+    order: 9;
   }
 
   body.device-tablet .game-options label:nth-child(8) {
-    order: 8;
+    order: 7;
   }
 
   body.device-tablet .game-options label:nth-child(9) {
-    order: 9;
+    order: 8;
   }
 
   body.device-tablet .game-options select,
@@ -750,15 +754,19 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   }
 
   body.device-tablet .game-options label:nth-child(7) {
-    order: 7;
+    order: 9;
+  }
+
+  body.device-tablet .game-options .language-option {
+    order: 9;
   }
 
   body.device-tablet .game-options label:nth-child(8) {
-    order: 8;
+    order: 7;
   }
 
   body.device-tablet .game-options label:nth-child(9) {
-    order: 9;
+    order: 8;
   }
 
   body.device-tablet .game-options select,
