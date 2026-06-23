@@ -168,51 +168,51 @@ body.device-tablet .score-screen:not(.is-hidden) .score-box {
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span {
-  font-size: clamp(136px, calc(var(--score-short-side, 100dvh) * 0.3), 250px);
+  font-size: clamp(156px, calc(var(--score-short-side, 100dvh) * 0.36), 292px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span.result-text {
-  font-size: clamp(72px, calc(var(--score-short-side, 100dvh) * 0.15), 132px);
+  font-size: clamp(82px, calc(var(--score-short-side, 100dvh) * 0.18), 150px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span.status-three-c {
-  font-size: clamp(116px, calc(var(--score-short-side, 100dvh) * 0.25), 210px);
+  font-size: clamp(132px, calc(var(--score-short-side, 100dvh) * 0.29), 238px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .score-box span.status-bank {
-  font-size: clamp(58px, calc(var(--score-short-side, 100dvh) * 0.12), 102px);
+  font-size: clamp(66px, calc(var(--score-short-side, 100dvh) * 0.14), 118px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .score-box span {
-  font-size: clamp(124px, calc(var(--score-short-side, 100dvh) * 0.255), 214px);
+  font-size: clamp(140px, calc(var(--score-short-side, 100dvh) * 0.3), 248px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .score-box span.result-text {
-  font-size: clamp(66px, calc(var(--score-short-side, 100dvh) * 0.13), 112px);
+  font-size: clamp(74px, calc(var(--score-short-side, 100dvh) * 0.15), 128px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .score-box span.status-three-c {
-  font-size: clamp(104px, calc(var(--score-short-side, 100dvh) * 0.215), 178px);
+  font-size: clamp(118px, calc(var(--score-short-side, 100dvh) * 0.25), 204px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="3"] .score-box span.status-bank {
-  font-size: clamp(52px, calc(var(--score-short-side, 100dvh) * 0.1), 86px);
+  font-size: clamp(58px, calc(var(--score-short-side, 100dvh) * 0.115), 98px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span {
-  font-size: clamp(112px, calc(var(--score-short-side, 100dvh) * 0.22), 184px);
+  font-size: clamp(124px, calc(var(--score-short-side, 100dvh) * 0.25), 206px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.result-text {
-  font-size: clamp(58px, calc(var(--score-short-side, 100dvh) * 0.11), 96px);
+  font-size: clamp(64px, calc(var(--score-short-side, 100dvh) * 0.125), 108px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.status-three-c {
-  font-size: clamp(92px, calc(var(--score-short-side, 100dvh) * 0.18), 152px);
+  font-size: clamp(102px, calc(var(--score-short-side, 100dvh) * 0.205), 170px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.status-bank {
-  font-size: clamp(46px, calc(var(--score-short-side, 100dvh) * 0.085), 74px);
+  font-size: clamp(50px, calc(var(--score-short-side, 100dvh) * 0.095), 82px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .finish-count {
@@ -652,7 +652,8 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     grid-row: auto;
     grid-template-rows: auto 76px;
     gap: 5px;
-    font-size: 11px;
+    font-size: 22px;
+    line-height: 1;
   }
 
   body.device-tablet .game-options label:nth-child(-n + 4) {
@@ -669,21 +670,34 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options select,
   body.device-tablet .game-options input {
     min-height: 76px;
-    font-size: 14px;
+    font-size: 28px;
+    font-weight: 850;
   }
 
   body.device-tablet .selection-strip {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--tablet-selected-count, 4), minmax(0, 1fr));
     gap: 8px;
     align-self: start;
     align-content: start;
     justify-content: start;
   }
 
+  body.device-tablet .selection-strip:has(.selection-card:nth-child(2):last-child) {
+    --tablet-selected-count: 2;
+  }
+
+  body.device-tablet .selection-strip:has(.selection-card:nth-child(3):last-child) {
+    --tablet-selected-count: 3;
+  }
+
+  body.device-tablet .selection-strip:has(.selection-card:nth-child(4):last-child) {
+    --tablet-selected-count: 4;
+  }
+
   body.device-tablet .selection-strip .selection-card {
     aspect-ratio: 1 / 1;
     min-height: 0;
-    max-height: 132px;
+    max-height: none;
     padding: 13px 11px 7px;
   }
 
@@ -748,11 +762,14 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .record-average label {
     gap: 7px;
+    font-size: 22px;
+    line-height: 1;
   }
 
   body.device-tablet .record-average select {
     min-height: 92px;
-    font-size: 18px;
+    font-size: 28px;
+    font-weight: 850;
   }
 
   body.device-tablet .record-average div {
@@ -762,8 +779,13 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
     padding: 12px;
   }
 
+  body.device-tablet .record-average span {
+    font-size: 26px;
+    line-height: 1;
+  }
+
   body.device-tablet .record-average strong {
-    font-size: 38px;
+    font-size: 68px;
   }
 
   body.device-tablet .record-list {
