@@ -491,13 +491,13 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .selection-strip strong {
     grid-template-rows: minmax(0, 1fr) 17px;
-    font-size: 15px;
-    font-weight: 750;
+    font-size: 17px;
+    font-weight: 900;
   }
 
   body.device-tablet .selection-strip .member-label-target {
-    font-size: 0.9em;
-    font-weight: 750;
+    font-size: 1em;
+    font-weight: 900;
   }
 
   body.device-tablet .member-form {
@@ -713,8 +713,8 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
   body.device-tablet .game-options input {
     min-height: 76px;
     padding: 0 12px;
-    font-size: 21px;
-    font-weight: 850;
+    font-size: 18px;
+    font-weight: 700;
   }
 
   body.device-tablet .selection-strip {
@@ -760,13 +760,13 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .playe
 
   body.device-tablet .selection-strip strong {
     grid-template-rows: minmax(0, 1fr) 19px;
-    font-size: 17px;
-    font-weight: 750;
+    font-size: 20px;
+    font-weight: 900;
   }
 
   body.device-tablet .selection-strip .member-label-target {
-    font-size: 0.9em;
-    font-weight: 750;
+    font-size: 1em;
+    font-weight: 900;
   }
 
   body.device-tablet .member-form {
