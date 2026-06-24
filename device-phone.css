@@ -18,17 +18,23 @@ body.device-phone .phone-only {
 @media (orientation: landscape) {
   body.device-phone.setup-mode .app-shell,
   body.device-phone.records-mode .app-shell {
-    width: 100vw;
-    min-height: 100svh;
+    position: fixed;
+    inset: var(--phone-safe-top, env(safe-area-inset-top, 0px)) var(--phone-safe-right, env(safe-area-inset-right, 0px))
+      var(--phone-safe-bottom, env(safe-area-inset-bottom, 0px)) var(--phone-safe-left, env(safe-area-inset-left, 0px));
+    width: auto;
+    height: auto;
+    min-height: 0;
     padding: 0;
     overflow: hidden;
   }
 
   body.device-phone .setup-screen,
   body.device-phone .records-screen {
-    inset: 0;
-    height: 100svh;
-    min-height: 100svh;
+    inset: var(--phone-safe-top, env(safe-area-inset-top, 0px)) var(--phone-safe-right, env(safe-area-inset-right, 0px))
+      var(--phone-safe-bottom, env(safe-area-inset-bottom, 0px)) var(--phone-safe-left, env(safe-area-inset-left, 0px));
+    width: auto;
+    height: auto;
+    min-height: 0;
     display: grid;
     place-items: center;
     overflow: hidden;
@@ -36,10 +42,10 @@ body.device-phone .phone-only {
 
   body.device-phone .setup-panel,
   body.device-phone .records-panel {
-    width: calc(100vw - 10px);
+    width: calc(100% - 10px);
     max-width: none;
-    height: calc(100svh - 10px);
-    max-height: calc(100svh - 10px);
+    height: calc(100% - 10px);
+    max-height: calc(100% - 10px);
     margin: 0;
     gap: 8px;
     padding: 8px;
@@ -159,6 +165,7 @@ body.device-phone .phone-only {
     grid-column: 2;
     grid-row: 2;
     grid-template-rows: auto auto minmax(0, 1fr);
+    align-content: stretch;
     gap: 6px;
     background: #f8fafc;
   }
@@ -222,31 +229,33 @@ body.device-phone .phone-only {
     grid-row: auto;
   }
 
-  body.device-phone .game-options .voice-option {
-    grid-column: span 8;
-  }
-
   body.device-phone .game-options label:nth-child(5) {
+    grid-column: span 3;
     order: 5;
   }
 
   body.device-phone .game-options label:nth-child(6) {
+    grid-column: span 3;
     order: 6;
   }
 
   body.device-phone .game-options label:nth-child(7) {
-    order: 9;
+    grid-column: span 4;
+    order: 8;
   }
 
   body.device-phone .game-options .language-option {
-    order: 9;
+    grid-column: span 4;
+    order: 8;
   }
 
   body.device-phone .game-options label:nth-child(8) {
+    grid-column: span 5;
     order: 7;
   }
 
   body.device-phone .game-options label:nth-child(9) {
+    grid-column: span 5;
     order: 8;
   }
 
@@ -341,11 +350,14 @@ body.device-phone .phone-only {
   }
 
   body.device-phone .edit-list {
-    height: auto;
+    height: calc(100svh - 188px);
     min-height: 0;
-    max-height: none;
+    max-height: calc(100svh - 188px);
     align-content: start;
-    overflow-y: auto;
+    overflow-y: scroll;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+    touch-action: pan-y;
     gap: 5px;
     padding-right: 8px;
     padding-bottom: max(10px, env(safe-area-inset-bottom));
@@ -452,7 +464,10 @@ body.device-phone .phone-only {
     grid-row: 2;
     min-height: 0;
     max-height: none;
-    overflow: auto;
+    overflow: scroll;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+    touch-action: pan-y;
     gap: 5px;
     padding: 0 8px 0 0;
     border-right-width: 4px;
