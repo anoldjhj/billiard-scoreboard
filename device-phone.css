@@ -53,7 +53,7 @@ body.device-phone .score-screen:not(.is-hidden) .player-card {
 }
 
 body.device-phone .score-screen:not(.is-hidden) .inning-score {
-  position: static;
+  position: relative;
   isolation: isolate;
 }
 

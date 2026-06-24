@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v307";
+const APP_VERSION = "v309";
 const I18N = {
   ko: {
     appTitle: "PLAY 당구점수판 3/4구",
