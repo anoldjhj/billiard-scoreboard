@@ -12,9 +12,9 @@
     <title>PLAY Billiards Scoreboard</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
-    <link rel="stylesheet" href="styles.css?v=20260625-version-v325" />
-    <link rel="stylesheet" href="device-phone.css?v=20260625-version-v325" />
-    <link rel="stylesheet" href="device-tablet.css?v=20260625-version-v325" />
+    <link rel="stylesheet" href="styles.css?v=20260625-version-v326" />
+    <link rel="stylesheet" href="device-phone.css?v=20260625-version-v326" />
+    <link rel="stylesheet" href="device-tablet.css?v=20260625-version-v326" />
   </head>
   <body translate="no" class="notranslate">
     <main class="app-shell">
@@ -150,6 +150,9 @@
               <h1>MATCH RECORDS</h1>
             </div>
             <div class="records-header-actions">
+              <button class="secondary-action data-action" id="backupDataButton" type="button">백업</button>
+              <button class="secondary-action data-action" id="restoreDataButton" type="button">복원</button>
+              <input id="backupFileInput" type="file" accept="application/json,.json" hidden />
               <button class="primary-action" id="returnBoardFromRecordsButton" type="button" hidden>점수판으로</button>
               <button class="secondary-action" id="backToSetupButton" type="button">설정으로</button>
             </div>
@@ -222,6 +225,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260625-version-v325"></script>
+    <script src="app.js?v=20260625-version-v326"></script>
   </body>
 </html>

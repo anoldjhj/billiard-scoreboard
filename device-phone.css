@@ -424,6 +424,11 @@ body.device-phone .phone-only {
     font-size: 11px;
   }
 
+  body.device-phone .records-header .data-action {
+    min-width: 48px;
+    padding: 0 7px;
+  }
+
   body.device-phone .record-average {
     grid-column: 1;
     grid-row: 2;

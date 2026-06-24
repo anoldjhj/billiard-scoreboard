@@ -5,7 +5,16 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v325";
+const APP_VERSION = "v326";
+const BACKUP_STORAGE_KEYS = [
+  MEMBER_KEY,
+  RESULT_KEY,
+  SETTINGS_KEY,
+  VOICE_KEY,
+  VOICE_STYLE_KEY,
+  WARNING_SOUND_KEY,
+  LANGUAGE_KEY,
+];
 const I18N = {
   ko: {
     appTitle: "PLAY 당구점수판 3/4구",
@@ -47,6 +56,11 @@ const I18N = {
     delete: "삭제",
     setup: "설정",
     backToSetup: "설정으로",
+    backup: "백업",
+    restoreData: "복원",
+    restoreConfirm: "현재 선수와 기록을 백업 파일 내용으로 바꿀까요?",
+    restoreComplete: "선수와 기록을 복원했습니다.",
+    restoreFailed: "백업 파일을 읽을 수 없습니다.",
     recordAverage: "평균 Aver.",
     playerSelect: "선수 선택",
     recentRecords: "최근 30게임 기록",
@@ -127,6 +141,11 @@ const I18N = {
     delete: "Delete",
     setup: "Settings",
     backToSetup: "Settings",
+    backup: "Backup",
+    restoreData: "Restore",
+    restoreConfirm: "Replace current players and records with this backup file?",
+    restoreComplete: "Players and records have been restored.",
+    restoreFailed: "Could not read this backup file.",
     recordAverage: "Average",
     playerSelect: "Player",
     recentRecords: "Recent 30 Match Records",
@@ -235,6 +254,9 @@ const els = {
   openRecordsButton: $("#openRecordsButton"),
   returnBoardFromRecordsButton: $("#returnBoardFromRecordsButton"),
   backToSetupButton: $("#backToSetupButton"),
+  backupDataButton: $("#backupDataButton"),
+  restoreDataButton: $("#restoreDataButton"),
+  backupFileInput: $("#backupFileInput"),
   recordGameType: $("#recordGameType"),
   recordPlayerSelect: $("#recordPlayerSelect"),
   recordAverage: $("#recordAverage"),
@@ -413,6 +435,8 @@ function applyLanguage() {
   text(".record-average div span", t("recordAverage"));
   text("#returnBoardFromRecordsButton", state.language === "en" && isCompactViewport() ? t("returnBoardShort") : t("returnBoard"));
   text("#backToSetupButton", t("backToSetup"));
+  text("#backupDataButton", t("backup"));
+  text("#restoreDataButton", t("restoreData"));
   text("#homeButton", t("setup"));
   text("#turnSwitchButton", t("changePlayer"));
   text("#winnerTitle", t("win"));
@@ -565,6 +589,73 @@ function saveSettings() {
       nextPick: state.nextPick,
     }),
   );
+}
+
+function showMessage(key) {
+  if (window.alert) window.alert(t(key));
+}
+
+function exportBackupData() {
+  const storage = {};
+  BACKUP_STORAGE_KEYS.forEach((key) => {
+    storage[key] = localStorage.getItem(key);
+  });
+
+  const backup = {
+    type: "play-billiards-scoreboard-backup",
+    version: 1,
+    appVersion: APP_VERSION,
+    exportedAt: new Date().toISOString(),
+    storage,
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `play-billiards-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function applyImportedStorage(storage) {
+  BACKUP_STORAGE_KEYS.forEach((key) => {
+    if (!Object.prototype.hasOwnProperty.call(storage, key)) return;
+    const value = storage[key];
+    if (value === null || value === undefined) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, String(value));
+    }
+  });
+
+  loadMembers();
+  loadSettings();
+  setupPlayersFromSelection();
+  renderMembers();
+  renderRecords();
+  applyLanguage();
+}
+
+function importBackupFile(file) {
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result || "{}"));
+      const storage = parsed.storage && typeof parsed.storage === "object" ? parsed.storage : null;
+      if (!storage) throw new Error("Invalid backup");
+      if (window.confirm && !window.confirm(t("restoreConfirm"))) return;
+      applyImportedStorage(storage);
+      showMessage("restoreComplete");
+    } catch {
+      showMessage("restoreFailed");
+    }
+  };
+  reader.onerror = () => showMessage("restoreFailed");
+  reader.readAsText(file);
 }
 
 function selectionText(slot) {
@@ -770,6 +861,38 @@ function commitFinishCustomInput(select, customInput) {
   setFinishControlValue(select, customInput, customInput.value);
   readFinishSettings();
   saveSettings();
+}
+
+function bindImmediateTap(button, action) {
+  if (!button) return;
+
+  let lastRunAt = 0;
+  const run = (event) => {
+    const now = Date.now();
+    if (now - lastRunAt < 450) {
+      event?.preventDefault();
+      event?.stopPropagation();
+      return;
+    }
+
+    lastRunAt = now;
+    event?.preventDefault();
+    event?.stopPropagation();
+    action(event);
+  };
+
+  button.addEventListener("touchend", run, { passive: false });
+  button.addEventListener("pointerup", (event) => {
+    if (event.pointerType === "touch" || event.pointerType === "pen") run(event);
+  });
+  button.addEventListener("click", (event) => {
+    if (Date.now() - lastRunAt < 450) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    run(event);
+  });
 }
 
 function renderFinishOptions() {
@@ -2219,10 +2342,16 @@ els.selectionStrip.addEventListener("click", (event) => {
   const slotButton = event.target.closest("[data-selection-slot]");
   if (slotButton) selectPlayerSlot(Number(slotButton.dataset.selectionSlot));
 });
-els.openBoardButton.addEventListener("click", handleSetupBoardAction);
-els.openRecordsButton.addEventListener("click", showRecords);
-els.returnBoardFromRecordsButton.addEventListener("click", returnToBoard);
-els.backToSetupButton.addEventListener("click", showSetup);
+bindImmediateTap(els.openBoardButton, handleSetupBoardAction);
+bindImmediateTap(els.openRecordsButton, showRecords);
+bindImmediateTap(els.returnBoardFromRecordsButton, returnToBoard);
+bindImmediateTap(els.backToSetupButton, showSetup);
+bindImmediateTap(els.backupDataButton, exportBackupData);
+bindImmediateTap(els.restoreDataButton, () => els.backupFileInput?.click());
+els.backupFileInput?.addEventListener("change", () => {
+  importBackupFile(els.backupFileInput.files?.[0]);
+  els.backupFileInput.value = "";
+});
 els.recordGameType.addEventListener("change", renderRecords);
 els.recordPlayerSelect.addEventListener("change", renderRecords);
 els.recordList.addEventListener("click", (event) => {
