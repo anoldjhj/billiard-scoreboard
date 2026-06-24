@@ -208,7 +208,7 @@ body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.status-three-c {
-  font-size: clamp(102px, calc(var(--score-short-side, 100dvh) * 0.205), 170px);
+  font-size: clamp(82px, calc(var(--score-short-side, 100dvh) * 0.17), 136px);
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.status-bank {

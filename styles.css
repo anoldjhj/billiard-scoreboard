@@ -1154,6 +1154,7 @@ h2 {
 .quick-score-actions .undo-quick-button {
   width: 58px;
   min-width: 58px;
+  margin-left: 3mm;
   border-color: #c4b5fd;
   background: linear-gradient(180deg, #ffffff 0%, #ede9fe 100%);
   color: #6d28d9;
@@ -1453,6 +1454,10 @@ h2 {
   color: #26364a;
   font-size: clamp(118px, 17vw, 210px);
   text-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+}
+
+.board[data-players="4"] .score-box span.status-three-c {
+  font-size: clamp(82px, 11vw, 140px);
 }
 
 .score-box span.status-bank {
