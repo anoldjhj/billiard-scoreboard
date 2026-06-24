@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v313";
+const APP_VERSION = "v314";
 const I18N = {
   ko: {
     appTitle: "PLAY 당구점수판 3/4구",
@@ -342,13 +342,13 @@ function syncPhoneScoreGeometry(scoreViewport) {
   document.documentElement.style.setProperty("--phone-safe-left", `${Math.round(insets.left)}px`);
   document.documentElement.style.setProperty("--phone-safe-right", `${Math.round(insets.right)}px`);
   document.documentElement.style.setProperty("--phone-safe-top", `${Math.round(insets.top)}px`);
-  document.documentElement.style.setProperty("--phone-safe-bottom", `${Math.round(insets.bottom)}px`);
+  document.documentElement.style.setProperty("--phone-safe-bottom", "0px");
 
   const shellRect = document.querySelector(".app-shell")?.getBoundingClientRect();
   const shellWidth = Math.round(shellRect?.width || 0);
   const shellHeight = Math.round(shellRect?.height || 0);
   const safeWidth = shellWidth || Math.max(0, Math.round(scoreViewport.width - insets.left - insets.right));
-  const safeHeight = shellHeight || Math.max(0, Math.round(scoreViewport.height - insets.top - insets.bottom));
+  const safeHeight = shellHeight || Math.max(0, Math.round(scoreViewport.height - insets.top));
   const scoreLogicalWidth = Math.max(safeWidth, safeHeight);
   const scoreLogicalHeight = Math.min(safeWidth, safeHeight);
 

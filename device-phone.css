@@ -18,7 +18,7 @@ body.device-phone .phone-only {
 body.device-phone.score-mode .app-shell,
 body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
   position: fixed;
-  inset: var(--phone-safe-top, 0px) var(--phone-safe-right, 0px) var(--phone-safe-bottom, 0px) var(--phone-safe-left, 0px);
+  inset: var(--phone-safe-top, 0px) var(--phone-safe-right, 0px) 0 var(--phone-safe-left, 0px);
   width: auto;
   height: auto;
   min-width: 0;
@@ -32,8 +32,8 @@ body.device-phone .score-screen:not(.is-hidden) {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: calc(var(--phone-score-width, var(--score-long-side, 100dvw)) - 12px);
-  height: calc(var(--phone-score-height, var(--score-short-side, 100dvh)) - 18px);
+  width: calc(var(--phone-score-width, var(--score-long-side, 100dvw)) + 6mm);
+  height: var(--phone-score-height, var(--score-short-side, 100dvh));
   min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -159,5 +159,34 @@ body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .player
 @media (orientation: portrait) {
   body.device-phone .score-screen:not(.is-hidden) {
     transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"],
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .player-card,
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .player-card {
+    grid-template-rows: 28px minmax(112px, 1fr) 42px;
+    gap: 4px;
+    padding: 7px;
+  }
+
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .stat,
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .stat {
+    gap: 1px;
+  }
+
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .stat span,
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .stat span {
+    font-size: 10px;
+  }
+
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .stat strong,
+  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .stat strong {
+    min-height: 28px;
+    font-size: 18px;
   }
 }
