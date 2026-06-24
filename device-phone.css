@@ -15,6 +15,491 @@ body.device-phone .phone-only {
   display: revert;
 }
 
+@media (orientation: landscape) {
+  body.device-phone.setup-mode .app-shell,
+  body.device-phone.records-mode .app-shell {
+    width: 100vw;
+    min-height: 100svh;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body.device-phone .setup-screen,
+  body.device-phone .records-screen {
+    inset: 0;
+    height: 100svh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  body.device-phone .setup-panel,
+  body.device-phone .records-panel {
+    width: calc(100vw - 10px);
+    max-width: none;
+    height: calc(100svh - 10px);
+    max-height: calc(100svh - 10px);
+    margin: 0;
+    gap: 8px;
+    padding: 8px;
+    overflow: hidden;
+    zoom: 1;
+    transform: none;
+  }
+
+  body.device-phone .setup-panel {
+    grid-template-columns: minmax(0, 1.04fr) minmax(270px, 0.96fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+  }
+
+  body.device-phone .setup-heading {
+    grid-column: 1 / -1;
+    grid-template-columns: 132px minmax(0, 1fr);
+    min-height: 52px;
+    gap: 10px;
+    padding-right: 132px;
+  }
+
+  body.device-phone .setup-heading > div:last-child {
+    min-height: 52px;
+    max-width: none;
+    display: grid;
+    align-content: center;
+    overflow: hidden;
+    padding-right: 0;
+  }
+
+  body.device-phone .app-logo {
+    width: 132px;
+    height: 52px;
+    column-gap: 6px;
+    row-gap: 1px;
+    padding: 8px 9px;
+    transform: none;
+  }
+
+  body.device-phone .logo-balls {
+    gap: 4px;
+  }
+
+  body.device-phone .logo-balls i {
+    width: 16px;
+    height: 16px;
+  }
+
+  body.device-phone .app-logo strong {
+    font-size: 20px;
+    transform: translateY(2px);
+  }
+
+  body.device-phone .app-logo small {
+    font-size: 7px;
+    transform: none;
+  }
+
+  body.device-phone .kicker {
+    margin-bottom: 2px;
+    font-size: 5px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  body.device-phone .app-version {
+    margin-top: 2px;
+    font-size: 8px;
+  }
+
+  body.device-phone .setup-panel h1 {
+    font-size: 14px;
+    line-height: 1.08;
+    white-space: normal;
+    overflow: visible;
+  }
+
+  body.device-phone .setup-start-action {
+    top: 8px;
+    right: 8px;
+    width: 116px;
+    min-width: 0;
+    min-height: 52px;
+    border-radius: 13px;
+    padding: 0 9px;
+    font-size: 16px;
+  }
+
+  body.device-phone .setup-start-action::after {
+    margin-top: 3px;
+    font-size: 7px;
+    letter-spacing: 0.14em;
+  }
+
+  body.device-phone .member-box,
+  body.device-phone .manager-panel {
+    min-height: 0;
+    height: 100%;
+    align-self: stretch;
+    overflow: hidden;
+    padding: 8px;
+    border-color: rgba(148, 163, 184, 0.42);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.78) inset, 0 7px 14px rgba(24, 39, 75, 0.06);
+  }
+
+  body.device-phone .member-box {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    gap: 6px;
+  }
+
+  body.device-phone .manager-panel {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 6px;
+    background: #f8fafc;
+  }
+
+  body.device-phone .member-title h2,
+  body.device-phone .manager-panel summary {
+    min-height: 28px;
+    font-size: 14px;
+    line-height: 1.1;
+  }
+
+  body.device-phone .member-title-actions {
+    gap: 4px;
+  }
+
+  body.device-phone .compact-action {
+    min-width: 54px;
+    min-height: 28px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
+  body.device-phone .manager-panel summary::after {
+    width: 24px;
+    min-height: 24px;
+    background-size: 6px 6px;
+    background-position: calc(50% - 3px) 50%, calc(50% + 3px) 50%;
+  }
+
+  body.device-phone .manager-panel summary #memberCount {
+    min-width: 34px;
+    min-height: 24px;
+    font-size: 11px;
+  }
+
+  body.device-phone .game-options {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+    gap: 5px;
+    align-items: start;
+  }
+
+  body.device-phone .game-options label {
+    grid-column: span 4;
+    grid-row: auto;
+    grid-template-rows: auto 34px;
+    gap: 2px;
+    font-size: 9px;
+    line-height: 1.06;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  body.device-phone .game-options label:nth-child(-n + 4) {
+    grid-column: span 5;
+  }
+
+  body.device-phone .game-options .sound-option,
+  body.device-phone .game-options .language-option,
+  body.device-phone .game-options .voice-option {
+    grid-column: span 4;
+    grid-row: auto;
+  }
+
+  body.device-phone .game-options .voice-option {
+    grid-column: span 8;
+  }
+
+  body.device-phone .game-options label:nth-child(5) {
+    order: 5;
+  }
+
+  body.device-phone .game-options label:nth-child(6) {
+    order: 6;
+  }
+
+  body.device-phone .game-options label:nth-child(7) {
+    order: 9;
+  }
+
+  body.device-phone .game-options .language-option {
+    order: 9;
+  }
+
+  body.device-phone .game-options label:nth-child(8) {
+    order: 7;
+  }
+
+  body.device-phone .game-options label:nth-child(9) {
+    order: 8;
+  }
+
+  body.device-phone .game-options select,
+  body.device-phone .game-options input {
+    min-height: 34px;
+    min-width: 0;
+    padding: 0 9px 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  body.device-phone .selection-strip {
+    display: flex;
+    width: 100%;
+    height: 54px;
+    min-height: 54px;
+    max-height: 54px;
+    gap: 5px;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  body.device-phone .selection-strip .selection-card {
+    flex: 1 1 0;
+    width: 100%;
+    min-width: 0;
+    height: 54px;
+    min-height: 54px;
+    max-height: 54px;
+    grid-template-rows: 13px minmax(0, 1fr);
+    gap: 1px;
+    padding: 4px 5px 3px;
+    overflow: hidden;
+  }
+
+  body.device-phone .selection-card strong {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 13px;
+    gap: 1px;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 1.05;
+  }
+
+  body.device-phone .selection-strip .selection-card strong .member-label-name,
+  body.device-phone .selection-strip .selection-card strong .member-label-target {
+    font-size: 11px;
+  }
+
+  body.device-phone .selection-strip .member-label-name {
+    max-height: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  body.device-phone .selection-strip .member-label-target {
+    min-width: 0;
+    justify-self: start;
+    align-self: end;
+    padding-right: 0;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  body.device-phone .selection-strip .selection-card.can-swap .member-label-target {
+    padding-right: 28px;
+  }
+
+  body.device-phone .selection-swap-button {
+    min-width: 32px;
+    min-height: 20px;
+    border-radius: 5px 0 5px 0;
+    font-size: 8px;
+  }
+
+  body.device-phone .member-form {
+    grid-template-columns: minmax(0, 1fr) 56px 54px;
+    gap: 5px;
+    margin-bottom: 6px;
+    padding: 6px 6px 6px 9px;
+    border-left-width: 4px;
+  }
+
+  body.device-phone .member-form input,
+  body.device-phone .member-form button {
+    min-height: 34px;
+    font-size: 12px;
+  }
+
+  body.device-phone .edit-list {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    align-content: start;
+    overflow-y: auto;
+    gap: 5px;
+    padding-right: 8px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  body.device-phone .edit-row {
+    grid-template-columns: minmax(0, 1fr) 28px 42px 42px;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  body.device-phone .edit-info {
+    min-height: 30px;
+    gap: 9px;
+    font-size: 12px;
+  }
+
+  body.device-phone .selection-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  body.device-phone .edit-button,
+  body.device-phone .delete-button {
+    min-height: 28px;
+    font-size: 10px;
+  }
+
+  body.device-phone .records-panel {
+    grid-template-columns: minmax(160px, 0.32fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+  }
+
+  body.device-phone .records-header {
+    grid-column: 1 / -1;
+    align-items: center;
+    min-height: 42px;
+  }
+
+  body.device-phone .records-header h1 {
+    display: block;
+    min-height: 20px;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  body.device-phone .records-header-actions {
+    gap: 5px;
+  }
+
+  body.device-phone .records-header .primary-action,
+  body.device-phone .records-header .secondary-action {
+    min-height: 32px;
+    min-width: 62px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  body.device-phone .record-average {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    align-self: stretch;
+    gap: 8px;
+    padding: 9px;
+  }
+
+  body.device-phone .record-average label {
+    gap: 4px;
+    font-size: 12px;
+    line-height: 1.05;
+  }
+
+  body.device-phone .record-average select {
+    min-height: 42px;
+    padding: 0 8px;
+    font-size: 14px;
+    font-weight: 850;
+  }
+
+  body.device-phone .record-average div {
+    min-height: 48px;
+    align-content: center;
+    gap: 2px;
+    padding: 7px 8px;
+  }
+
+  body.device-phone .record-average span {
+    font-size: 11px;
+  }
+
+  body.device-phone .record-average strong {
+    display: block;
+    min-height: 28px;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  body.device-phone .record-list {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+    gap: 5px;
+    padding: 0 8px 0 0;
+    border-right-width: 4px;
+  }
+
+  body.device-phone .record-row,
+  body.device-phone .record-empty {
+    min-width: 0;
+    padding: 6px 7px;
+  }
+
+  body.device-phone .record-row {
+    gap: 4px;
+  }
+
+  body.device-phone .record-row-title {
+    gap: 6px;
+    padding-right: 48px;
+  }
+
+  body.device-phone .record-row-title strong,
+  body.device-phone .record-standings {
+    font-size: 12px;
+  }
+
+  body.device-phone .record-meta {
+    font-size: 10px;
+  }
+
+  body.device-phone .record-delete {
+    top: 6px;
+    right: 7px;
+    min-width: 40px;
+    min-height: 24px;
+    font-size: 10px;
+  }
+
+  body.device-phone .record-players {
+    gap: 4px;
+  }
+
+  body.device-phone .record-players span {
+    padding: 3px 4px;
+    font-size: 10px;
+  }
+}
+
 body.device-phone.score-mode .app-shell,
 body.device-phone:has(.score-screen:not(.is-hidden)) .app-shell {
   position: fixed;
