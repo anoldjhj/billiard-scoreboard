@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v330";
+const APP_VERSION = "v331";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -665,6 +665,13 @@ function storageFromBackup(parsed) {
     if (Object.prototype.hasOwnProperty.call(parsed || {}, key)) directStorage[key] = parsed[key];
   });
   return Object.keys(directStorage).length ? directStorage : null;
+}
+
+function setupPlayersFromSelection() {
+  normalizeSelected();
+  state.players = state.selected
+    .slice(0, state.playerCount)
+    .map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
 }
 
 function applyImportedStorage(storage) {
