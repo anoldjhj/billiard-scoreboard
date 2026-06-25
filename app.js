@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v328";
+const APP_VERSION = "v330";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -595,6 +595,17 @@ function showMessage(key) {
   if (window.alert) window.alert(t(key));
 }
 
+function showRestoreFailure(file, error) {
+  const details = [
+    t("restoreFailed"),
+    file ? `파일: ${file.name || "(이름 없음)"}` : "",
+    file ? `크기: ${file.size} bytes` : "",
+    file?.type ? `형식: ${file.type}` : "",
+    error?.message ? `원인: ${error.message}` : "",
+  ].filter(Boolean);
+  if (window.alert) window.alert(details.join("\n"));
+}
+
 function createBackupPayload() {
   const storage = {};
   BACKUP_STORAGE_KEYS.forEach((key) => {
@@ -610,24 +621,10 @@ function createBackupPayload() {
   };
 }
 
-async function exportBackupData() {
+function exportBackupData() {
   const backup = createBackupPayload();
   const fileName = `play-billiards-backup-${new Date().toISOString().slice(0, 10)}.json`;
   const json = JSON.stringify(backup, null, 2);
-  const file = new File([json], fileName, { type: "application/json" });
-
-  if (navigator.canShare?.({ files: [file] }) && navigator.share) {
-    try {
-      await navigator.share({
-        files: [file],
-        title: "PLAY 당구점수판 백업",
-      });
-      return;
-    } catch (error) {
-      if (error?.name === "AbortError") return;
-    }
-  }
-
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -708,10 +705,10 @@ function importBackupFile(file) {
         type: file.type,
         error,
       });
-      showMessage("restoreFailed");
+      showRestoreFailure(file, error);
     }
   };
-  reader.onerror = () => showMessage("restoreFailed");
+  reader.onerror = () => showRestoreFailure(file, reader.error);
   reader.readAsText(file);
 }
 
