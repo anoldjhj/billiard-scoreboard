@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v327";
+const APP_VERSION = "v328";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -60,7 +60,7 @@ const I18N = {
     restoreData: "복원",
     restoreConfirm: "현재 선수와 기록을 백업 파일 내용으로 바꿀까요?",
     restoreComplete: "선수와 기록을 복원했습니다.",
-    restoreFailed: "백업 파일을 읽을 수 없습니다.",
+    restoreFailed: "백업 파일을 읽을 수 없습니다. 이 앱의 백업 버튼으로 만든 JSON 파일인지 확인해 주세요.",
     recordAverage: "평균 Aver.",
     playerSelect: "선수 선택",
     recentRecords: "최근 30게임 기록",
@@ -145,7 +145,7 @@ const I18N = {
     restoreData: "Restore",
     restoreConfirm: "Replace current players and records with this backup file?",
     restoreComplete: "Players and records have been restored.",
-    restoreFailed: "Could not read this backup file.",
+    restoreFailed: "Could not read this backup file. Please choose a JSON file made with this app's Backup button.",
     recordAverage: "Average",
     playerSelect: "Player",
     recentRecords: "Recent 30 Match Records",
@@ -595,28 +595,79 @@ function showMessage(key) {
   if (window.alert) window.alert(t(key));
 }
 
-function exportBackupData() {
+function createBackupPayload() {
   const storage = {};
   BACKUP_STORAGE_KEYS.forEach((key) => {
     storage[key] = localStorage.getItem(key);
   });
 
-  const backup = {
+  return {
     type: "play-billiards-scoreboard-backup",
     version: 1,
     appVersion: APP_VERSION,
     exportedAt: new Date().toISOString(),
     storage,
   };
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+}
+
+async function exportBackupData() {
+  const backup = createBackupPayload();
+  const fileName = `play-billiards-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  const json = JSON.stringify(backup, null, 2);
+  const file = new File([json], fileName, { type: "application/json" });
+
+  if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "PLAY 당구점수판 백업",
+      });
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+    }
+  }
+
+  const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `play-billiards-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  link.download = fileName;
   document.body.append(link);
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function parseBackupText(text) {
+  let source = String(text || "").replace(/^\uFEFF/, "").trim();
+  if (!source) throw new Error("Empty backup");
+
+  if (source.startsWith("data:")) {
+    const commaIndex = source.indexOf(",");
+    if (commaIndex === -1) throw new Error("Invalid data URL");
+    const meta = source.slice(0, commaIndex);
+    const payload = source.slice(commaIndex + 1);
+    source = meta.includes(";base64") ? atob(payload) : decodeURIComponent(payload);
+  }
+
+  try {
+    return JSON.parse(source);
+  } catch {
+    const firstBrace = source.indexOf("{");
+    const lastBrace = source.lastIndexOf("}");
+    if (firstBrace === -1 || lastBrace <= firstBrace) throw new Error("Invalid JSON");
+    return JSON.parse(source.slice(firstBrace, lastBrace + 1));
+  }
+}
+
+function storageFromBackup(parsed) {
+  if (parsed?.storage && typeof parsed.storage === "object") return parsed.storage;
+  const directStorage = {};
+  BACKUP_STORAGE_KEYS.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(parsed || {}, key)) directStorage[key] = parsed[key];
+  });
+  return Object.keys(directStorage).length ? directStorage : null;
 }
 
 function applyImportedStorage(storage) {
@@ -644,13 +695,19 @@ function importBackupFile(file) {
   const reader = new FileReader();
   reader.onload = () => {
     try {
-      const parsed = JSON.parse(String(reader.result || "{}"));
-      const storage = parsed.storage && typeof parsed.storage === "object" ? parsed.storage : null;
+      const parsed = parseBackupText(reader.result);
+      const storage = storageFromBackup(parsed);
       if (!storage) throw new Error("Invalid backup");
       if (window.confirm && !window.confirm(t("restoreConfirm"))) return;
       applyImportedStorage(storage);
       showMessage("restoreComplete");
-    } catch {
+    } catch (error) {
+      console.warn("Backup restore failed", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        error,
+      });
       showMessage("restoreFailed");
     }
   };
