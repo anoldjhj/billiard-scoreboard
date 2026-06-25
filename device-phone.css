@@ -676,6 +676,170 @@ body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .score-
 }
 
 @media (orientation: portrait) {
+  body.device-phone.setup-mode .app-shell,
+  body.device-phone.records-mode .app-shell {
+    position: fixed;
+    inset: var(--phone-safe-top, env(safe-area-inset-top, 0px)) var(--phone-safe-right, env(safe-area-inset-right, 0px))
+      var(--phone-safe-bottom, env(safe-area-inset-bottom, 0px)) var(--phone-safe-left, env(safe-area-inset-left, 0px));
+    width: auto;
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body.device-phone .records-screen {
+    inset: var(--phone-safe-top, env(safe-area-inset-top, 0px)) var(--phone-safe-right, env(safe-area-inset-right, 0px))
+      var(--phone-safe-bottom, env(safe-area-inset-bottom, 0px)) var(--phone-safe-left, env(safe-area-inset-left, 0px));
+    width: auto;
+    height: auto;
+    min-height: 0;
+    display: grid;
+    place-items: start center;
+    overflow: hidden;
+  }
+
+  body.device-phone .records-panel {
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    max-height: calc(100% - 12px);
+    margin: 6px auto 0;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 8px;
+    padding: 9px;
+    overflow: hidden;
+  }
+
+  body.device-phone .records-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 7px;
+    min-height: 0;
+  }
+
+  body.device-phone .records-header h1 {
+    min-width: 0;
+    font-size: 18px;
+    line-height: 1.15;
+  }
+
+  body.device-phone .records-header-actions {
+    display: grid;
+    grid-template-columns: minmax(42px, 0.52fr) minmax(42px, 0.52fr) minmax(0, 1fr) minmax(0, 1.15fr);
+    align-items: stretch;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  body.device-phone .records-header .primary-action,
+  body.device-phone .records-header .secondary-action {
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 7px;
+    font-size: 13px;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  body.device-phone .records-header .data-action {
+    min-width: 0;
+    min-height: 34px;
+    border-color: rgba(148, 163, 184, 0.44);
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.14);
+  }
+
+  body.device-phone .record-average {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr) 84px;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  body.device-phone .record-average label {
+    gap: 4px;
+    font-size: 11px;
+    line-height: 1.05;
+  }
+
+  body.device-phone .record-average select {
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 7px;
+    font-size: 14px;
+  }
+
+  body.device-phone .record-average div {
+    align-self: stretch;
+    align-content: center;
+    gap: 2px;
+    padding: 5px 7px;
+  }
+
+  body.device-phone .record-average span {
+    font-size: 10px;
+  }
+
+  body.device-phone .record-average strong {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  body.device-phone .record-list {
+    min-height: 0;
+    max-height: none;
+    align-content: start;
+    overflow: auto;
+    gap: 5px;
+    padding-right: 9px;
+    border-right-width: 4px;
+  }
+
+  body.device-phone .record-row,
+  body.device-phone .record-empty {
+    min-width: 0;
+    padding: 7px 8px;
+  }
+
+  body.device-phone .record-row {
+    gap: 4px;
+  }
+
+  body.device-phone .record-row-title {
+    gap: 6px;
+    padding-right: 52px;
+  }
+
+  body.device-phone .record-row-title strong,
+  body.device-phone .record-standings {
+    font-size: 13px;
+  }
+
+  body.device-phone .record-meta {
+    font-size: 10px;
+  }
+
+  body.device-phone .record-delete {
+    top: 7px;
+    right: 8px;
+    min-width: 44px;
+    min-height: 26px;
+    font-size: 11px;
+  }
+
+  body.device-phone .record-players {
+    gap: 4px;
+  }
+
+  body.device-phone .record-players span {
+    padding: 3px 4px;
+    border-radius: 5px;
+    font-size: 10px;
+  }
+
   body.device-phone .score-screen:not(.is-hidden) {
     transform: translate(-50%, -50%) rotate(90deg);
   }

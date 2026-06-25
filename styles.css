@@ -479,6 +479,10 @@ h2 {
 
 .records-header .data-action {
   min-width: 70px;
+  border-color: rgba(148, 163, 184, 0.38);
+  background: #f8fafc;
+  color: #475569;
+  box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.14);
 }
 
 .record-average {

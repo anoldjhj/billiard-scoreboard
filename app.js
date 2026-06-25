@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v326";
+const APP_VERSION = "v327";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -656,6 +656,11 @@ function importBackupFile(file) {
   };
   reader.onerror = () => showMessage("restoreFailed");
   reader.readAsText(file);
+}
+
+function requestPersistentStorage() {
+  if (!navigator.storage?.persist) return;
+  navigator.storage.persist().catch(() => {});
 }
 
 function selectionText(slot) {
@@ -2497,6 +2502,7 @@ if ("serviceWorker" in navigator) {
 }
 
 syncVisualViewport();
+requestPersistentStorage();
 loadMembers();
 loadSettings();
 state.players = state.selected.slice(0, state.playerCount).map((index) => createPlayer(state.members[index] || DEFAULT_MEMBERS[0]));
