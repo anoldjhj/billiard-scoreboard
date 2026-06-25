@@ -247,12 +247,12 @@ body.device-phone .phone-only {
 
   body.device-phone .game-options label:nth-child(7) {
     grid-column: span 4;
-    order: 8;
+    order: 9;
   }
 
   body.device-phone .game-options .language-option {
     grid-column: span 4;
-    order: 8;
+    order: 9;
   }
 
   body.device-phone .game-options label:nth-child(8) {
