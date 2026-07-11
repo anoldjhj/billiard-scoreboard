@@ -841,7 +841,6 @@ body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .score-
   }
 
   body.device-phone .score-screen:not(.is-hidden) {
-    padding: 4px 6px;
     transform: translate(-50%, -50%) rotate(90deg);
   }
 
@@ -853,14 +852,9 @@ body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .score-
 
   body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .player-card,
   body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .player-card {
-    grid-template-rows: 28px minmax(108px, 1fr) 42px;
+    grid-template-rows: 28px minmax(112px, 1fr) 42px;
     gap: 4px;
     padding: 7px;
-  }
-
-  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .stat-row,
-  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .stat-row {
-    gap: 4px;
   }
 
   body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .stat,
@@ -877,12 +871,6 @@ body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .score-
   body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .stat strong {
     min-height: 28px;
     font-size: 18px;
-  }
-
-  body.device-phone .score-screen:not(.is-hidden) .board[data-players="3"] .player-card.is-active .inning-score strong,
-  body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .player-card.is-active .inning-score strong {
-    min-height: 54px;
-    font-size: 28px;
   }
 
   body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .score-box span.status-three-c {
