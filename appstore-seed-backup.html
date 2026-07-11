@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>App Store Capture Seed</title>
+  </head>
+  <body>
+    <p>Preparing App Store capture data...</p>
+    <script>
+      fetch("./appstore-shots/seed-backup.json")
+        .then((response) => response.json())
+        .then((backup) => {
+          const storage = backup.storage || {};
+          Object.entries(storage).forEach(([key, value]) => {
+            if (value === null || value === undefined) localStorage.removeItem(key);
+            else localStorage.setItem(key, String(value));
+          });
+          window.location.replace("./index.html?appstore-capture=1");
+        })
+        .catch((error) => {
+          document.body.textContent = `Seed failed: ${error.message || error}`;
+        });
+    </script>
+  </body>
+</html>

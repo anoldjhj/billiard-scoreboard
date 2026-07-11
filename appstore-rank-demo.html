@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Rank Demo</title>
+    <link rel="stylesheet" href="./styles.css?v=20260625-version-v332" />
+    <link rel="stylesheet" href="./device-phone.css?v=20260625-version-v332" />
+    <style>
+      body {
+        margin: 0;
+        background: #050608;
+        overflow: hidden;
+      }
+
+      .rank-demo {
+        min-height: 100svh;
+        display: grid;
+        grid-template-rows: 58px 1fr;
+        gap: 6px;
+        padding: 6px;
+      }
+
+      .rank-demo .score-header {
+        min-height: 54px;
+        grid-template-columns: 86px 108px 110px minmax(116px, 1fr) auto;
+        gap: 7px;
+        padding: 4px 7px;
+      }
+
+      .rank-demo .board {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        padding: 7px;
+      }
+
+      .rank-demo .player-card {
+        grid-template-rows: 30px minmax(124px, 1fr) 48px;
+        gap: 5px;
+        padding: 6px;
+      }
+
+      .rank-demo .score-box span {
+        font-size: clamp(70px, 12vw, 112px);
+      }
+
+      .rank-demo .score-box span.result-text {
+        font-size: clamp(42px, 7vw, 72px);
+      }
+    </style>
+  </head>
+  <body class="device-phone score-mode">
+    <main class="rank-demo score-screen">
+      <header class="score-header">
+        <button class="timer" type="button"><strong>0</strong><span>sec</span></button>
+        <div class="match-time"><strong>18:42</strong></div>
+        <div class="inning-title"><div class="inning-main"><strong>13</strong><span>INN</span></div></div>
+        <div class="quick-score-actions">
+          <button type="button">+1</button>
+          <button type="button">+3</button>
+          <button type="button">+5</button>
+        </div>
+        <div class="header-actions">
+          <button class="start-button" type="button">재경기</button>
+          <button class="settings-button" type="button">설정</button>
+        </div>
+      </header>
+      <div class="board" data-players="4">
+        <article class="player-card is-p1">
+          <div class="player-topline"><span class="target">15</span><button class="name-button">Tom</button></div>
+          <div class="score-box"><span class="result-text">Win</span></div>
+          <div class="stat-row"><div class="stat"><span>High</span><strong>15</strong></div><div class="stat"><span>Avg</span><strong>5.0</strong></div></div>
+        </article>
+        <article class="player-card is-p2">
+          <div class="player-topline"><span class="target">50</span><button class="name-button">나들이</button></div>
+          <div class="score-box"><span class="result-text">2nd</span></div>
+          <div class="stat-row"><div class="stat"><span>High</span><strong>50</strong></div><div class="stat"><span>Avg</span><strong>25.0</strong></div></div>
+        </article>
+        <article class="player-card is-p3">
+          <div class="player-topline"><span class="target">30</span><button class="name-button">선수1</button></div>
+          <div class="score-box"><span class="result-text">3rd</span></div>
+          <div class="stat-row"><div class="stat"><span>High</span><strong>30</strong></div><div class="stat"><span>Avg</span><strong>15.0</strong></div></div>
+        </article>
+        <article class="player-card is-p4">
+          <div class="player-topline"><span class="target">50</span><button class="name-button">나라</button></div>
+          <div class="score-box"><span>23</span></div>
+          <div class="stat-row"><div class="stat"><span>High</span><strong>9</strong></div><div class="stat"><span>Avg</span><strong>1.8</strong></div></div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

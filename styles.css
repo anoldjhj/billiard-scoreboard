@@ -1930,8 +1930,8 @@ h2 {
     position: fixed;
     left: 50%;
     top: calc(50% + 1mm);
-    width: calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) - 56px - 4mm);
-    height: calc(var(--score-viewport-width, var(--viewport-width, 100dvw)) - 8px);
+    width: calc(var(--score-long-side, var(--score-viewport-height, var(--viewport-height, 100dvh))) - 56px - 4mm);
+    height: calc(var(--score-short-side, var(--score-viewport-width, var(--viewport-width, 100dvw))) - 8px);
     min-height: 0;
     display: grid;
     grid-template-rows: auto 1fr;
@@ -2069,19 +2069,19 @@ h2 {
   }
 
   .score-screen:not(.is-hidden) .score-box span {
-    font-size: clamp(92px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.18), 172px);
+    font-size: clamp(92px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.18), 172px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.result-text {
-    font-size: clamp(50px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.09), 96px);
+    font-size: clamp(50px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.09), 96px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-three-c {
-    font-size: clamp(78px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.15), 142px);
+    font-size: clamp(78px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.15), 142px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-bank {
-    font-size: clamp(38px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.07), 68px);
+    font-size: clamp(38px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.07), 68px);
   }
 
   .score-screen:not(.is-hidden) .finish-count {
@@ -2154,19 +2154,19 @@ h2 {
 
 @media (orientation: portrait) and (min-width: 481px) {
   .score-screen:not(.is-hidden) .score-box span {
-    font-size: clamp(92px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.18), 172px);
+    font-size: clamp(92px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.18), 172px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.result-text {
-    font-size: clamp(50px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.09), 96px);
+    font-size: clamp(50px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.09), 96px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-three-c {
-    font-size: clamp(78px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.15), 142px);
+    font-size: clamp(78px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.15), 142px);
   }
 
   .score-screen:not(.is-hidden) .score-box span.status-bank {
-    font-size: clamp(38px, calc(var(--score-viewport-height, var(--viewport-height, 100dvh)) * 0.07), 68px);
+    font-size: clamp(38px, calc(var(--score-short-side, var(--score-viewport-height, 100dvh)) * 0.07), 68px);
   }
 
   .manager-panel {

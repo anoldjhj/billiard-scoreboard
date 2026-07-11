@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PLAY 당구점수판 App Store Screenshot Maker</title>
+    <style>
+      :root {
+        --bg: #eef2f6;
+        --ink: #111827;
+        --muted: #64748b;
+        --line: #d8dee8;
+        --primary: #26364a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(248, 250, 252, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .toolbar strong {
+        margin-right: 8px;
+        font-size: 15px;
+      }
+
+      button {
+        min-height: 34px;
+        border: 1px solid #b8c3d3;
+        border-radius: 8px;
+        padding: 0 12px;
+        background: #fff;
+        color: var(--primary);
+        font-weight: 850;
+        cursor: pointer;
+      }
+
+      button.primary {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .note {
+        width: 100%;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .gallery {
+        display: grid;
+        gap: 24px;
+        padding: 22px;
+      }
+
+      .shot {
+        display: grid;
+        gap: 8px;
+        justify-items: start;
+        scroll-margin-top: 132px;
+      }
+
+      .shot header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 850;
+      }
+
+      canvas {
+        width: min(100%, 430px);
+        height: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+      }
+
+      .shot[data-family="ipad"] canvas {
+        width: min(100%, 680px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <strong>App Store Screenshot Maker</strong>
+      <button class="primary" id="downloadAll" type="button">전체 PNG 다운로드</button>
+      <button id="downloadPhone" type="button">iPhone만 다운로드</button>
+      <button id="downloadPad" type="button">iPad만 다운로드</button>
+      <div class="note">
+        실제 앱 화면 캡처를 사용합니다. iPhone: 1290 x 2796 / iPad: 2732 x 2048 PNG.
+      </div>
+    </div>
+
+    <main class="gallery" id="gallery"></main>
+
+    <script>
+      const slides = [
+        {
+          family: "iphone",
+          name: "iphone-01-scoreboard",
+          title: "3구/4구 당구 전용 점수판",
+          subtitle: "3인, 4인 경기 점수판도 함께 지원",
+          image: "appstore-shots/backup-phone-score-2p.png",
+          extraImages: ["appstore-shots/backup-phone-score-3p.png", "appstore-shots/backup-phone-score-4p.png"],
+          layout: "score-trio",
+          accent: "#f97316",
+          tags: ["2인 경기", "3인 경기", "4인 경기"],
+        },
+        {
+          family: "iphone",
+          name: "iphone-02-match-tools",
+          title: "순위 결정 가능",
+          subtitle: "3인, 4인 경기의 1위·2위·3위 기록까지",
+          image: "appstore-shots/actual-phone-rank-win-2nd-3rd.png",
+          layout: "rank-board",
+          accent: "#15803d",
+          tags: ["Win 표시", "2nd", "3rd"],
+        },
+        {
+          family: "iphone",
+          name: "iphone-03-settings",
+          title: "설정과 선수관리",
+          subtitle: "친구와 동호회 이름을 등록하고 경기 옵션을 관리",
+          lines: ["다양한 마무리 지원", "타이머 설정"],
+          image: "appstore-shots/backup-phone-setup.png",
+          extraImages: ["appstore-shots/backup-phone-setup-landscape.png"],
+          layout: "settings-duo",
+          accent: "#b45309",
+          tags: ["친구 등록", "동호회 명단", "가로보기"],
+        },
+        {
+          family: "iphone",
+          name: "iphone-04-records",
+          title: "기록과 평균 확인",
+          subtitle: "선수별 애버리지와 경기 기록을 저장",
+          image: "appstore-shots/backup-phone-records.png",
+          layout: "phone-portrait",
+          accent: "#7c2d12",
+          tags: ["게임기록", "Aver.", "백업/복원"],
+        },
+        {
+          family: "iphone",
+          name: "iphone-05-voice",
+          title: "카운트 음성 안내",
+          subtitle: "점수와 남은 개수를 놓치지 않게",
+          image: "appstore-shots/backup-phone-setup.png",
+          layout: "phone-portrait",
+          accent: "#be123c",
+          tags: ["음성 설정", "경고음", "카운트 안내"],
+        },
+        {
+          family: "iphone",
+          name: "iphone-06-backup",
+          title: "선수와 기록 백업",
+          subtitle: "동호회 명단과 게임 기록을 안전하게 복원",
+          image: "appstore-shots/backup-phone-records.png",
+          layout: "phone-portrait",
+          accent: "#0f766e",
+          tags: ["선수명단", "기록 백업", "복원"],
+          highlightBackup: true,
+        },
+        {
+          family: "ipad",
+          name: "ipad-01-scoreboard",
+          title: "3구/4구 당구 전용 점수판",
+          subtitle: "iPad 화면에 맞춘 넓은 2인, 3인, 4인 경기",
+          image: "appstore-shots/real-ipad-score-2p.png",
+          extraImages: ["appstore-shots/real-ipad-score-3p.png", "appstore-shots/real-ipad-score-4p.png"],
+          layout: "ipad-score-trio",
+          accent: "#c2410c",
+          tags: ["2인 경기", "3인 경기", "4인 경기"],
+        },
+        {
+          family: "ipad",
+          name: "ipad-02-settings",
+          title: "가로보기 설정 화면",
+          subtitle: "선수 등록과 경기 옵션을 넓은 화면에서 빠르게",
+          image: "appstore-shots/backup-ipad-setup.png",
+          layout: "ipad-landscape",
+          accent: "#b45309",
+          tags: ["선수관리", "자리바꿈", "마무리 설정"],
+        },
+        {
+          family: "ipad",
+          name: "ipad-03-records",
+          title: "기록·평균·백업까지",
+          subtitle: "게임 기록과 선수별 애버리지를 한 곳에서",
+          image: "appstore-shots/backup-ipad-records.png",
+          layout: "ipad-landscape",
+          accent: "#6d28d9",
+          tags: ["경기기록", "선수별 평균", "백업/복원"],
+        },
+      ];
+
+      const sizes = {
+        iphone: { width: 1290, height: 2796 },
+        ipad: { width: 2732, height: 2048 },
+      };
+
+      const gallery = document.querySelector("#gallery");
+
+      function scale(canvas) {
+        return canvas.width / 1290;
+      }
+
+      function font(canvas, weight, size) {
+        return `${weight} ${Math.round(size * scale(canvas))}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+      }
+
+      function roundRect(ctx, x, y, w, h, r) {
+        const rr = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + rr, y);
+        ctx.arcTo(x + w, y, x + w, y + h, rr);
+        ctx.arcTo(x + w, y + h, x, y + h, rr);
+        ctx.arcTo(x, y + h, x, y, rr);
+        ctx.arcTo(x, y, x + w, y, rr);
+        ctx.closePath();
+      }
+
+      function fillRound(ctx, x, y, w, h, r, fill, stroke, lineWidth = 1) {
+        roundRect(ctx, x, y, w, h, r);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        if (stroke) {
+          ctx.lineWidth = lineWidth;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+        }
+      }
+
+      function loadImage(src) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = src;
+        });
+      }
+
+      function drawCoverImage(ctx, img, x, y, w, h) {
+        const ratio = Math.max(w / img.width, h / img.height);
+        const sw = w / ratio;
+        const sh = h / ratio;
+        const sx = (img.width - sw) / 2;
+        const sy = (img.height - sh) / 2;
+        ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+      }
+
+      function drawContainImage(ctx, img, x, y, w, h) {
+        const ratio = Math.min(w / img.width, h / img.height);
+        const dw = img.width * ratio;
+        const dh = img.height * ratio;
+        ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+      }
+
+      function drawWrapped(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+        const chars = [...text];
+        const lines = [];
+        let line = "";
+        chars.forEach((char) => {
+          const test = line + char;
+          if (ctx.measureText(test).width > maxWidth && line) {
+            lines.push(line);
+            line = char;
+          } else {
+            line = test;
+          }
+        });
+        if (line) lines.push(line);
+        lines.slice(0, maxLines).forEach((value, index) => {
+          ctx.fillText(value, x, y + lineHeight * index);
+        });
+      }
+
+      function drawBackground(ctx, canvas, slide) {
+        ctx.fillStyle = "#e7edf2";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        bg.addColorStop(0, "#f4f7f8");
+        bg.addColorStop(0.42, "#dfe8ec");
+        bg.addColorStop(1, "#bfcbd3");
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.globalAlpha = 0.94;
+        const panel = ctx.createLinearGradient(0, canvas.height * 0.05, canvas.width, canvas.height * 0.95);
+        panel.addColorStop(0, "#fbfbf8");
+        panel.addColorStop(0.5, "#eef3f1");
+        panel.addColorStop(1, "#e2e8ea");
+        ctx.shadowColor = "rgba(15, 23, 42, 0.16)";
+        ctx.shadowBlur = canvas.width * 0.035;
+        ctx.shadowOffsetY = canvas.width * 0.018;
+        fillRound(ctx, canvas.width * 0.045, canvas.height * 0.055, canvas.width * 0.91, canvas.height * 0.88, canvas.width * 0.03, panel, "rgba(100,116,139,0.28)", canvas.width * 0.0013);
+        ctx.restore();
+
+        ctx.save();
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = slide.accent;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width * 0.045, canvas.height * 0.23);
+        ctx.lineTo(canvas.width * 0.955, canvas.height * 0.14);
+        ctx.lineTo(canvas.width * 0.955, canvas.height * 0.25);
+        ctx.lineTo(canvas.width * 0.045, canvas.height * 0.34);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        const band = canvas.width / 1290;
+        ctx.fillStyle = slide.accent;
+        ctx.fillRect(canvas.width * 0.045, canvas.height - 38 * band, canvas.width * 0.91, 12 * band);
+      }
+
+      function drawBrand(ctx, canvas) {
+        const s = scale(canvas);
+        const x = 80 * s;
+        const y = 72 * s;
+        fillRound(ctx, x, y, 254 * s, 82 * s, 20 * s, "#111827", "rgba(255,255,255,0.28)", 2 * s);
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(x + 48 * s, y + 41 * s, 18 * s, 0, Math.PI * 2);
+        ctx.arc(x + 88 * s, y + 41 * s, 18 * s, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#facc15";
+        ctx.beginPath();
+        ctx.arc(x + 88 * s, y + 41 * s, 18 * s, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.font = `950 ${40 * s}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+        ctx.fillText("PLAY", x + 120 * s, y + 52 * s);
+        ctx.fillStyle = "#facc15";
+        ctx.font = `900 ${14 * s}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+        ctx.fillText("3/4 BALL", x + 124 * s, y + 72 * s);
+      }
+
+      function drawTextBlock(ctx, canvas, slide) {
+        const isPad = slide.family === "ipad";
+        const s = scale(canvas);
+        const x = isPad ? 128 * s : 80 * s;
+        const y = isPad ? 245 * s : 310 * s;
+        const maxWidth = isPad ? 900 * s : 1040 * s;
+        ctx.fillStyle = "#111827";
+        ctx.font = font(canvas, "950", isPad ? 54 : 82);
+        drawWrapped(ctx, slide.title, x, y, maxWidth, isPad ? 64 * s : 92 * s, 2);
+        ctx.font = font(canvas, "850", isPad ? 28 : 38);
+        ctx.fillStyle = "#334155";
+        drawWrapped(ctx, slide.subtitle, x, y + (isPad ? 92 * s : 180 * s), maxWidth, isPad ? 38 * s : 52 * s, 2);
+        const detailY = y + (isPad ? 154 * s : 270 * s);
+        if (slide.lines?.length) drawLines(ctx, canvas, slide, x, detailY);
+        drawTags(ctx, canvas, slide, x, y + (slide.layout === "ipad-score-trio" ? 170 * s : (isPad ? 210 * s : 360 * s)));
+      }
+
+      function drawLines(ctx, canvas, slide, x, y) {
+        const s = scale(canvas);
+        ctx.fillStyle = "#1f2937";
+        ctx.font = font(canvas, "900", slide.family === "ipad" ? 22 : 30);
+        slide.lines.forEach((line, index) => {
+          const yy = y + index * (slide.family === "ipad" ? 32 * s : 42 * s);
+          ctx.fillText(`· ${line}`, x, yy);
+        });
+      }
+
+      function drawTags(ctx, canvas, slide, x, y) {
+        const s = scale(canvas);
+        let cursor = x;
+        slide.tags.forEach((tag, index) => {
+          ctx.font = font(canvas, "950", slide.family === "ipad" ? 20 : 25);
+          const w = ctx.measureText(tag).width + 38 * s;
+          fillRound(ctx, cursor, y, w, 50 * s, 13 * s, index === 0 ? slide.accent : "#ffffff", "rgba(255,255,255,0.52)", 2 * s);
+          ctx.fillStyle = index === 0 ? "#ffffff" : "#172033";
+          ctx.fillText(tag, cursor + 19 * s, y + 33 * s);
+          cursor += w + 12 * s;
+        });
+      }
+
+      function drawDevice(ctx, canvas, slide, img, extraImages = []) {
+        const s = scale(canvas);
+        if (slide.layout === "ipad-score-trio") {
+          const mainW = canvas.width * 0.398;
+          const mainH = mainW * 0.75;
+          const mainX = canvas.width * 0.13;
+          const mainY = canvas.height * 0.51;
+          drawBareImage(ctx, img, mainX, mainY, mainW, mainH, 26);
+          extraImages.forEach((extra, index) => {
+            const w = canvas.width * 0.225;
+            const h = w * 0.75;
+            const x = canvas.width * 0.665;
+            const y = canvas.height * (index === 0 ? 0.4 : 0.665);
+            drawBareImage(ctx, extra, x, y, w, h, 18);
+            fillRound(ctx, x + 18, y - 46, 128, 38, 11, index === 0 ? "#15803d" : "#6d28d9");
+            ctx.fillStyle = "#fff";
+            ctx.font = `950 19px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+            ctx.fillText(index === 0 ? "3인 경기" : "4인 경기", x + 38, y - 21);
+          });
+          return;
+        }
+        if (slide.layout === "score-trio") {
+          const mainX = 84 * s;
+          const mainY = 830 * s;
+          const mainW = 1122 * s;
+          const mainH = 560 * s;
+          drawFrame(ctx, img, mainX, mainY, mainW, mainH, 46 * s, 26 * s);
+          extraImages.forEach((extra, index) => {
+            const x = 106 * s + index * 540 * s;
+            const y = 1495 * s;
+            drawFrame(ctx, extra, x, y, 496 * s, 238 * s, 26 * s, 14 * s);
+            fillRound(ctx, x + 22 * s, y - 52 * s, 142 * s, 44 * s, 12 * s, index === 0 ? "#16a34a" : "#7c3aed");
+            ctx.fillStyle = "#fff";
+            ctx.font = font(canvas, "950", 22);
+            ctx.fillText(index === 0 ? "3인 경기" : "4인 경기", x + 42 * s, y - 23 * s);
+          });
+          drawFeatureCard(ctx, canvas, slide, 118 * s, 1885 * s, 1054 * s, 360 * s);
+          return;
+        }
+        if (slide.layout === "settings-duo") {
+          const mainX = 214 * s;
+          const mainY = 760 * s;
+          const mainW = 862 * s;
+          const mainH = 1485 * s;
+          drawFrame(ctx, img, mainX, mainY, mainW, mainH, 54 * s, 26 * s);
+          if (extraImages[0]) {
+            const x = 90 * s;
+            const y = 2225 * s;
+            drawFrame(ctx, extraImages[0], x, y, 1110 * s, 512 * s, 34 * s, 18 * s);
+            fillRound(ctx, x + 32 * s, y - 58 * s, 176 * s, 46 * s, 12 * s, slide.accent);
+            ctx.fillStyle = "#fff";
+            ctx.font = font(canvas, "950", 22);
+            ctx.fillText("가로보기", x + 62 * s, y - 28 * s);
+          }
+          return;
+        }
+        if (slide.layout === "rank-board") {
+          const x = 92 * s;
+          const y = 850 * s;
+          const w = 1105 * s;
+          const h = 560 * s;
+          drawFrame(ctx, img, x, y, w, h, 44 * s, 26 * s);
+          drawRankBadges(ctx, canvas, slide, x, y, w, h);
+          drawFeatureCard(ctx, canvas, slide, 128 * s, 1535 * s, 1030 * s, 520 * s);
+          return;
+        }
+        if (slide.layout === "phone-landscape") {
+          const x = 92 * s;
+          const y = 870 * s;
+          const w = 1105 * s;
+          const h = 560 * s;
+          drawFrame(ctx, img, x, y, w, h, 44 * s, 26 * s);
+          drawFeatureCard(ctx, canvas, slide, 128 * s, 1540 * s, 1030 * s, 560 * s);
+          return;
+        }
+        if (slide.layout === "phone-portrait") {
+          const x = 238 * s;
+          const y = 760 * s;
+          const w = 814 * s;
+          const h = 1500 * s;
+          drawFrame(ctx, img, x, y, w, h, 54 * s, 26 * s);
+          if (slide.highlightBackup) drawBackupCallout(ctx, canvas, slide, x, y, w, h);
+          drawFeatureCard(ctx, canvas, slide, 118 * s, 2310 * s, 1054 * s, 260 * s);
+          return;
+        }
+        const x = canvas.width * 0.42;
+        const y = canvas.height * 0.4;
+        const w = canvas.width * 0.48;
+        const h = canvas.height * 0.5;
+        drawBareImage(ctx, img, x, y, w, h, 26);
+      }
+
+      function drawBareImage(ctx, img, x, y, w, h, r, fit = "contain") {
+        ctx.save();
+        ctx.shadowColor = "rgba(15,23,42,0.26)";
+        ctx.shadowBlur = 26;
+        ctx.shadowOffsetY = 14;
+        fillRound(ctx, x, y, w, h, r, "#ffffff");
+        ctx.restore();
+
+        ctx.save();
+        roundRect(ctx, x, y, w, h, r);
+        ctx.clip();
+        if (fit === "cover") drawCoverImage(ctx, img, x, y, w, h);
+        else drawContainImage(ctx, img, x, y, w, h);
+        ctx.restore();
+      }
+
+      function drawBackupCallout(ctx, canvas, slide, x, y, w, h) {
+        const s = scale(canvas);
+        const bx = x + 60 * s;
+        const by = y + 182 * s;
+        const bw = 360 * s;
+        const bh = 84 * s;
+        ctx.save();
+        ctx.shadowColor = "rgba(15, 23, 42, 0.22)";
+        ctx.shadowBlur = 18 * s;
+        ctx.shadowOffsetY = 8 * s;
+        fillRound(ctx, bx, by, bw, bh, 18 * s, "#0f766e", "#ffffff", 4 * s);
+        ctx.restore();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = font(canvas, "950", 30);
+        ctx.fillText("백업", bx + 48 * s, by + 53 * s);
+        fillRound(ctx, bx + 190 * s, by + 14 * s, 126 * s, 56 * s, 14 * s, "#ffffff");
+        ctx.fillStyle = "#0f766e";
+        ctx.font = font(canvas, "950", 27);
+        ctx.fillText("복원", bx + 226 * s, by + 52 * s);
+      }
+
+      function drawFrame(ctx, img, x, y, w, h, r, pad, fit = "contain") {
+        ctx.save();
+        ctx.shadowColor = "rgba(15,23,42,0.36)";
+        ctx.shadowBlur = pad * 1.4;
+        ctx.shadowOffsetY = pad * 0.7;
+        fillRound(ctx, x, y, w, h, r, "#111827");
+        ctx.restore();
+        fillRound(ctx, x + pad, y + pad, w - pad * 2, h - pad * 2, Math.max(6, r - pad), "#f8fafc");
+        ctx.save();
+        roundRect(ctx, x + pad, y + pad, w - pad * 2, h - pad * 2, Math.max(6, r - pad));
+        ctx.clip();
+        if (fit === "cover") drawCoverImage(ctx, img, x + pad, y + pad, w - pad * 2, h - pad * 2);
+        else drawContainImage(ctx, img, x + pad, y + pad, w - pad * 2, h - pad * 2);
+        ctx.restore();
+      }
+
+      function drawFeatureCard(ctx, canvas, slide, x, y, w, h) {
+        const s = scale(canvas);
+        ctx.save();
+        ctx.shadowColor = "rgba(15,23,42,0.16)";
+        ctx.shadowBlur = 28 * s;
+        ctx.shadowOffsetY = 14 * s;
+        fillRound(ctx, x, y, w, h, 28 * s, "#ffffff", "rgba(216,222,232,0.9)", 2 * s);
+        ctx.restore();
+        ctx.fillStyle = slide.accent;
+        fillRound(ctx, x + 36 * s, y + 38 * s, 72 * s, 72 * s, 20 * s, slide.accent);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = font(canvas, "950", 34);
+        ctx.fillText("✓", x + 55 * s, y + 87 * s);
+        ctx.fillStyle = "#111827";
+        ctx.font = font(canvas, "950", slide.family === "ipad" ? 30 : 40);
+        ctx.fillText(slide.tags[0], x + 132 * s, y + 82 * s);
+        ctx.fillStyle = "#64748b";
+        ctx.font = font(canvas, "850", slide.family === "ipad" ? 18 : 28);
+        drawWrapped(ctx, slide.tags.slice(1).join(" · "), x + 132 * s, y + 132 * s, w - 180 * s, slide.family === "ipad" ? 28 * s : 38 * s, 2);
+      }
+
+      function drawRankBadges(ctx, canvas, slide, x, y, w, h) {
+        const s = scale(canvas);
+        const badges = [
+          ["1등", "#facc15", x + 72 * s, y + 82 * s],
+          ["2등", "#cbd5e1", x + 590 * s, y + 82 * s],
+          ["3등", "#f97316", x + 840 * s, y + 82 * s],
+        ];
+        badges.forEach(([label, color, bx, by]) => {
+          ctx.save();
+          ctx.shadowColor = "rgba(15,23,42,0.28)";
+          ctx.shadowBlur = 18 * s;
+          ctx.shadowOffsetY = 8 * s;
+          fillRound(ctx, bx, by, 134 * s, 70 * s, 18 * s, color, "#fff", 4 * s);
+          ctx.restore();
+          ctx.fillStyle = label === "2등" ? "#111827" : "#fff";
+          ctx.font = font(canvas, "950", 34);
+          ctx.fillText(label, bx + 35 * s, by + 47 * s);
+        });
+      }
+
+      async function drawSlide(canvas, slide) {
+        const ctx = canvas.getContext("2d");
+        const img = await loadImage(slide.image);
+        const extraImages = await Promise.all((slide.extraImages || []).map(loadImage));
+        drawBackground(ctx, canvas, slide);
+        drawBrand(ctx, canvas);
+        drawTextBlock(ctx, canvas, slide);
+        drawDevice(ctx, canvas, slide, img, extraImages);
+      }
+
+      function downloadCanvas(canvas, fileName) {
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = canvas.toDataURL("image/png");
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }
+
+      async function createShot(slide) {
+        const size = sizes[slide.family];
+        const section = document.createElement("section");
+        const header = document.createElement("header");
+        const canvas = document.createElement("canvas");
+        const button = document.createElement("button");
+        section.className = "shot";
+        section.dataset.family = slide.family;
+        canvas.width = size.width;
+        canvas.height = size.height;
+        button.type = "button";
+        button.textContent = `${slide.name}.png 다운로드`;
+        button.addEventListener("click", () => downloadCanvas(canvas, `${slide.name}.png`));
+        header.textContent = `${slide.family.toUpperCase()} · ${size.width} x ${size.height} · ${slide.title}`;
+        header.append(button);
+        section.append(header, canvas);
+        gallery.append(section);
+        await drawSlide(canvas, slide);
+        return { slide, canvas };
+      }
+
+      const renderedPromise = Promise.all(slides.map(createShot));
+
+      async function downloadFamily(family) {
+        const rendered = await renderedPromise;
+        rendered.filter((item) => !family || item.slide.family === family).forEach((item, index) => {
+          window.setTimeout(() => downloadCanvas(item.canvas, `${item.slide.name}.png`), index * 250);
+        });
+      }
+
+      document.querySelector("#downloadAll").addEventListener("click", () => downloadFamily());
+      document.querySelector("#downloadPhone").addEventListener("click", () => downloadFamily("iphone"));
+      document.querySelector("#downloadPad").addEventListener("click", () => downloadFamily("ipad"));
+    </script>
+  </body>
+</html>
