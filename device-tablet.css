@@ -167,7 +167,7 @@ body.device-tablet .score-screen:not(.is-hidden) .target {
 body.device-tablet .score-screen:not(.is-hidden) .remaining-score {
   min-width: 0;
   justify-self: center;
-  color: #dc2626;
+  color: #fb7185;
   font-size: clamp(24px, calc(var(--score-short-side, 100dvh) * 0.036), 33px);
   font-style: italic;
   font-weight: 950;
