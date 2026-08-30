@@ -609,7 +609,7 @@ body.device-phone .score-screen:not(.is-hidden) .player-card {
 }
 
 body.device-phone .score-screen:not(.is-hidden) .player-topline {
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(30px, 1fr) minmax(0, auto);
   gap: 5px;
 }
 
@@ -623,7 +623,7 @@ body.device-phone .score-screen:not(.is-hidden) .target {
 }
 
 body.device-phone .score-screen:not(.is-hidden) .remaining-score {
-  min-width: 30px;
+  min-width: 0;
   justify-self: center;
   color: #dc2626;
   font-size: clamp(19px, calc(var(--score-short-side, 100dvh) * 0.06), 28px);

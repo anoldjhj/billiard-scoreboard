@@ -151,6 +151,7 @@ body.device-tablet .score-screen:not(.is-hidden) .player-card {
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .player-topline {
+  grid-template-columns: auto minmax(36px, 1fr) minmax(0, auto);
   min-height: 34px;
 }
 
@@ -164,7 +165,7 @@ body.device-tablet .score-screen:not(.is-hidden) .target {
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .remaining-score {
-  min-width: 36px;
+  min-width: 0;
   justify-self: center;
   color: #dc2626;
   font-size: clamp(24px, calc(var(--score-short-side, 100dvh) * 0.036), 33px);

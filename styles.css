@@ -1476,7 +1476,7 @@ h2 {
 
 .player-topline {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(42px, 1fr) minmax(0, auto);
   align-items: baseline;
   gap: 8px;
   min-height: 46px;
@@ -1492,7 +1492,7 @@ h2 {
 }
 
 .remaining-score {
-  min-width: 42px;
+  min-width: 0;
   justify-self: center;
   color: #dc2626;
   font-size: clamp(23px, 4vw, 36px);
@@ -3060,6 +3060,7 @@ h2 {
   }
 
   .player-topline {
+    grid-template-columns: auto minmax(34px, 1fr) minmax(0, auto);
     min-height: 30px;
   }
 
@@ -3069,7 +3070,7 @@ h2 {
   }
 
   .remaining-score {
-    min-width: 34px;
+    min-width: 0;
     font-size: 24px;
     font-style: italic;
   }
