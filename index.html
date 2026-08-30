@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko" translate="no" class="notranslate">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="PLAY 당구점수판" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#eef2f6" />
+    <meta name="google" content="notranslate" />
+    <title>PLAY Billiards Scoreboard</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css?v=20260712-version-v333" />
+    <link rel="stylesheet" href="device-phone.css?v=20260712-version-v333" />
+    <link rel="stylesheet" href="device-tablet.css?v=20260712-version-v333" />
+  </head>
+  <body translate="no" class="notranslate">
+    <main class="app-shell">
+      <section class="setup-screen" id="setupScreen" aria-label="경기 설정">
+        <div class="setup-panel">
+          <div class="setup-heading">
+            <div class="app-logo" aria-label="PLAY Billiards Scoreboard">
+              <span class="logo-balls"><i></i><i></i></span>
+              <strong>PLAY</strong>
+              <small>3/4 BALL</small>
+            </div>
+            <div>
+              <p class="kicker">PLAY Billiards Scoreboard</p>
+              <h1>PLAY 당구점수판 3/4구</h1>
+            </div>
+          </div>
+
+          <section class="member-box" aria-label="선수 선택">
+            <div class="member-title">
+              <h2>경기설정</h2>
+              <div class="member-title-actions">
+                <button class="primary-action setup-start-action" id="openBoardButton" type="button">점수판 시작</button>
+                <button class="secondary-action compact-action" id="openRecordsButton" type="button">기록보기</button>
+              </div>
+            </div>
+
+            <section class="game-options" aria-label="경기 옵션">
+              <label>
+                경기방식
+                <select id="gameType">
+                  <option value="four-ball" selected>4구</option>
+                  <option value="three-cushion">3구</option>
+                </select>
+              </label>
+              <label>
+                인원수
+                <select id="playerCount">
+                  <option value="2" selected>2인</option>
+                  <option value="3">3인</option>
+                  <option value="4">4인</option>
+                </select>
+              </label>
+              <label class="finish-option" id="finishThreeCField">
+                3C 마무리
+                <span class="finish-control">
+                  <select id="finishThreeC">
+                    <option value="0">0</option>
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="custom">입력</option>
+                  </select>
+                  <input id="finishThreeCCustom" class="finish-custom-input" type="number" min="0" inputmode="numeric" placeholder="입력" aria-label="3C 마무리 직접 입력" hidden />
+                </span>
+              </label>
+              <label class="finish-option">
+                Bank 마무리
+                <span class="finish-control">
+                  <select id="finishBank">
+                    <option value="0" selected>0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="custom">입력</option>
+                  </select>
+                  <input id="finishBankCustom" class="finish-custom-input" type="number" min="0" inputmode="numeric" placeholder="입력" aria-label="Bank 마무리 직접 입력" hidden />
+                </span>
+              </label>
+              <label>
+                제한시간
+                <select id="shotLimit">
+                  <option value="none" selected>없음</option>
+                  <option value="30">30초</option>
+                  <option value="40">40초</option>
+                  <option value="50">50초</option>
+                  <option value="60">60초</option>
+                </select>
+              </label>
+              <label class="sound-option">
+                경고음
+                <select id="warningSound">
+                  <option value="on" selected>사용</option>
+                  <option value="off">끄기</option>
+                </select>
+              </label>
+              <label class="language-option">
+                언어/Language
+                <select id="languageSelect">
+                  <option value="ko" selected>한국어</option>
+                  <option value="en">English</option>
+                </select>
+              </label>
+              <label class="voice-option">
+                음성
+                <select id="voiceSelect">
+                  <option value="auto" selected>자동 선택</option>
+                </select>
+              </label>
+              <label class="sound-option">
+                음성스타일
+                <select id="voiceStyle">
+                  <option value="bright">밝은 여성</option>
+                  <option value="young">어린 톤</option>
+                  <option value="clear" selected>또렷한 안내</option>
+                  <option value="calm">차분한 톤</option>
+                </select>
+              </label>
+            </section>
+
+            <div class="selection-strip" id="selectionStrip" aria-label="선택된 선수"></div>
+          </section>
+
+          <details class="manager-panel" open>
+            <summary><span class="manager-summary-title">선수 등록/편집</span><span id="memberCount">0</span></summary>
+            <div class="member-form">
+              <input id="memberName" type="text" placeholder="선수 이름" autocomplete="off" />
+              <input id="memberTarget" type="number" min="1" placeholder="점수" inputmode="numeric" aria-label="목표점수" />
+              <button id="addMemberButton" type="button">등록</button>
+            </div>
+            <div class="edit-list" id="editList" aria-label="선수 편집"></div>
+          </details>
+        </div>
+      </section>
+
+      <section class="records-screen is-hidden" id="recordsScreen" aria-label="경기 기록">
+        <div class="records-panel">
+          <header class="records-header">
+            <div>
+              <h1>MATCH RECORDS</h1>
+            </div>
+            <div class="records-header-actions">
+              <button class="secondary-action data-action" id="backupDataButton" type="button">백업</button>
+              <button class="secondary-action data-action" id="restoreDataButton" type="button">복원</button>
+              <input id="backupFileInput" type="file" accept="application/json,text/plain,.json,.txt" hidden />
+              <button class="primary-action" id="returnBoardFromRecordsButton" type="button" hidden>점수판으로</button>
+              <button class="secondary-action" id="backToSetupButton" type="button">설정으로</button>
+            </div>
+          </header>
+
+          <section class="record-average" aria-label="선수 평균">
+            <label>
+              경기방식
+              <select id="recordGameType">
+                <option value="four-ball" selected>4구</option>
+                <option value="three-cushion">3구</option>
+              </select>
+            </label>
+            <label>
+              선수 선택
+              <select id="recordPlayerSelect"></select>
+            </label>
+            <div>
+              <span>평균 Aver.</span>
+              <strong id="recordAverage">0.000</strong>
+            </div>
+          </section>
+
+          <div class="record-list" id="recordList" aria-label="최근 30게임 기록"></div>
+        </div>
+      </section>
+
+      <section class="score-screen is-hidden" id="scoreScreen" aria-label="점수판">
+        <header class="score-header">
+          <button class="timer" id="timerButton" type="button" aria-label="타이머 일시정지 또는 다시 시작">
+            <strong id="timerValue">0</strong><span>sec</span>
+          </button>
+          <div class="match-time" aria-label="전체 경기시간">
+            <strong id="matchTimerValue">00:00</strong>
+          </div>
+          <div class="inning-title">
+            <div class="inning-main"><strong id="inningValue">1</strong><span>INN</span></div>
+            <div class="inning-adjust" aria-label="이닝 수동 조정">
+              <button id="inningUpButton" type="button" aria-label="이닝 올리기">▲</button>
+              <button id="inningDownButton" type="button" aria-label="이닝 내리기">▼</button>
+            </div>
+          </div>
+          <div class="quick-score-actions" aria-label="현재 선수 점수 빠르게 올리기">
+            <button type="button" data-quick-score="1">+1</button>
+            <button type="button" data-quick-score="3">+3</button>
+            <button type="button" data-quick-score="5">+5</button>
+            <button class="icon-button undo-quick-button" id="undoButton" type="button" aria-label="되돌리기">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 7H5m0 0 3-3M5 7l3 3m-3-3h8a6 6 0 1 1-5.2 9" />
+              </svg>
+            </button>
+          </div>
+          <div class="header-actions">
+            <span class="limit-chip" id="limitChip">제한 없음</span>
+            <button class="start-button" id="startButton" type="button">경기시작</button>
+            <button class="turn-change-button" id="turnSwitchButton" type="button">선수변경</button>
+            <button class="settings-button" id="homeButton" type="button">설정</button>
+          </div>
+        </header>
+
+        <div class="board" id="scoreBoard" aria-label="선수 점수판"></div>
+      </section>
+    </main>
+
+    <dialog id="winnerDialog" class="winner-dialog">
+      <form method="dialog">
+        <h2 id="winnerTitle">승리</h2>
+        <p id="winnerText"></p>
+        <button class="primary-action" value="close">확인</button>
+      </form>
+    </dialog>
+
+    <script src="app.js?v=20260712-version-v333"></script>
+  </body>
+</html>
