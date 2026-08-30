@@ -1493,11 +1493,20 @@ h2 {
 
 .remaining-score {
   min-width: 42px;
+  justify-self: center;
   color: #dc2626;
   font-size: clamp(23px, 4vw, 36px);
   font-style: italic;
   font-weight: 950;
   text-align: center;
+}
+
+.board[data-players="4"] .player-topline {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.board[data-players="4"] .remaining-score {
+  display: none;
 }
 
 .name-button {

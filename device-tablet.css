@@ -154,6 +154,10 @@ body.device-tablet .score-screen:not(.is-hidden) .player-topline {
   min-height: 34px;
 }
 
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .player-topline {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
 body.device-tablet .score-screen:not(.is-hidden) .target {
   min-width: 40px;
   font-size: clamp(25px, calc(var(--score-short-side, 100dvh) * 0.038), 34px);
@@ -161,10 +165,15 @@ body.device-tablet .score-screen:not(.is-hidden) .target {
 
 body.device-tablet .score-screen:not(.is-hidden) .remaining-score {
   min-width: 36px;
+  justify-self: center;
   color: #dc2626;
   font-size: clamp(24px, calc(var(--score-short-side, 100dvh) * 0.036), 33px);
   font-style: italic;
   font-weight: 950;
+}
+
+body.device-tablet .score-screen:not(.is-hidden) .board[data-players="4"] .remaining-score {
+  display: none;
 }
 
 body.device-tablet .score-screen:not(.is-hidden) .name-button {

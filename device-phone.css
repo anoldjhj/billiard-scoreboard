@@ -613,6 +613,10 @@ body.device-phone .score-screen:not(.is-hidden) .player-topline {
   gap: 5px;
 }
 
+body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .player-topline {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
 body.device-phone .score-screen:not(.is-hidden) .target {
   min-width: 32px;
   font-size: clamp(20px, calc(var(--score-short-side, 100dvh) * 0.064), 30px);
@@ -620,10 +624,15 @@ body.device-phone .score-screen:not(.is-hidden) .target {
 
 body.device-phone .score-screen:not(.is-hidden) .remaining-score {
   min-width: 30px;
+  justify-self: center;
   color: #dc2626;
   font-size: clamp(19px, calc(var(--score-short-side, 100dvh) * 0.06), 28px);
   font-style: italic;
   font-weight: 950;
+}
+
+body.device-phone .score-screen:not(.is-hidden) .board[data-players="4"] .remaining-score {
+  display: none;
 }
 
 body.device-phone .score-screen:not(.is-hidden) .name-button {
