@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v340";
+const APP_VERSION = "v350";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -24,6 +24,7 @@ const I18N = {
     startBoard: "점수판 시작",
     records: "기록보기",
     matchRecords: "경기 기록",
+    recordsHint: "경기 흐름과 선수별 평균을 한눈에 확인하세요.",
     gameType: "경기방식",
     playerCount: "인원수",
     finishThreeC: "3C 마무리",
@@ -112,6 +113,7 @@ const I18N = {
     startBoard: "Start Board",
     records: "Records",
     matchRecords: "Match Records",
+    recordsHint: "Review match flow and player averages at a glance.",
     gameType: "Game Type",
     playerCount: "Players",
     finishThreeC: "3C Finish",
@@ -439,6 +441,7 @@ function applyLanguage() {
   const compactSetup = false;
   text("#openRecordsButton", t("records"));
   text(".records-header h1", t("matchRecords"));
+  text(".records-heading-copy p", t("recordsHint"));
   text(".record-average div span", t("recordAverage"));
   text("#returnBoardFromRecordsButton", state.language === "en" && isCompactViewport() ? t("returnBoardShort") : t("returnBoard"));
   text("#backToSetupButton", t("backToSetup"));

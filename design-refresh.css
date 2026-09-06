@@ -1,0 +1,270 @@
+/* 2026-09 settings and records visual refresh */
+:root {
+  --ui-navy: #17233a;
+  --ui-blue: #2563eb;
+  --ui-cyan: #0ea5e9;
+  --ui-warm: #ff6b57;
+  --ui-panel: rgba(255, 255, 255, 0.94);
+}
+
+body.setup-mode,
+body.records-mode,
+body:has(.setup-screen:not(.is-hidden)),
+body:has(.records-screen:not(.is-hidden)) {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(37, 99, 235, 0.12), transparent 32%),
+    radial-gradient(circle at 94% 92%, rgba(14, 165, 233, 0.1), transparent 30%),
+    #eef3f8;
+}
+
+.setup-panel,
+.records-panel {
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  border-radius: 22px;
+  background: var(--ui-panel);
+  box-shadow: 0 24px 60px rgba(30, 41, 59, 0.13), inset 0 1px 0 #fff;
+}
+
+.member-box,
+.manager-panel,
+.record-average {
+  border-color: rgba(148, 163, 184, 0.32);
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.88);
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.member-title h2::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 20px;
+  margin-right: 9px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, var(--ui-blue), var(--ui-cyan));
+  vertical-align: -3px;
+}
+
+#openRecordsButton.compact-action {
+  min-width: 132px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #bfd5ff;
+  border-radius: 12px;
+  padding: 0 16px;
+  background: linear-gradient(180deg, #ffffff, #edf4ff);
+  color: #174ea6;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 7px 16px rgba(37, 99, 235, 0.14), inset 0 1px 0 #fff;
+}
+
+#openRecordsButton::before {
+  content: "";
+  width: 19px;
+  height: 19px;
+  border-radius: 6px;
+  background:
+    linear-gradient(#fff, #fff) 5px 5px / 9px 2px no-repeat,
+    linear-gradient(#fff, #fff) 5px 9px / 7px 2px no-repeat,
+    linear-gradient(#fff, #fff) 5px 13px / 5px 2px no-repeat,
+    linear-gradient(135deg, #2563eb, #0ea5e9);
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.24);
+}
+
+#openRecordsButton:hover {
+  border-color: #8db6ff;
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+}
+
+.game-options select,
+.game-options input,
+.member-form input,
+.record-average select {
+  border-radius: 11px;
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.records-header {
+  align-items: center;
+  padding: 2px 2px 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+.records-heading-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.records-eyebrow {
+  color: var(--ui-blue);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+}
+
+.records-heading-copy p {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.records-header h1 {
+  color: var(--ui-navy);
+  letter-spacing: -0.025em;
+}
+
+.records-header .secondary-action,
+.records-header .primary-action {
+  min-height: 42px;
+  border-radius: 11px;
+  box-shadow: none;
+}
+
+#backToSetupButton {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--ui-navy), #2b4770);
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(23, 35, 58, 0.18);
+}
+
+#backToSetupButton::before {
+  content: "←";
+  margin-right: 7px;
+}
+
+.record-average {
+  padding: 16px;
+}
+
+.record-average div {
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--ui-navy), #26466e);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(23, 35, 58, 0.18);
+}
+
+.record-average div span {
+  color: #bcd4f5;
+}
+
+.record-average div strong {
+  color: #fff;
+  letter-spacing: -0.04em;
+}
+
+.record-list {
+  gap: 10px;
+  padding: 2px 10px 8px 2px;
+  border-right: 0;
+  scrollbar-width: thin;
+}
+
+.record-row,
+.record-empty {
+  border-color: rgba(148, 163, 184, 0.3);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.06);
+}
+
+.record-row {
+  padding: 13px 14px;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.record-row:hover {
+  border-color: #a9c5f7;
+  box-shadow: 0 9px 24px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+
+.record-row-title strong,
+.record-standings {
+  color: var(--ui-navy);
+  font-weight: 950;
+}
+
+.record-players span {
+  border: 1px solid #e5eaf1;
+  border-radius: 9px;
+  background: #f8fafc;
+}
+
+.record-delete {
+  border-radius: 9px;
+  opacity: 0.76;
+}
+
+.record-row:hover .record-delete,
+.record-delete:focus-visible {
+  opacity: 1;
+}
+
+.record-inning-detail {
+  border-radius: 12px;
+  background: #f6f9fd;
+}
+
+@media (max-width: 600px), (orientation: portrait) and (max-width: 720px) {
+  .setup-panel,
+  .records-panel {
+    border-radius: 16px;
+  }
+
+  #openRecordsButton.compact-action {
+    min-width: 106px;
+    min-height: 38px;
+    padding: 0 11px;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  #openRecordsButton::before {
+    width: 17px;
+    height: 17px;
+    background:
+      linear-gradient(#fff, #fff) 4px 4px / 9px 2px no-repeat,
+      linear-gradient(#fff, #fff) 4px 8px / 7px 2px no-repeat,
+      linear-gradient(#fff, #fff) 4px 12px / 5px 2px no-repeat,
+      linear-gradient(135deg, #2563eb, #0ea5e9);
+  }
+
+  .records-heading-copy p,
+  .records-eyebrow {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  body.device-phone .records-header {
+    padding-bottom: 6px;
+  }
+
+  body.device-phone .records-heading-copy p,
+  body.device-phone .records-eyebrow {
+    display: none;
+  }
+
+  body.device-phone #openRecordsButton.compact-action {
+    min-width: 104px;
+    min-height: 34px;
+    font-size: 12px;
+  }
+
+  body.device-phone .record-average div {
+    border: 0;
+  }
+
+  body.device-phone .record-row {
+    border-radius: 10px;
+  }
+}
