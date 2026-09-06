@@ -214,6 +214,49 @@ body:has(.records-screen:not(.is-hidden)) {
   background: #f6f9fd;
 }
 
+.record-inning-player {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 5px;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.record-inning-player-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.record-inning-score-value {
+  color: #334155;
+  font-weight: 900;
+}
+
+.record-finish-three-c,
+.record-inning-win {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  padding: 0 8px;
+  background: linear-gradient(180deg, #fff1f2, #ffe4e6);
+  color: #c81e2b;
+  font-size: 11px;
+  font-weight: 950;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.record-inning-win {
+  border-color: #fca5a5;
+  background: #dc2626;
+  color: #fff;
+}
+
 @media (max-width: 600px), (orientation: portrait) and (max-width: 720px) {
   .setup-panel,
   .records-panel {

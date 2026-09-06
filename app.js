@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v350";
+const APP_VERSION = "v351";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -1633,6 +1633,8 @@ function cloneInningScores(scores = []) {
   return scores.map((row) => ({
     inning: Number(row.inning) || 0,
     scores: Array.isArray(row.scores) ? [...row.scores] : [],
+    threeC: Array.isArray(row.threeC) ? [...row.threeC] : [],
+    wins: Array.isArray(row.wins) ? [...row.wins] : [],
   }));
 }
 
@@ -1641,11 +1643,17 @@ function recordTurnScore(playerIndex, inning = state.inning) {
   if (!player) return;
   let row = state.inningScores.find((item) => item.inning === inning);
   if (!row) {
-    row = { inning, scores: Array(state.players.length).fill(null) };
+    row = { inning, scores: Array(state.players.length).fill(null), threeC: Array(state.players.length).fill(0), wins: Array(state.players.length).fill(false) };
     state.inningScores.push(row);
   }
   while (row.scores.length < state.players.length) row.scores.push(null);
+  if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
+  if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
+  while (row.threeC.length < state.players.length) row.threeC.push(0);
+  while (row.wins.length < state.players.length) row.wins.push(false);
   row.scores[playerIndex] = player.turn;
+  row.threeC[playerIndex] = player.turnFinishThreeC || 0;
+  row.wins[playerIndex] = player.status === "win";
 }
 
 function inningScoresForResult() {
@@ -1654,11 +1662,15 @@ function inningScoresForResult() {
   if (activePlayer && state.gameStarted) {
     let row = scores.find((item) => item.inning === state.inning);
     if (!row) {
-      row = { inning: state.inning, scores: Array(state.players.length).fill(null) };
+      row = { inning: state.inning, scores: Array(state.players.length).fill(null), threeC: Array(state.players.length).fill(0), wins: Array(state.players.length).fill(false) };
       scores.push(row);
     }
     while (row.scores.length < state.players.length) row.scores.push(null);
+    if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
+    if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
     row.scores[state.active] = activePlayer.turn;
+    row.threeC[state.active] = activePlayer.turnFinishThreeC || 0;
+    row.wins[state.active] = activePlayer.status === "win";
   }
   return scores
     .filter((row) => row.inning > 0)
@@ -1666,6 +1678,8 @@ function inningScoresForResult() {
     .map((row) => ({
       inning: row.inning,
       scores: row.scores.slice(0, state.players.length).map((score) => (Number.isFinite(Number(score)) ? Number(score) : 0)),
+      threeC: (row.threeC || []).slice(0, state.players.length).map((count) => Math.max(0, Number(count) || 0)),
+      wins: (row.wins || []).slice(0, state.players.length).map(Boolean),
     }));
 }
 
@@ -1681,6 +1695,7 @@ function createPlayer(member) {
     high: 0,
     turn: 0,
     runs: [],
+    turnFinishThreeC: 0,
     status: "playing",
     rank: null,
     finishedAtInning: null,
@@ -1703,6 +1718,7 @@ function addScore(playerIndex, delta) {
 
 function advanceFinish(player) {
   if (player.status === "threeC") {
+    player.turnFinishThreeC = (player.turnFinishThreeC || 0) + 1;
     player.finish.threeC = Math.max(0, player.finish.threeC - 1);
     if (player.finish.threeC === 0) {
       player.status = player.finish.bank > 0 ? "bank" : "win";
@@ -1743,6 +1759,7 @@ function beginTurn(playerIndex) {
     recordTurnScore(currentIndex);
     current.runs.push(current.turn);
     current.turn = 0;
+    current.turnFinishThreeC = 0;
     recalcHigh(current);
   }
   const inningChanged = playerIndex <= currentIndex;
@@ -2229,7 +2246,29 @@ function createInningScoreDetail(result) {
       const player = result.players[index];
       if (!player) return;
       const item = document.createElement("span");
-      item.textContent = `${displayName(player.name)} ${score}`;
+      const name = document.createElement("span");
+      const scoreValue = document.createElement("span");
+      const finishCount = row.threeC[index] || 0;
+      const isWinner = row.wins[index] || (player.rank === 1 && player.inning === row.inning);
+
+      item.className = "record-inning-player";
+      name.className = "record-inning-player-name";
+      scoreValue.className = "record-inning-score-value";
+      name.textContent = displayName(player.name);
+      scoreValue.textContent = String(score);
+      item.append(name, scoreValue);
+
+      if (finishCount > 0) {
+        const finish = document.createElement("strong");
+        finish.className = "record-finish-three-c";
+        finish.textContent = `3C ${finishCount}${isWinner ? ` · ${rankTextForRecord(1)}` : ""}`;
+        item.append(finish);
+      } else if (isWinner) {
+        const win = document.createElement("strong");
+        win.className = "record-inning-win";
+        win.textContent = rankTextForRecord(1);
+        item.append(win);
+      }
       column.append(item);
     });
 
@@ -2268,6 +2307,8 @@ function normalizedInningScoreRows(result) {
       scores: Array.isArray(row.scores)
         ? row.scores.map((score) => (Number.isFinite(Number(score)) ? Number(score) : 0))
         : [],
+      threeC: Array.isArray(row.threeC) ? row.threeC.map((count) => Math.max(0, Number(count) || 0)) : [],
+      wins: Array.isArray(row.wins) ? row.wins.map(Boolean) : [],
     }))
     .filter((row) => row.inning > 0 && row.scores.length)
     .sort((a, b) => a.inning - b.inning);
