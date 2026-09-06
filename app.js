@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v351";
+const APP_VERSION = "v352";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -1634,6 +1634,8 @@ function cloneInningScores(scores = []) {
     inning: Number(row.inning) || 0,
     scores: Array.isArray(row.scores) ? [...row.scores] : [],
     threeC: Array.isArray(row.threeC) ? [...row.threeC] : [],
+    threeCActive: Array.isArray(row.threeCActive) ? [...row.threeCActive] : [],
+    enteredThreeC: Array.isArray(row.enteredThreeC) ? [...row.enteredThreeC] : [],
     wins: Array.isArray(row.wins) ? [...row.wins] : [],
   }));
 }
@@ -1643,16 +1645,29 @@ function recordTurnScore(playerIndex, inning = state.inning) {
   if (!player) return;
   let row = state.inningScores.find((item) => item.inning === inning);
   if (!row) {
-    row = { inning, scores: Array(state.players.length).fill(null), threeC: Array(state.players.length).fill(0), wins: Array(state.players.length).fill(false) };
+    row = {
+      inning,
+      scores: Array(state.players.length).fill(null),
+      threeC: Array(state.players.length).fill(0),
+      threeCActive: Array(state.players.length).fill(false),
+      enteredThreeC: Array(state.players.length).fill(false),
+      wins: Array(state.players.length).fill(false),
+    };
     state.inningScores.push(row);
   }
   while (row.scores.length < state.players.length) row.scores.push(null);
   if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
+  if (!Array.isArray(row.threeCActive)) row.threeCActive = Array(state.players.length).fill(false);
+  if (!Array.isArray(row.enteredThreeC)) row.enteredThreeC = Array(state.players.length).fill(false);
   if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
   while (row.threeC.length < state.players.length) row.threeC.push(0);
+  while (row.threeCActive.length < state.players.length) row.threeCActive.push(false);
+  while (row.enteredThreeC.length < state.players.length) row.enteredThreeC.push(false);
   while (row.wins.length < state.players.length) row.wins.push(false);
   row.scores[playerIndex] = player.turn;
   row.threeC[playerIndex] = player.turnFinishThreeC || 0;
+  row.threeCActive[playerIndex] = Boolean(player.turnThreeCActive || player.turnEnteredThreeC);
+  row.enteredThreeC[playerIndex] = Boolean(player.turnEnteredThreeC);
   row.wins[playerIndex] = player.status === "win";
 }
 
@@ -1662,14 +1677,25 @@ function inningScoresForResult() {
   if (activePlayer && state.gameStarted) {
     let row = scores.find((item) => item.inning === state.inning);
     if (!row) {
-      row = { inning: state.inning, scores: Array(state.players.length).fill(null), threeC: Array(state.players.length).fill(0), wins: Array(state.players.length).fill(false) };
+      row = {
+        inning: state.inning,
+        scores: Array(state.players.length).fill(null),
+        threeC: Array(state.players.length).fill(0),
+        threeCActive: Array(state.players.length).fill(false),
+        enteredThreeC: Array(state.players.length).fill(false),
+        wins: Array(state.players.length).fill(false),
+      };
       scores.push(row);
     }
     while (row.scores.length < state.players.length) row.scores.push(null);
     if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
+    if (!Array.isArray(row.threeCActive)) row.threeCActive = Array(state.players.length).fill(false);
+    if (!Array.isArray(row.enteredThreeC)) row.enteredThreeC = Array(state.players.length).fill(false);
     if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
     row.scores[state.active] = activePlayer.turn;
     row.threeC[state.active] = activePlayer.turnFinishThreeC || 0;
+    row.threeCActive[state.active] = Boolean(activePlayer.turnThreeCActive || activePlayer.turnEnteredThreeC);
+    row.enteredThreeC[state.active] = Boolean(activePlayer.turnEnteredThreeC);
     row.wins[state.active] = activePlayer.status === "win";
   }
   return scores
@@ -1679,6 +1705,8 @@ function inningScoresForResult() {
       inning: row.inning,
       scores: row.scores.slice(0, state.players.length).map((score) => (Number.isFinite(Number(score)) ? Number(score) : 0)),
       threeC: (row.threeC || []).slice(0, state.players.length).map((count) => Math.max(0, Number(count) || 0)),
+      threeCActive: (row.threeCActive || []).slice(0, state.players.length).map(Boolean),
+      enteredThreeC: (row.enteredThreeC || []).slice(0, state.players.length).map(Boolean),
       wins: (row.wins || []).slice(0, state.players.length).map(Boolean),
     }));
 }
@@ -1696,6 +1724,8 @@ function createPlayer(member) {
     turn: 0,
     runs: [],
     turnFinishThreeC: 0,
+    turnThreeCActive: false,
+    turnEnteredThreeC: false,
     status: "playing",
     rank: null,
     finishedAtInning: null,
@@ -1739,6 +1769,8 @@ function updatePlayerStatus(player) {
   if (player.score < player.target || player.status !== "playing") return;
   if (player.finish.threeC > 0) {
     player.status = "threeC";
+    player.turnThreeCActive = true;
+    player.turnEnteredThreeC = true;
     return;
   }
   if (player.finish.bank > 0) {
@@ -1760,6 +1792,8 @@ function beginTurn(playerIndex) {
     current.runs.push(current.turn);
     current.turn = 0;
     current.turnFinishThreeC = 0;
+    current.turnThreeCActive = false;
+    current.turnEnteredThreeC = false;
     recalcHigh(current);
   }
   const inningChanged = playerIndex <= currentIndex;
@@ -1772,6 +1806,7 @@ function beginTurn(playerIndex) {
         : null;
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
+  if (next) next.turnThreeCActive = next.status === "threeC";
   if (inningChanged) arrangeBallColorsForNewInning(lastColor);
   resetTimer(true);
 }
@@ -2249,6 +2284,8 @@ function createInningScoreDetail(result) {
       const name = document.createElement("span");
       const scoreValue = document.createElement("span");
       const finishCount = row.threeC[index] || 0;
+      const enteredThreeC = Boolean(row.enteredThreeC[index]);
+      const threeCActive = Boolean(row.threeCActive[index] || enteredThreeC || finishCount > 0);
       const isWinner = row.wins[index] || (player.rank === 1 && player.inning === row.inning);
 
       item.className = "record-inning-player";
@@ -2256,14 +2293,25 @@ function createInningScoreDetail(result) {
       scoreValue.className = "record-inning-score-value";
       name.textContent = displayName(player.name);
       scoreValue.textContent = String(score);
-      item.append(name, scoreValue);
+      item.append(name);
 
-      if (finishCount > 0) {
+      if (!threeCActive || enteredThreeC) item.append(scoreValue);
+
+      if (enteredThreeC) {
+        const transition = document.createElement("strong");
+        transition.className = "record-three-c-transition";
+        transition.textContent = "3C";
+        item.append(transition);
+      }
+
+      if (threeCActive) {
         const finish = document.createElement("strong");
         finish.className = "record-finish-three-c";
-        finish.textContent = `3C ${finishCount}${isWinner ? ` · ${rankTextForRecord(1)}` : ""}`;
+        finish.textContent = String(finishCount);
         item.append(finish);
-      } else if (isWinner) {
+      }
+
+      if (isWinner) {
         const win = document.createElement("strong");
         win.className = "record-inning-win";
         win.textContent = rankTextForRecord(1);
@@ -2308,6 +2356,8 @@ function normalizedInningScoreRows(result) {
         ? row.scores.map((score) => (Number.isFinite(Number(score)) ? Number(score) : 0))
         : [],
       threeC: Array.isArray(row.threeC) ? row.threeC.map((count) => Math.max(0, Number(count) || 0)) : [],
+      threeCActive: Array.isArray(row.threeCActive) ? row.threeCActive.map(Boolean) : [],
+      enteredThreeC: Array.isArray(row.enteredThreeC) ? row.enteredThreeC.map(Boolean) : [],
       wins: Array.isArray(row.wins) ? row.wins.map(Boolean) : [],
     }))
     .filter((row) => row.inning > 0 && row.scores.length)

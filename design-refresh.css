@@ -215,8 +215,7 @@ body:has(.records-screen:not(.is-hidden)) {
 }
 
 .record-inning-player {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  display: flex;
   align-items: center;
   gap: 6px;
   padding: 4px 5px;
@@ -225,6 +224,7 @@ body:has(.records-screen:not(.is-hidden)) {
 }
 
 .record-inning-player-name {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -236,6 +236,7 @@ body:has(.records-screen:not(.is-hidden)) {
 }
 
 .record-finish-three-c,
+.record-three-c-transition,
 .record-inning-win {
   display: inline-flex;
   align-items: center;
@@ -249,6 +250,21 @@ body:has(.records-screen:not(.is-hidden)) {
   font-weight: 950;
   white-space: nowrap;
   box-shadow: inset 0 1px 0 #fff;
+}
+
+.record-three-c-transition {
+  border-color: #fda4af;
+  background: #fff;
+  color: #be123c;
+}
+
+.record-finish-three-c {
+  min-width: 28px;
+  justify-content: center;
+  border-color: #fecdd3;
+  background: #fff1f2;
+  color: #dc2626;
+  font-size: 13px;
 }
 
 .record-inning-win {
