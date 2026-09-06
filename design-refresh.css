@@ -237,6 +237,8 @@ body:has(.records-screen:not(.is-hidden)) {
 
 .record-finish-three-c,
 .record-three-c-transition,
+.record-finish-bank,
+.record-bank-transition,
 .record-inning-win {
   display: inline-flex;
   align-items: center;
@@ -258,6 +260,15 @@ body:has(.records-screen:not(.is-hidden)) {
 
 .record-finish-three-c {
   color: #dc2626;
+  font-size: 13px;
+}
+
+.record-bank-transition {
+  color: #1d4ed8;
+}
+
+.record-finish-bank {
+  color: #2563eb;
   font-size: 13px;
 }
 

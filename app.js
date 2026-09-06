@@ -5,7 +5,7 @@ const VOICE_KEY = "billiards-voice-v1";
 const VOICE_STYLE_KEY = "billiards-voice-style-v1";
 const WARNING_SOUND_KEY = "billiards-warning-sound-v1";
 const LANGUAGE_KEY = "billiards-language-v1";
-const APP_VERSION = "v353";
+const APP_VERSION = "v354";
 const BACKUP_STORAGE_KEYS = [
   MEMBER_KEY,
   RESULT_KEY,
@@ -1636,6 +1636,9 @@ function cloneInningScores(scores = []) {
     threeC: Array.isArray(row.threeC) ? [...row.threeC] : [],
     threeCActive: Array.isArray(row.threeCActive) ? [...row.threeCActive] : [],
     enteredThreeC: Array.isArray(row.enteredThreeC) ? [...row.enteredThreeC] : [],
+    bank: Array.isArray(row.bank) ? [...row.bank] : [],
+    bankActive: Array.isArray(row.bankActive) ? [...row.bankActive] : [],
+    enteredBank: Array.isArray(row.enteredBank) ? [...row.enteredBank] : [],
     wins: Array.isArray(row.wins) ? [...row.wins] : [],
   }));
 }
@@ -1651,6 +1654,9 @@ function recordTurnScore(playerIndex, inning = state.inning) {
       threeC: Array(state.players.length).fill(0),
       threeCActive: Array(state.players.length).fill(false),
       enteredThreeC: Array(state.players.length).fill(false),
+      bank: Array(state.players.length).fill(0),
+      bankActive: Array(state.players.length).fill(false),
+      enteredBank: Array(state.players.length).fill(false),
       wins: Array(state.players.length).fill(false),
     };
     state.inningScores.push(row);
@@ -1659,15 +1665,24 @@ function recordTurnScore(playerIndex, inning = state.inning) {
   if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
   if (!Array.isArray(row.threeCActive)) row.threeCActive = Array(state.players.length).fill(false);
   if (!Array.isArray(row.enteredThreeC)) row.enteredThreeC = Array(state.players.length).fill(false);
+  if (!Array.isArray(row.bank)) row.bank = Array(state.players.length).fill(0);
+  if (!Array.isArray(row.bankActive)) row.bankActive = Array(state.players.length).fill(false);
+  if (!Array.isArray(row.enteredBank)) row.enteredBank = Array(state.players.length).fill(false);
   if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
   while (row.threeC.length < state.players.length) row.threeC.push(0);
   while (row.threeCActive.length < state.players.length) row.threeCActive.push(false);
   while (row.enteredThreeC.length < state.players.length) row.enteredThreeC.push(false);
+  while (row.bank.length < state.players.length) row.bank.push(0);
+  while (row.bankActive.length < state.players.length) row.bankActive.push(false);
+  while (row.enteredBank.length < state.players.length) row.enteredBank.push(false);
   while (row.wins.length < state.players.length) row.wins.push(false);
   row.scores[playerIndex] = player.turn;
   row.threeC[playerIndex] = player.turnFinishThreeC || 0;
   row.threeCActive[playerIndex] = Boolean(player.turnThreeCActive || player.turnEnteredThreeC);
   row.enteredThreeC[playerIndex] = Boolean(player.turnEnteredThreeC);
+  row.bank[playerIndex] = player.turnFinishBank || 0;
+  row.bankActive[playerIndex] = Boolean(player.turnBankActive || player.turnEnteredBank);
+  row.enteredBank[playerIndex] = Boolean(player.turnEnteredBank);
   row.wins[playerIndex] = player.status === "win";
 }
 
@@ -1683,6 +1698,9 @@ function inningScoresForResult() {
         threeC: Array(state.players.length).fill(0),
         threeCActive: Array(state.players.length).fill(false),
         enteredThreeC: Array(state.players.length).fill(false),
+        bank: Array(state.players.length).fill(0),
+        bankActive: Array(state.players.length).fill(false),
+        enteredBank: Array(state.players.length).fill(false),
         wins: Array(state.players.length).fill(false),
       };
       scores.push(row);
@@ -1691,11 +1709,17 @@ function inningScoresForResult() {
     if (!Array.isArray(row.threeC)) row.threeC = Array(state.players.length).fill(0);
     if (!Array.isArray(row.threeCActive)) row.threeCActive = Array(state.players.length).fill(false);
     if (!Array.isArray(row.enteredThreeC)) row.enteredThreeC = Array(state.players.length).fill(false);
+    if (!Array.isArray(row.bank)) row.bank = Array(state.players.length).fill(0);
+    if (!Array.isArray(row.bankActive)) row.bankActive = Array(state.players.length).fill(false);
+    if (!Array.isArray(row.enteredBank)) row.enteredBank = Array(state.players.length).fill(false);
     if (!Array.isArray(row.wins)) row.wins = Array(state.players.length).fill(false);
     row.scores[state.active] = activePlayer.turn;
     row.threeC[state.active] = activePlayer.turnFinishThreeC || 0;
     row.threeCActive[state.active] = Boolean(activePlayer.turnThreeCActive || activePlayer.turnEnteredThreeC);
     row.enteredThreeC[state.active] = Boolean(activePlayer.turnEnteredThreeC);
+    row.bank[state.active] = activePlayer.turnFinishBank || 0;
+    row.bankActive[state.active] = Boolean(activePlayer.turnBankActive || activePlayer.turnEnteredBank);
+    row.enteredBank[state.active] = Boolean(activePlayer.turnEnteredBank);
     row.wins[state.active] = activePlayer.status === "win";
   }
   return scores
@@ -1707,6 +1731,9 @@ function inningScoresForResult() {
       threeC: (row.threeC || []).slice(0, state.players.length).map((count) => Math.max(0, Number(count) || 0)),
       threeCActive: (row.threeCActive || []).slice(0, state.players.length).map(Boolean),
       enteredThreeC: (row.enteredThreeC || []).slice(0, state.players.length).map(Boolean),
+      bank: (row.bank || []).slice(0, state.players.length).map((count) => Math.max(0, Number(count) || 0)),
+      bankActive: (row.bankActive || []).slice(0, state.players.length).map(Boolean),
+      enteredBank: (row.enteredBank || []).slice(0, state.players.length).map(Boolean),
       wins: (row.wins || []).slice(0, state.players.length).map(Boolean),
     }));
 }
@@ -1726,6 +1753,9 @@ function createPlayer(member) {
     turnFinishThreeC: 0,
     turnThreeCActive: false,
     turnEnteredThreeC: false,
+    turnFinishBank: 0,
+    turnBankActive: false,
+    turnEnteredBank: false,
     status: "playing",
     rank: null,
     finishedAtInning: null,
@@ -1752,11 +1782,16 @@ function advanceFinish(player) {
     player.finish.threeC = Math.max(0, player.finish.threeC - 1);
     if (player.finish.threeC === 0) {
       player.status = player.finish.bank > 0 ? "bank" : "win";
+      if (player.status === "bank") {
+        player.turnBankActive = true;
+        player.turnEnteredBank = true;
+      }
     }
     return true;
   }
 
   if (player.status === "bank") {
+    player.turnFinishBank = (player.turnFinishBank || 0) + 1;
     player.finish.bank = Math.max(0, player.finish.bank - 1);
     if (player.finish.bank === 0) player.status = "win";
     return true;
@@ -1775,6 +1810,8 @@ function updatePlayerStatus(player) {
   }
   if (player.finish.bank > 0) {
     player.status = "bank";
+    player.turnBankActive = true;
+    player.turnEnteredBank = true;
     return;
   }
   player.status = "win";
@@ -1794,6 +1831,9 @@ function beginTurn(playerIndex) {
     current.turnFinishThreeC = 0;
     current.turnThreeCActive = false;
     current.turnEnteredThreeC = false;
+    current.turnFinishBank = 0;
+    current.turnBankActive = false;
+    current.turnEnteredBank = false;
     recalcHigh(current);
   }
   const inningChanged = playerIndex <= currentIndex;
@@ -1807,6 +1847,7 @@ function beginTurn(playerIndex) {
   if (inningChanged) state.inning += 1;
   state.active = playerIndex;
   if (next) next.turnThreeCActive = next.status === "threeC";
+  if (next) next.turnBankActive = next.status === "bank";
   if (inningChanged) arrangeBallColorsForNewInning(lastColor);
   resetTimer(true);
 }
@@ -2286,6 +2327,9 @@ function createInningScoreDetail(result) {
       const finishCount = row.threeC[index] || 0;
       const enteredThreeC = Boolean(row.enteredThreeC[index]);
       const threeCActive = Boolean(row.threeCActive[index] || enteredThreeC || finishCount > 0);
+      const bankCount = row.bank[index] || 0;
+      const enteredBank = Boolean(row.enteredBank[index]);
+      const bankActive = Boolean(row.bankActive[index] || enteredBank || bankCount > 0);
       const isWinner = row.wins[index] || (player.rank === 1 && player.inning === row.inning);
 
       item.className = "record-inning-player";
@@ -2295,12 +2339,12 @@ function createInningScoreDetail(result) {
       scoreValue.textContent = String(score);
       item.append(name);
 
-      if (!threeCActive || enteredThreeC) item.append(scoreValue);
+      if ((!threeCActive && !bankActive) || enteredThreeC || (enteredBank && !threeCActive)) item.append(scoreValue);
 
       if (enteredThreeC) {
         const transition = document.createElement("strong");
         transition.className = "record-three-c-transition";
-        transition.textContent = "3C";
+        transition.textContent = "C";
         item.append(transition);
       }
 
@@ -2308,6 +2352,20 @@ function createInningScoreDetail(result) {
         const finish = document.createElement("strong");
         finish.className = "record-finish-three-c";
         finish.textContent = String(finishCount);
+        item.append(finish);
+      }
+
+      if (enteredBank) {
+        const transition = document.createElement("strong");
+        transition.className = "record-bank-transition";
+        transition.textContent = "B";
+        item.append(transition);
+      }
+
+      if (bankActive) {
+        const finish = document.createElement("strong");
+        finish.className = "record-finish-bank";
+        finish.textContent = String(bankCount);
         item.append(finish);
       }
 
@@ -2358,6 +2416,9 @@ function normalizedInningScoreRows(result) {
       threeC: Array.isArray(row.threeC) ? row.threeC.map((count) => Math.max(0, Number(count) || 0)) : [],
       threeCActive: Array.isArray(row.threeCActive) ? row.threeCActive.map(Boolean) : [],
       enteredThreeC: Array.isArray(row.enteredThreeC) ? row.enteredThreeC.map(Boolean) : [],
+      bank: Array.isArray(row.bank) ? row.bank.map((count) => Math.max(0, Number(count) || 0)) : [],
+      bankActive: Array.isArray(row.bankActive) ? row.bankActive.map(Boolean) : [],
+      enteredBank: Array.isArray(row.enteredBank) ? row.enteredBank.map(Boolean) : [],
       wins: Array.isArray(row.wins) ? row.wins.map(Boolean) : [],
     }))
     .filter((row) => row.inning > 0 && row.scores.length)
